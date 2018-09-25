@@ -2,9 +2,11 @@
 
 This postgres gotcha is actually also an issue in Oracle and technically is bad/inefficient SQL by the developer, an inefficient existence check over two or more tables.
 
-However I think the Oracle optimizer handles this inefficient existence check better? To be confirmed 
+I've included the Oracle optimizer details below ie the good and bad execution plans.
 
-# Setup with pgbench (scale factor 3)
+# Details - Postgres
+
+## Setup with pgbench (scale factor 3)
 
 ```
 -bash-4.2$ grep bench1 ~/.pgpass
@@ -19,7 +21,7 @@ set primary keys...
 done.
 ```
 
-# Details - bad plan - regular UNION (no deduplicate)
+## Details - postgres bad plan - regular UNION (with sort and data deduplication)
 
 ```
 bench1=> explain (analyze, buffers) (select 1 from pgbench_branches UNION  select 1 from pgbench_accounts) limit 1;
@@ -45,7 +47,7 @@ bench1=> explain (analyze, buffers) (select 1 from pgbench_branches UNION  selec
 (17 rows)
 ```
 
-# Details - good plan - UNION ALL (no sort operation and deduplication of data)
+## Details - postgres good plan - UNION ALL (no sort operation and deduplication of data)
 
 ```
 bench1=> explain (analyze, buffers) (select 1 from pgbench_branches UNION ALL select 1 from pgbench_accounts) limit 1;
@@ -62,5 +64,153 @@ bench1=> explain (analyze, buffers) (select 1 from pgbench_branches UNION ALL se
  Planning time: 0.087 ms
  Execution time: 0.027 ms
 (10 rows)
-
  ```
+
+
+# Details Oracle
+
+## transfer from postgres to oracle  
+
+### postgres export to csv
+
+\copy (SELECT * FROM pgbench_branches) to 'pgbench_branches.csv' with csv
+\copy (SELECT * FROM pgbench_accounts) to 'pgbench_accounts.csv' with csv
+
+
+### oracle import of csv via sqlloader
+
+conn / as sysdba
+create tablespace SCOTT_DATA datafile '/home/oracle/dbf/ORACLE/scott_data.dbf' size 25M autoextend on maxsize 1000M;
+create user scott identified by *** default tablespace SCOTT_DATA;
+grant connect,resource to scott;
+ALTER USER scott quota unlimited on scott_data;
+@?/rdbms/admin/utlxplan.sql
+@?/sqlplus/admin/plustrce.sql
+GRANT plustrace TO scott;
+
+create table pgbench_branches (bid number, bbalance number, filler character(88), CONSTRAINT pgbench_branches_pk PRIMARY KEY (bid));
+create table pgbench_accounts (aid number, bid number, bbalance number, filler character(88), CONSTRAINT pgbench_accounts_pk PRIMARY KEY (aid));
+
+
+$ cat load_accounts.ctl
+load data
+infile pgbench_accounts.csv
+into table pgbench_accounts
+fields terminated by ','
+(aid, bid, bbalance)
+
+$ cat load_branches.ctl
+load data
+infile pgbench_branches.csv
+into table pgbench_branches
+fields terminated by ','
+(bid, bbalance)
+
+sqlldr scott/*** load_accounts.ctl
+sqlldr scott/*** load_branches.ctl
+
+
+
+## Details - oracle bad plan - regular UNION (with sort and data deduplication)
+
+```
+SQL> select * from (select 1 from pgbench_branches UNION  select 1 from pgbench_accounts) where rownum < 2;
+
+         1
+----------
+         1
+
+Elapsed: 00:00:00.05
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2330842441
+
+-----------------------------------------------------------------------------------------------------
+| Id  | Operation             | Name                | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT      |                     |     1 |     3 |       |   673   (2)| 00:00:01 |
+|*  1 |  COUNT STOPKEY        |                     |       |       |       |            |          |
+|   2 |   VIEW                |                     |   315K|   924K|       |   673   (2)| 00:00:01 |
+|*  3 |    SORT UNIQUE STOPKEY|                     |   315K|       |  1248K|   673   (2)| 00:00:01 |
+|   4 |     UNION-ALL         |                     |       |       |       |            |          |
+|   5 |      INDEX FULL SCAN  | PGBENCH_BRANCHES_PK |     3 |       |       |     1   (0)| 00:00:01 |
+|   6 |      INDEX FULL SCAN  | PGBENCH_ACCOUNTS_PK |   315K|       |       |    62   (0)| 00:00:01 |
+-----------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter(ROWNUM<2)
+   3 - filter(ROWNUM<2)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+        564  consistent gets
+          0  physical reads
+          0  redo size
+        535  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          1  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+```
+
+## Details - oracle good plan - UNION ALL (no sort operation and deduplication of data)
+
+```
+SQL> select * from (select 1 from pgbench_branches UNION ALL  select 1 from pgbench_accounts) where rownum < 2;
+
+         1
+----------
+         1
+
+Elapsed: 00:00:00.00
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3634172636
+
+------------------------------------------------------------------------------------------
+| Id  | Operation          | Name                | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |                     |     1 |     3 |     2   (0)| 00:00:01 |
+|*  1 |  COUNT STOPKEY     |                     |       |       |            |          |
+|   2 |   VIEW             |                     |   315K|   924K|     2   (0)| 00:00:01 |
+|   3 |    UNION-ALL       |                     |       |       |            |          |
+|   4 |     INDEX FULL SCAN| PGBENCH_BRANCHES_PK |     3 |       |     1   (0)| 00:00:01 |
+|   5 |     INDEX FULL SCAN| PGBENCH_ACCOUNTS_PK |   315K|       |     1   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter(ROWNUM<2)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          1  consistent gets
+          0  physical reads
+          0  redo size
+        535  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+```
