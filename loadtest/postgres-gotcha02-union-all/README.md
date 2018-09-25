@@ -73,12 +73,15 @@ bench1=> explain (analyze, buffers) (select 1 from pgbench_branches UNION ALL se
 
 ### postgres export to csv
 
+```
 \copy (SELECT * FROM pgbench_branches) to 'pgbench_branches.csv' with csv
 \copy (SELECT * FROM pgbench_accounts) to 'pgbench_accounts.csv' with csv
-
+```
 
 ### oracle import of csv via sqlloader
 
+setup scott as sysdba
+```
 conn / as sysdba
 create tablespace SCOTT_DATA datafile '/home/oracle/dbf/ORACLE/scott_data.dbf' size 25M autoextend on maxsize 1000M;
 create user scott identified by *** default tablespace SCOTT_DATA;
@@ -87,11 +90,18 @@ ALTER USER scott quota unlimited on scott_data;
 @?/rdbms/admin/utlxplan.sql
 @?/sqlplus/admin/plustrce.sql
 GRANT plustrace TO scott;
+```
 
+create tables as scott/***
+
+```
 create table pgbench_branches (bid number, bbalance number, filler character(88), CONSTRAINT pgbench_branches_pk PRIMARY KEY (bid));
 create table pgbench_accounts (aid number, bid number, bbalance number, filler character(88), CONSTRAINT pgbench_accounts_pk PRIMARY KEY (aid));
+```
 
+load data via sqlloader ctl files
 
+```
 $ cat load_accounts.ctl
 load data
 infile pgbench_accounts.csv
@@ -108,7 +118,7 @@ fields terminated by ','
 
 sqlldr scott/*** load_accounts.ctl
 sqlldr scott/*** load_branches.ctl
-
+```
 
 
 ## Details - oracle bad plan - regular UNION (with sort and data deduplication)
