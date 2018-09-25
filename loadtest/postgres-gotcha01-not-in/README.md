@@ -7,12 +7,6 @@ This is a class postgres gotcha which I have demo via a very simple pgbench data
 ```
 -bash-4.2$ grep bench1 ~/.pgpass
 localhost:5432:*:bench1:***
--bash-4.2$ pgbench -i -s 3^Ch localhost -p 5432 -U bench1  -d bench1
-connection to database "localhost" failed:
-FATAL:  database "localhost" does not exist
--bash-4.2$ pgbench -i -s 3 localhost -p 5432 -U bench1  -d bench1
-connection to database "localhost" failed:
-FATAL:  database "localhost" does not exist
 -bash-4.2$ pgbench -i -s 3 -h localhost -p 5432 -U bench1  -d bench1
 creating tables...
 100000 of 300000 tuples (33%) done (elapsed 0.04 s, remaining 0.08 s)
