@@ -1,8 +1,14 @@
 # Summary
 
-This is a class postgres gotcha which I have demo via a very simple pgbench dataset.
+This is a class postgres gotcha which I have demo via a very simple pgbench dataset:
+* postgres bad plan - NOT IN
+* postgres good plan - NOT EXISTS
 
-# Setup with pgbench (scale factor 3)
+I've also copied the data into Oracle to show the equivalent plans in Oracle
+* oracle NOT IN plan - very fast
+* oracle NOT EXISTS plan - very fast
+
+## Setup with pgbench (scale factor 3)
 
 ```
 -bash-4.2$ grep bench1 ~/.pgpass
@@ -17,7 +23,7 @@ set primary keys...
 done.
 ```
 
-# Details - bad plan - NOT IN
+## Details - postgres bad plan - NOT IN
 
 ```
 select count(bid) from pgbench_branches where bid NOT IN (select bid from pgbench_accounts);
@@ -40,7 +46,7 @@ select count(bid) from pgbench_branches where bid NOT IN (select bid from pgbenc
 (12 rows)
 ```
 
-# Details - good plan - NOT EXISTS
+# Details - postgres good plan - NOT EXISTS
 
 ```
 select count(bid) from pgbench_branches branch where NOT EXISTS (select * from pgbench_accounts account where account.bid = branch.bid);
@@ -61,3 +67,170 @@ select count(bid) from pgbench_branches branch where NOT EXISTS (select * from p
  Planning time: 0.089 ms
  Execution time: 216.341 ms
  ```
+
+
+
+
+
+# Details Oracle
+
+## transfer from postgres to oracle
+
+### postgres export to csv
+
+```
+\copy (SELECT * FROM pgbench_branches) to 'pgbench_branches.csv' with csv
+\copy (SELECT * FROM pgbench_accounts) to 'pgbench_accounts.csv' with csv
+```
+
+### oracle import of csv via sqlloader
+
+setup scott as sysdba
+```
+conn / as sysdba
+create tablespace SCOTT_DATA datafile '/home/oracle/dbf/ORACLE/scott_data.dbf' size 25M autoextend on maxsize 1000M;
+create user scott identified by *** default tablespace SCOTT_DATA;
+grant connect,resource to scott;
+ALTER USER scott quota unlimited on scott_data;
+@?/rdbms/admin/utlxplan.sql
+@?/sqlplus/admin/plustrce.sql
+GRANT plustrace TO scott;
+```
+
+create tables as scott/***
+
+```
+create table pgbench_branches (bid number, bbalance number, filler character(88), CONSTRAINT pgbench_branches_pk PRIMARY KEY (bid));
+create table pgbench_accounts (aid number, bid number, bbalance number, filler character(88), CONSTRAINT pgbench_accounts_pk PRIMARY KEY (aid));
+create index pgbench_accounts_bid on pgbench_accounts(bid);
+```
+
+load data via sqlloader ctl files
+
+```
+$ cat load_accounts.ctl
+load data
+infile pgbench_accounts.csv
+into table pgbench_accounts
+fields terminated by ','
+(aid, bid, bbalance)
+
+$ cat load_branches.ctl
+load data
+infile pgbench_branches.csv
+into table pgbench_branches
+fields terminated by ','
+(bid, bbalance)
+
+sqlldr scott/*** load_accounts.ctl
+sqlldr scott/*** load_branches.ctl
+```
+
+
+## Details - oracle NOT IN plan - very fast
+
+```
+SQL> select count(bid) from pgbench_branches where bid NOT IN (select bid from pgbench_accounts);
+
+COUNT(BID)
+----------
+         0
+
+Elapsed: 00:00:00.02
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1674807286
+
+------------------------------------------------------------------------------------------------
+| Id  | Operation               | Name                 | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT        |                      |     1 |    26 |    24   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE         |                      |     1 |    26 |            |          |
+|*  2 |   FILTER                |                      |       |       |            |          |
+|   3 |    NESTED LOOPS ANTI SNA|                      |     3 |    78 |    24  (92)| 00:00:01 |
+|   4 |     INDEX FULL SCAN     | PGBENCH_BRANCHES_PK  |     3 |    39 |     1   (0)| 00:00:01 |
+|*  5 |     INDEX RANGE SCAN    | PGBENCH_ACCOUNTS_BID |     1 |    13 |     1   (0)| 00:00:01 |
+|*  6 |    TABLE ACCESS FULL    | PGBENCH_ACCOUNTS     |     7 |    91 |    22   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter( NOT EXISTS (SELECT 0 FROM "PGBENCH_ACCOUNTS" "PGBENCH_ACCOUNTS" WHERE
+              "BID" IS NULL))
+   5 - access("BID"="BID")
+   6 - filter("BID" IS NULL)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+        635  consistent gets
+          0  physical reads
+          0  redo size
+        543  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+
+
+```
+
+## Details - oracle NOT EXISTS plan - very fast
+
+```
+SQL> select count(bid) from pgbench_branches branch where NOT EXISTS (select * from pgbench_accounts account where account.bid = branch.bid);
+
+COUNT(BID)
+----------
+         0
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1650890366
+
+-------------------------------------------------------------------------------------------
+| Id  | Operation          | Name                 | Rows  | Bytes | Cost (%CPU)| Time     |
+-------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |                      |     1 |    26 |     2   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE    |                      |     1 |    26 |            |          |
+|   2 |   NESTED LOOPS ANTI|                      |     3 |    78 |     2   (0)| 00:00:01 |
+|   3 |    INDEX FULL SCAN | PGBENCH_BRANCHES_PK  |     3 |    39 |     1   (0)| 00:00:01 |
+|*  4 |    INDEX RANGE SCAN| PGBENCH_ACCOUNTS_BID |     1 |    13 |     1   (0)| 00:00:01 |
+-------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   4 - access("ACCOUNT"."BID"="BRANCH"."BID")
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          9  consistent gets
+          0  physical reads
+          0  redo size
+        543  bytes sent via SQL*Net to client
+        551  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+
+```
