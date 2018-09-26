@@ -97,6 +97,7 @@ create tables as scott/***
 ```
 create table pgbench_branches (bid number, bbalance number, filler character(88), CONSTRAINT pgbench_branches_pk PRIMARY KEY (bid));
 create table pgbench_accounts (aid number, bid number, bbalance number, filler character(88), CONSTRAINT pgbench_accounts_pk PRIMARY KEY (aid));
+create index pgbench_accounts_bid on pgbench_accounts(bid);
 ```
 
 load data via sqlloader ctl files
