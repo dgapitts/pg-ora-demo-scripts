@@ -20,7 +20,7 @@ iterations=`echo $1*6|bc`
 echo $iterations
 for i in `seq 1 $iterations`;
 do 
-   time psql -h localhost -U postgres -p 5432 -f pgmon/pg_act_query.sql | tee -a $active_session_log
+   time psql -h localhost -U postgres -p 5432 -f pgmon/act_trans.sql    | tee -a $active_session_log
    time psql -h localhost -U postgres -p 5432 -f pgmon/block_sess_mon.sql | tee -a $block_sess_mon_log
    sleep 10
    #sleep 1   # only useful for pgmon.sh script testing/develop
