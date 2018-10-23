@@ -1,6 +1,6 @@
 ## Overview
 
-The following cte.sql is from Bruce Momjian excellent CTE presentation, 
+The following cte.sql is from Bruce Momjian's excellent CTE presentation, 
 * https://momjian.us/main/writings/pgsql/cte.pdf 
 * http://dailytechvideo.com/bruce-momjian-programming-sql-way-common-table-expressions/
 
