@@ -7,7 +7,7 @@ for i in range(10001):
     print "create table tab"+str(i)+" (pk integer primary key, col1 varchar(30)); "
 ```
 
-and then can run via
+and then generate you CREATE SQL statements via
 ```
 ~/projects/pg-ora-demo-scripts/memtest $ python gen_sql.py > create_table.sql
 ~/projects/pg-ora-demo-scripts/memtest $ head -3 create_table.sql
@@ -19,6 +19,14 @@ create table tab9998 (pk integer primary key, col1 varchar(30));
 create table tab9999 (pk integer primary key, col1 varchar(30));
 create table tab10000 (pk integer primary key, col1 varchar(30));
 ~/projects/pg-ora-demo-scripts/memtest $
+```
+
+and finally on your dbserver 
+
+
+```
+[pg10centos7:postgres:~/pg-ora-demo-scripts/memtest/setup] # psql -f create_table.sql
+...
 ```
 
 == Background on postgres data_directory and pg_class.relfilenode==
