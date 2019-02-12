@@ -53,10 +53,23 @@ sleep 5
 uptime
 sleep 55
 
-
 ```
 
+these tests eventually started to fail at around 50K postgres file handles
 
+```
+could not connect to server: No such file or directory
+	Is the server running locally and accepting
+	connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?
+connection to database "" failed:
+could not connect to server: No such file or directory
+	Is the server running locally and accepting
+	connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?
+connection to database "" failed:
+could not connect to server: No such file or directory
+	Is the server running locally and accepting
+	connections on Unix domain socket "/var/run/postgresq
+```
 
 
 ## Test execution details 
@@ -90,6 +103,8 @@ load averages and postgres file handles
  23:09:32 up  1:38,  3 users,  load average: 9.95, 19.89, 11.55
 48588
 ```
+
+
 
 sar (sysstat) monitoring
 

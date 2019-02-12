@@ -3,7 +3,7 @@
 This pg-ora-demo-scripts project/repro is for basic postgres monitoring, simple load tests, interesting Postgres DBA edge cases and other demo exercises. It is especially aimed at Oracle DBA with comparisons to how Oracle handles such edge cases and some gotchas around migrating/moving from Postgres to Oracle.
 
 note:
-* each subfolder has it own README.md with setup instructions and details of varioud perf/monitoring issues
+* each subfolder has it own README.md with setup instructions and details of various perf/monitoring issues
 * the dgapitts/vagrant-postgres9.6 can be used to quickly build a postgres-on-linux VM 
 * I will also work on a simple RDS/EC2 setup instructions, so you can run these tests in the AWS Cloud 
 
