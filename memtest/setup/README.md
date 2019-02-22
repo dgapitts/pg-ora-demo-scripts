@@ -100,7 +100,7 @@ and in pg_class
 postgres=# SELECT relname, relfilenode FROM pg_class WHERE relname = 'tab1';
  relname | relfilenode
 ---------+-------------
- tab2    |       16402
+ tab1    |       16402
 (1 row)
 ````
 
