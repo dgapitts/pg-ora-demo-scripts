@@ -78,10 +78,12 @@ peak query rate 1003 queries/s
 2019-02-22 21:05:32.019 5900 LOG stats: 752 xacts/s, 752 queries/s, in 21080 B/s, out 53453 B/s, xact 12638 us, query 12638 us, wait time 0 us
 2019-02-22 21:06:32.021 5900 LOG stats: 726 xacts/s, 726 queries/s, in 20148 B/s, out 51560 B/s, xact 13126 us, query 13126 us, wait time 0 us
 2019-02-22 21:07:32.088 5900 LOG stats: 680 xacts/s, 680 queries/s, in 19053 B/s, out 48314 B/s, xact 14005 us, query 14005 us, wait time 0 us
-2019-02-22 21:08:32.019 5900 LOG stats: 336 xacts/s, 336 queries/s, in 9431 B/s, out 23941 B/s, xact 14039 us, query 14039 us, wait time 0 us```
+2019-02-22 21:08:32.019 5900 LOG stats: 336 xacts/s, 336 queries/s, in 9431 B/s, out 23941 B/s, xact 14039 us, query 14039 us, wait time 0 us
+```
 
 
-## Tech Details - test two  - pgbench 30 concurrent test threads and pgbouncer pool with 20 connections 
+## Tech Details - test two  - pgbench 30 concurrent test threads and pgbouncer pool with 20 connections
+ 
 ```
 pgbench -h localhost -p 6432 -d pgbbench -U bench1 -c 30 -j 30 -T 300 -f custom_bench_nowait.sql
 ```
