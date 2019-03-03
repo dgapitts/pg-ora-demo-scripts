@@ -97,10 +97,10 @@ less /tmp/temp2
 and in pg_class
 
 ```
-postgres=# SELECT relname, relfilenode FROM pg_class WHERE relname = 'tab1';
+postgres=# SELECT relname, relfilenode FROM pg_class WHERE relname = 'tab2';
  relname | relfilenode
 ---------+-------------
- tab1    |       16402
+ tab2    |       16402
 (1 row)
 ````
 
