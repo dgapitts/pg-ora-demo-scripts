@@ -1,7 +1,7 @@
 ## Setup - base test_mvcc table with 100000 rows
 
 NB This is can be simplified i.e. simple psql script and drop psycopg2
-
+NB2 This has been simplified i.e. started psql-setup.sql
 
 ```
 [pg10centos7:postgres:~/pg-ora-demo-scripts/mvcc] # cat mvcc_test_step1.py
