@@ -1,6 +1,5 @@
 begin;
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 select count(*) from test_mvcc;
-SELECT pg_sleep(3600);
+SELECT pg_sleep(300);
 select count(*) from test_mvcc;
 end;
