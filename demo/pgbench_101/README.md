@@ -325,6 +325,8 @@ Time: 2.283 ms
 
 ### Hash Join plan without parallelization  
 
+As per: https://dba.stackexchange.com/questions/226654/how-can-i-disable-parallel-queries-in-postgresql
+
 ```
 pgbench=# explain (analyze,buffers) select max(abalance) from pgbench_accounts a, pgbench_branches b where a.bid=b.bid and b.mname = 'Brittany';
                                                                QUERY PLAN
