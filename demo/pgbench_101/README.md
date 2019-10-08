@@ -154,6 +154,8 @@ Time: 132.219 ms
 
 ### Add account names column (aname) and then populate randomly from {Ava,Alex,Aiden,Abigail}
 
+https://dba.stackexchange.com/questions/55363/set-random-value-from-set
+
 ```
 pgbench=# select ('[0:3]={Ava,Alex,Aiden,Abigail}'::text[])[floor(random()*4)];
  text
@@ -324,6 +326,8 @@ Time: 2.283 ms
 ```
 
 ### Hash Join plan without parallelization  
+
+As per: https://dba.stackexchange.com/questions/226654/how-can-i-disable-parallel-queries-in-postgresql
 
 ```
 pgbench=# explain (analyze,buffers) select max(abalance) from pgbench_accounts a, pgbench_branches b where a.bid=b.bid and b.mname = 'Brittany';
