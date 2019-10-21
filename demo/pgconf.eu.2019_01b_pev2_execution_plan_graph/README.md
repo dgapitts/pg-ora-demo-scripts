@@ -2,23 +2,23 @@
 
 Firstly you need to run psql with some special options
 
-{noformat}
+```
 ~ $  psql -qAt -d milano2019
 milano2019=#
-{noformat}
+```
 
 firstly let rerun the regular plan 
-{noformat}
+```
 milano2019=# explain (analyze)  select count(*) from t_test;
 Aggregate  (cost=158288.60..158288.61 rows=1 width=8) (actual time=4764.453..4764.453 rows=1 loops=1)
   ->  Seq Scan on t_test  (cost=0.00..137317.08 rows=8388608 width=0) (actual time=2.538..4016.553 rows=8388608 loops=1)
 Planning Time: 1.814 ms
 Execution Time: 4764.577 ms
-{noformat}
+```
 
 and now in json format
 
-{noformat}
+```
 milano2019=# explain (analyze, format json)  select count(*) from t_test;
 [
   {
@@ -59,7 +59,7 @@ milano2019=# explain (analyze, format json)  select count(*) from t_test;
     "Execution Time": 3430.922
   }
 ]
-{noformat}
+```
 
 which you can graph this using pev2 with 
 
