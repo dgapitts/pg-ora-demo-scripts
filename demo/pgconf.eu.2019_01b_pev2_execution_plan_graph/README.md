@@ -31,8 +31,8 @@ milano2019=# explain (analyze, format json)  select count(*) from t_test;
       "Total Cost": 158288.61,
       "Plan Rows": 1,
       "Plan Width": 8,
-      "Actual Startup Time": 3430.895,
-      "Actual Total Time": 3430.895,
+      "Actual Startup Time": 4511.241,
+      "Actual Total Time": 4511.241,
       "Actual Rows": 1,
       "Actual Loops": 1,
       "Plans": [
@@ -46,17 +46,17 @@ milano2019=# explain (analyze, format json)  select count(*) from t_test;
           "Total Cost": 137317.08,
           "Plan Rows": 8388608,
           "Plan Width": 0,
-          "Actual Startup Time": 0.008,
-          "Actual Total Time": 2718.305,
+          "Actual Startup Time": 0.037,
+          "Actual Total Time": 3714.727,
           "Actual Rows": 8388608,
           "Actual Loops": 1
         }
       ]
     },
-    "Planning Time": 0.058,
+    "Planning Time": 0.070,
     "Triggers": [
     ],
-    "Execution Time": 3430.922
+    "Execution Time": 4511.265
   }
 ]
 ```
