@@ -9,6 +9,7 @@ sys	0m0.010s
 ```
 
 ### install pgbench sample schema
+
 ```
 ~ $ time pgbench -i -s 3 -d pgbench
 dropping old tables...
@@ -30,12 +31,20 @@ user	0m0.174s
 sys	0m0.029s
 ``` 
 
+NB you might need to hard code pgbench path
+
+```
+~ $ time /usr/pgsql-9.6/bin/pgbench -i -s 3 -d pgbench
+```
+although better to append to "/usr/pgsql-9.6/bin" to the PATH.
+
 ### test connect via psql
 ```
 psql -d pgbench
 ```
 
 ### sample query output on vanilla pgbench
+Default four tables:
 ```
 pgbench=# \d
              List of relations
@@ -46,7 +55,9 @@ pgbench=# \d
  public | pgbench_history  | table | dpitts
  public | pgbench_tellers  | table | dpitts
 (4 rows)
-
+```
+Lets start by a simple select but first only looking at the plan:
+```
 pgbench=# \timing on
 Timing is on.
 pgbench=# explain select * from pgbench_accounts;
@@ -54,8 +65,14 @@ pgbench=# explain select * from pgbench_accounts;
 -------------------------------------------------------------------------
  Seq Scan on pgbench_accounts  (cost=0.00..7919.00 rows=300000 width=97)
 (1 row)
-
 Time: 3.165 ms
+```
+i.e. the optimizer thinks there are 300000 rows and this simple query should be "fairly cheap" i.e. optimizer cost of 
+7919. This abstract cost has no direct real-world meaning but the optimizer choosed the cheapest plan (I will give further examples later which help clarify the optimizer cost model).
+
+
+Running the query takes signiifcantly long (112ms) than just generating the plan
+```
 pgbench=# select count(*) from pgbench_accounts;
  count
 --------
@@ -63,6 +80,10 @@ pgbench=# select count(*) from pgbench_accounts;
 (1 row)
 
 Time: 112.382 ms
+```
+
+and rerunning is faster (probably as the table blocks are not in shared buffers and fewre io calls)
+```
 pgbench=# select count(*) from pgbench_accounts;
  count
 --------
@@ -71,6 +92,37 @@ pgbench=# select count(*) from pgbench_accounts;
 
 Time: 29.915 ms
 ```
+
+Next I'm going to rerun the query with some DBA training/debugging options i.e. *explain (analyze,buffers,verbose)*  
+```
+pgbench=# explain (analyze,buffers,verbose) select * from pgbench_accounts;
+                                                           QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on public.pgbench_accounts  (cost=0.00..7919.00 rows=300000 width=97) (actual time=0.054..51.939 rows=300000 loops=1)
+   Output: aid, bid, abalance, filler
+   Buffers: shared hit=2144 read=2775
+ Planning time: 0.128 ms
+ Execution time: 73.565 ms
+(5 rows)
+
+Time: 74.176 ms
+```
+and again rerunning we get similar but not identical metrics:
+```
+pgbench=# explain (analyze,buffers,verbose) select * from pgbench_accounts;
+                                                           QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on public.pgbench_accounts  (cost=0.00..7919.00 rows=300000 width=97) (actual time=0.154..37.869 rows=300000 loops=1)
+   Output: aid, bid, abalance, filler
+   Buffers: shared hit=2176 read=2743
+ Planning time: 0.046 ms
+ Execution time: 52.986 ms
+(5 rows)
+
+Time: 53.479 ms
+```
+
+
 ### Add foreign key on pgbench_accounts(bid) to pgbench_branches - pgbench_accounts_fk_bid 
 ```
 pgbench=# \d pgbench_accounts
