@@ -43,6 +43,10 @@ install pgbench sample schema
 ```
 pgbench -i -s 15 -d pgbench
 ``` 
+alternatively if using the bench1 user and database:
+```
+pgbench -i -s 15 -d bench1 -U bench1
+```
 
 test connect
 ```
