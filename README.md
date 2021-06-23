@@ -19,6 +19,12 @@ note:
 * Issues with postgres blocking and waiting scripts i.e. https://wiki.postgresql.org/wiki/Lock_Monitoring (latest version of this pages is looking good)
 * pgsql functions STABLE or VOLATILE (default) ?
 
+# Going deeper into the Postgres optimizer
+
+Reading Postgres Execution plans isn't too tricky, I've written some simple scripts and made some notes to demo this:
+
+* [Demo-01 of the three key execution plan join operations Nested Loop, [Sort] Merge Join and Hash Join Operations](docs/Demo1_NestedLoop_MergeJoin_HashJoin.md)
+* to be continued ...
 
 ## Quick setup notes for Mac
 
