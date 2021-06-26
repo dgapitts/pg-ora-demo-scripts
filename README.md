@@ -24,7 +24,7 @@ note:
 Reading Postgres Execution plans isn't too tricky, I've written some simple scripts and made some notes to demo this:
 
 * [Demo-01 of the three key execution plan join operations Nested Loop, [Sort] Merge Join and Hash Join Operations](docs/Demo1_NestedLoop_MergeJoin_HashJoin.md)
-* to be continued ...
+* [Demo02_with_ANALYZE-BUFFERS](docs/Demo02_with_ANALYZE-BUFFERS.md)
 
 ## Quick setup notes for Mac
 
