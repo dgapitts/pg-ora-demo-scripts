@@ -26,7 +26,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-01 of the three key execution plan join operations `Nested Loop`, `[Sort] Merge Join` and `Hash Join` Operations](docs/Demo1_NestedLoop_MergeJoin_HashJoin.md)
 * [Demo-02 `explain` with ANALYZE-BUFFERS](docs/Demo02_with_ANALYZE-BUFFERS.md)
 * [Demo-03 `work_mem` and `Sorts-to-Disk`](docs/Demo-03_work_mem_and_Sorts-to-Disk.md)
-
+* [Demo-04 Anti Join (with nested loops)](docs/Demo-04-AntiJoin.md)
 
 ## Quick setup notes for Mac
 
