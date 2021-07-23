@@ -1,5 +1,4 @@
-
-## Demo of the three key execution plan join operations Nested Loop, [Sort] Merge Join and Hash Join Operarions 
+## Demo-01 of the three key execution plan join operations Nested Loop, [Sort] Merge Join and Hash Join Operarions 
 
 ### pg version - 12.5
 
