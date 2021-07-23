@@ -1,6 +1,6 @@
 ## Demo-05 Materialize SubPlan
 
-I've docuented this broader ["postgres edge" before](loadtest/postgres-gotcha01-not-in/README.md), but here I want to focus on the Materialize SubPlan
+I've docuented this broader ["postgres edge" before](../loadtest/postgres-gotcha01-not-in/README.md), but here I want to focus on the Materialize SubPlan
 
 ```
 bench1=# explain (analyze, buffers) select count(bid) from pgbench_branches where bid NOT IN (select bid from pgbench_accounts);
