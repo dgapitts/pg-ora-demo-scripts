@@ -23,12 +23,13 @@ note:
 
 Reading Postgres Execution plans isn't too tricky, I've written some simple scripts and made some notes to demo this:
 
-* [Demo-01 of the three key execution plan join operations `Nested Loop`, `[Sort] Merge Join` and `Hash Join` Operations](docs/Demo1_NestedLoop_MergeJoin_HashJoin.md)
-* [Demo-02 `explain` with ANALYZE-BUFFERS](docs/Demo02_with_ANALYZE-BUFFERS.md)
-* [Demo-03 `work_mem` and `Sorts-to-Disk`](docs/Demo-03_work_mem_and_Sorts-to-Disk.md)
+* [Demo-01 Three key execution plan join operations `Nested Loop`, `[Sort] Merge Join` and `Hash Join` Operations](docs/Demo1_NestedLoop_MergeJoin_HashJoin.md)
+* [Demo-02 Using `EXPLAIN` with `ANALYZE BUFFERS` to trace sql execution actual performance details](docs/Demo02_with_ANALYZE-BUFFERS.md)
+* [Demo-03 postgres `WORK_MEM` parameter challenge and why you might see more Sorts-to-Disk](docs/Demo-03_work_mem_and_Sorts-to-Disk.md)
 * [Demo-04 Anti Join (with nested loops)](docs/Demo-04-AntiJoin.md)
 * [Demo-05 Materialize SubPlan](docs/Demo05-Materialize-SubPlan.md)
-* [Demo-06 Materialize SubPlan](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
+* [Demo-06 Postgres optimizer NOT IN gotcha - still in pg12](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
+
 ## Quick setup notes for Mac
 
 Install (or upgrade) via brew
