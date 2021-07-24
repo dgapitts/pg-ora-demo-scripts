@@ -28,6 +28,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-03 `work_mem` and `Sorts-to-Disk`](docs/Demo-03_work_mem_and_Sorts-to-Disk.md)
 * [Demo-04 Anti Join (with nested loops)](docs/Demo-04-AntiJoin.md)
 * [Demo-05 Materialize SubPlan](docs/Demo05-Materialize-SubPlan.md)
+* [Demo-06 Materialize SubPlan](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
 ## Quick setup notes for Mac
 
 Install (or upgrade) via brew
