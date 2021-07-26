@@ -1,0 +1,127 @@
+==> 01-setup-transaction-isolation-demo.sql <==
+CREATE TABLE doctors (
+    id INT PRIMARY KEY,
+    name TEXT
+);
+
+CREATE TABLE schedules (
+    day DATE,
+    doctor_id INT REFERENCES doctors (id),
+    on_call BOOL,
+    PRIMARY KEY (day, doctor_id)
+);
+
+INSERT INTO doctors VALUES
+    (1, 'Abe'),
+    (2, 'Betty');
+
+INSERT INTO schedules VALUES
+    ('2018-10-01', 1, true),
+    ('2018-10-01', 2, true),
+    ('2018-10-02', 1, true),
+    ('2018-10-02', 2, true),
+    ('2018-10-03', 1, true),
+    ('2018-10-03', 2, true),
+    ('2018-10-04', 1, true),
+    ('2018-10-04', 2, true),
+    ('2018-10-05', 1, true),
+    ('2018-10-05', 2, true),
+    ('2018-10-06', 1, true),
+    ('2018-10-06', 2, true),
+    ('2018-10-07', 1, true),
+    ('2018-10-07', 2, true);
+
+==> 02.sessionA-with-rollback.sql <==
+BEGIN;
+
+SELECT day, count(*) AS doctors_on_call FROM schedules
+  WHERE on_call = true
+  GROUP BY day
+  ORDER BY day;
+
+
+SELECT count(*) FROM schedules
+  WHERE on_call = true
+  AND day = '2018-10-05'
+  AND doctor_id != 1;
+
+-- pause for parallel session2 to start 
+select now(), pg_sleep(10);
+
+UPDATE schedules SET on_call = false
+  WHERE day = '2018-10-05'
+  AND doctor_id = 1;
+
+
+SELECT day, count(*) AS doctors_on_call FROM schedules
+  WHERE on_call = true
+  GROUP BY day
+  ORDER BY day;
+
+rollback;  
+
+
+==> 02.sessionB-with-rollback.sql <==
+BEGIN;
+
+SELECT day, count(*) AS doctors_on_call FROM schedules
+  WHERE on_call = true
+  GROUP BY day
+  ORDER BY day;
+
+
+SELECT count(*) FROM schedules
+  WHERE on_call = true
+  AND day = '2018-10-05'
+  AND doctor_id != 2;
+
+-- pause for parallel session2 to start 
+select now(), pg_sleep(10);
+
+UPDATE schedules SET on_call = false
+  WHERE day = '2018-10-05'
+  AND doctor_id = 2;
+
+
+SELECT day, count(*) AS doctors_on_call FROM schedules
+  WHERE on_call = true
+  GROUP BY day
+  ORDER BY day;
+
+rollback;  
+
+
+==> 03.sessionA-with-rollback-SERIALIZABLE.sql <==
+BEGIN;
+
+set transaction ISOLATION LEVEL SERIALIZABLE;
+show transaction ISOLATION LEVEL;
+
+
+
+SELECT day, count(*) AS doctors_on_call FROM schedules
+  WHERE on_call = true
+  GROUP BY day
+  ORDER BY day;
+
+
+SELECT count(*) FROM schedules
+  WHERE on_call = true
+  AND day = '2018-10-05'
+  AND doctor_id != 1;
+
+-- pause for parallel session2 to start 
+select now(), pg_sleep(10);
+
+UPDATE schedules SET on_call = false
+  WHERE day = '2018-10-05'
+  AND doctor_id = 1;
+
+
+SELECT day, count(*) AS doctors_on_call FROM schedules
+  WHERE on_call = true
+  GROUP BY day
+  ORDER BY day;
+
+rollback;  
+
