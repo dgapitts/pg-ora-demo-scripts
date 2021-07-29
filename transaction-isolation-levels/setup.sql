@@ -1,5 +1,6 @@
+DROP TABLE IF EXISTS DOCTORS CASCADE;
+DROP TABLE IF EXISTS SCHEDULES CASCADE;
 
--- based off https://www.cockroachlabs.com/docs/stable/demo-serializable.html
 
 CREATE TABLE doctors (
     id INT PRIMARY KEY,
@@ -33,4 +34,3 @@ INSERT INTO schedules VALUES
     ('2018-10-07', 1, true),
     ('2018-10-07', 2, true);
 
-    
