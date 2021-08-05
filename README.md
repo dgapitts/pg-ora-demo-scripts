@@ -37,7 +37,14 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Default READ-COMMITED bahaviour in Postgres - some issues with overlapping transaction](docs/Demo01-Default-READ-COMMITED-issues.md)
 * [Default SERIALIZATION in CockroachDB update single row in BLOCKS other SELECT transactions - ouch](docs/Demo02-Default-SERIALIZATION-CRDB-issues.md)
 * [Using SERIALIZATION in Postgres transactions start failing - due to read/write dependencies among transactions](docs/Demo03-Using-SERIALIZATION-in-Postgres.md)
-## Quick setup notes for Mac
+
+
+# Unindexed foreign keys
+
+
+* [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
+  
+# Quick setup notes for Mac
 
 Install (or upgrade) via brew
 ```
