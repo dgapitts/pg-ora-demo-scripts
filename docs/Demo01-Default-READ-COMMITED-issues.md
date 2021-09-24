@@ -1,4 +1,4 @@
-## Default READ-COMMITED issues
+## Default READ-COMMITED issues bahaviour in Postgres
 
 This is basically following https://www.cockroachlabs.com/docs/stable/demo-serializable.html but I've added "select now()" to show the how two sessions/transactions overlap
 

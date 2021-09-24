@@ -1,5 +1,8 @@
 -- https://www.cybertec-postgresql.com/en/index-your-foreign-key/
 
+drop if exists target;
+drop if exists source;
+
 
 -- to make the plans look simpler
 SET max_parallel_workers_per_gather = 0;
