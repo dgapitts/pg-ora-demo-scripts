@@ -39,9 +39,11 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Using SERIALIZATION in Postgres transactions start failing - due to read/write dependencies among transactions](docs/Demo03-Using-SERIALIZATION-in-Postgres.md)
 
 
-# Useful-Queries
+# Useful bits and pieces
 
-* [Useful-Queries](docs/Useful-Queries.md)
+* [Useful bits and pieces](docs/Useful-Queries.md)
+* [pg startup and running time](docs/Useful-Queries.md#pg-startup-and-running-time)
+
 
 # Unindexed foreign keys
 
