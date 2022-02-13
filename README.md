@@ -41,9 +41,10 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 
 # Useful bits and pieces
 
-* [Useful bits and pieces](docs/Useful-Queries.md)
+* [Useful bits and pieces (all)](docs/Useful-Queries.md)
 * [pg startup and running time](docs/Useful-Queries.md#pg-startup-and-running-time)
-
+* [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
+* [plpgsql random_json from ryanbooz's FOSDEM 2022 presenation](docs/FOSDEM_2022_random_json.md)
 
 # Unindexed foreign keys
 
