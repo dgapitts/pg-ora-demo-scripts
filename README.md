@@ -50,6 +50,18 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 
 
 * [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
+
+
+# Postrgres FillFactor and HOT updates
+### Background 
+
+I want to write up some notes on FF and HOT updates
+* this is a good start point - nice summary https://www.cybertec-postgresql.com/en/hot-updates-in-postgresql-for-better-performance/
+* but I want to work through some of the details
+* also expand on how to monitor and tune this 
+
+### Examples
+* [FF and HOT updates - part 01 - examples with fillfactor 90](docs/FF-and-HOT-updates-part-01.md)
   
 # Quick setup notes for Mac
 
