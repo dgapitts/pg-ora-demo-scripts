@@ -22,7 +22,6 @@ select n_tup_upd, n_tup_hot_upd from pg_stat_user_tables where relname = 't1_90'
 update t1_90 set f3 = 'v2' where v1 = 3;
 select pg_sleep(3);
 select n_tup_upd, n_tup_hot_upd from pg_stat_user_tables where relname = 't1_90';
-SELECT ctid, v1, f1 from t1_90 order by v1 limit 10;
 SELECT ctid, v1, f1, f3 from t1_90 order by v1 limit 10;
 update t1_90 set f1 = 'v2' where v1 = 4;
 SELECT ctid, v1, f1, f3 from t1_90 order by v1 limit 10;
