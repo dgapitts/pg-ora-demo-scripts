@@ -29,6 +29,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-04 Anti Join (with nested loops)](docs/Demo-04-AntiJoin.md)
 * [Demo-05 Materialize SubPlan](docs/Demo05-Materialize-SubPlan.md)
 * [Demo-06 Postgres optimizer NOT IN gotcha - still in pg12](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
+* [Demo-07 Index Scan Backward](docs/Demo07-Index-Scan-Backward.md)
 
 #  Transaction isolation levels
 
