@@ -54,7 +54,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
 
 
-# Postrgres FillFactor and HOT updates
+# Postrgres FillFactor and HOT (Heap Only Tuple) updates
 ### Background 
 
 I want to write up some notes on FF and HOT updates
@@ -63,8 +63,9 @@ I want to write up some notes on FF and HOT updates
 * also expand on how to monitor and tune this 
 
 ### Examples
-* [FF and HOT updates - part 01 - examples with fillfactor 90](docs/FF-and-HOT-updates-part-01.md)
-  
+* [FF and HOT updates - part 01 - simple example with fillfactor 9 - 3 updates and 3 out of 3 are HOT ](docs/FF-and-HOT-updates-part-01.md)
+* [FF and HOT updates - part 02 - simple example with fillfactor 100 - 3 updates and only 2 out of 3 are HOT](docs/FF-and-HOT-updates-part-02.md)
+
 # Quick setup notes for Mac
 
 Install (or upgrade) via brew

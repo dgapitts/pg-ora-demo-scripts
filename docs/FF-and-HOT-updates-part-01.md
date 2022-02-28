@@ -1,4 +1,4 @@
-## FF and HOT updates - part 01 - examples with fillfactor 90
+## FF and HOT updates - part 01 - examples with fillfactor 90 - 3 updates and all 3 HOT 
 
 
 ### Background 
@@ -7,6 +7,14 @@ I want to write up some notes on FF and HOT updates
 * this is a good start point - nice summary https://www.cybertec-postgresql.com/en/hot-updates-in-postgresql-for-better-performance/
 * but I want to work through some of the details
 * also expand on how to monitor and tune this 
+
+
+### Test 01 - simple table, with spare space (90% fillfactor) plus no UPDATEs on INDEXed columns so 3 out of 3 HOT updates 
+
+Below I step through a very simple scenario:
+* simple table, with fillfactor=90 and 100 rows - spread over two pages (as per ctid details below)
+* no UPDATEs on INDEXed columns 
+* as per pg_stat_user_tables we have 3 out of 3 i.e. 100% HOT updates
 
 
 ### Setup with fillfactor 90 - three HOT updates
