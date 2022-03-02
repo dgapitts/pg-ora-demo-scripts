@@ -60,13 +60,11 @@ explain (analyze,wal) update t1_90 set f1 = 'v2' where v1 = 4;
 (7 rows)
 ```
 
-```
-
-
-
 
 ## Full output
 
+
+Setup...
 
 ```
 [pg13centos7:vagrant:/vagrant] #  psql -a -f t1_ff90.sql
@@ -196,7 +194,10 @@ SELECT ctid, v1, f1 from t1_90;
  (1,27) |  99 | aaa123
  (1,28) | 100 | aaa123
 (101 rows)
+```
 
+the run three UPDATE tests
+```
 select n_tup_upd, n_tup_hot_upd from pg_stat_user_tables where relname = 't1_90';
  n_tup_upd | n_tup_hot_upd
 -----------+---------------
