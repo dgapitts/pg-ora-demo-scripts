@@ -65,7 +65,7 @@ I want to write up some notes on FF and HOT updates
 ### Examples
 * [FF and HOT updates - part 01 - simple example with fillfactor 9 - 3 updates and 3 out of 3 are HOT ](docs/FF-and-HOT-updates-part-01.md)
 * [FF and HOT updates - part 02 - simple example with fillfactor 100 - 3 updates and only 2 out of 3 are HOT](docs/FF-and-HOT-updates-part-02.md)
-
+* [FF and HOT updates - part 03  -  added `explain (analyze,wal)`](docs/FF-and-HOT-updates-part-03.md)
 # Quick setup notes for Mac
 
 Install (or upgrade) via brew
