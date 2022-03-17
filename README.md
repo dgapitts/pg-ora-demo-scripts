@@ -30,7 +30,10 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-05 Materialize SubPlan](docs/Demo05-Materialize-SubPlan.md)
 * [Demo-06 Postgres optimizer NOT IN gotcha - still in pg12](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
 * [Demo-07 Index Scan Backward](docs/Demo07-Index-Scan-Backward.md)
+<<<<<<< HEAD
 * [Demo-08 Introducing Columnar Projected Columns](docs/Demo08-Columnar-Projected-Columns.md)
+=======
+>>>>>>> 4efa0bb9b59245dcabe7cc2eaedcbf6b1254ce47
 
 #  Transaction isolation levels
 
@@ -41,11 +44,32 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Using SERIALIZATION in Postgres transactions start failing - due to read/write dependencies among transactions](docs/Demo03-Using-SERIALIZATION-in-Postgres.md)
 
 
+# Useful bits and pieces
+
+* [Useful bits and pieces (all)](docs/Useful-Queries.md)
+* [pg startup and running time](docs/Useful-Queries.md#pg-startup-and-running-time)
+* [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
+* [plpgsql random_json from ryanbooz's FOSDEM 2022 presenation](docs/FOSDEM_2022_random_json.md)
+* [psql variables and running in parallel schemas](docs/psql-variables-and-parallel-schemas.md)
+
 # Unindexed foreign keys
 
 
 * [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
-  
+
+
+# Postrgres FillFactor and HOT (Heap Only Tuple) updates
+### Background 
+
+I want to write up some notes on FF and HOT updates
+* this is a good start point - nice summary https://www.cybertec-postgresql.com/en/hot-updates-in-postgresql-for-better-performance/
+* but I want to work through some of the details
+* also expand on how to monitor and tune this 
+
+### Examples
+* [FF and HOT updates - part 01 - simple example with fillfactor 9 - 3 updates and 3 out of 3 are HOT ](docs/FF-and-HOT-updates-part-01.md)
+* [FF and HOT updates - part 02 - simple example with fillfactor 100 - 3 updates and only 2 out of 3 are HOT](docs/FF-and-HOT-updates-part-02.md)
+* [FF and HOT updates - part 03  -  added `explain (analyze,wal)`](docs/FF-and-HOT-updates-part-03.md)
 # Quick setup notes for Mac
 
 Install (or upgrade) via brew
