@@ -51,6 +51,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
 * [plpgsql random_json from ryanbooz's FOSDEM 2022 presenation](docs/FOSDEM_2022_random_json.md)
 * [psql variables and running in parallel schemas](docs/psql-variables-and-parallel-schemas.md)
+* [Install citus RPMs and pg extension](docs/install-citus-RPMs-and-pg-extension.md)
 
 # Unindexed foreign keys
 
