@@ -30,10 +30,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-05 Materialize SubPlan](docs/Demo05-Materialize-SubPlan.md)
 * [Demo-06 Postgres optimizer NOT IN gotcha - still in pg12](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
 * [Demo-07 Index Scan Backward](docs/Demo07-Index-Scan-Backward.md)
-<<<<<<< HEAD
 * [Demo-08 Introducing Columnar Projected Columns](docs/Demo08-Columnar-Projected-Columns.md)
-=======
->>>>>>> 4efa0bb9b59245dcabe7cc2eaedcbf6b1254ce47
 
 #  Transaction isolation levels
 
