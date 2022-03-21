@@ -1,5 +1,6 @@
 -- https://www.citusdata.com/blog/2021/03/06/citus-10-columnar-compression-for-postgres/
-
+-- reduced sizes by a factor x100 to test on small VM
+-- tweaked some of the formatting and added absolute table sizes
 
 CREATE TABLE perf_row(
   c00 int8, c01 int8, c02 int8, c03 int8, c04 int8, c05 int8, c06 int8, c07 int8, c08 int8, c09 int8,
@@ -30,7 +31,7 @@ INSERT INTO perf_row
     g % 35500, g % 36000, g % 36500, g % 37000, g % 37500, g % 38000, g % 38500, g % 39000, g % 39500, g % 40000,
     g % 40500, g % 41000, g % 41500, g % 42000, g % 42500, g % 43000, g % 43500, g % 44000, g % 44500, g % 45000,
     g % 45500, g % 46000, g % 46500, g % 47000, g % 47500, g % 48000, g % 48500, g % 49000, g % 49500, g % 50000
-  FROM generate_series(1,50000000) g;
+  FROM generate_series(1,500000) g;
 
 INSERT INTO perf_columnar
   SELECT
@@ -44,17 +45,15 @@ INSERT INTO perf_columnar
     g % 35500, g % 36000, g % 36500, g % 37000, g % 37500, g % 38000, g % 38500, g % 39000, g % 39500, g % 40000,
     g % 40500, g % 41000, g % 41500, g % 42000, g % 42500, g % 43000, g % 43500, g % 44000, g % 44500, g % 45000,
     g % 45500, g % 46000, g % 46500, g % 47000, g % 47500, g % 48000, g % 48500, g % 49000, g % 49500, g % 50000
-  FROM generate_series(1,50000000) g;
+  FROM generate_series(1,500000) g;
 
-VACUUM (FREEZE, ANALYZE) perf_row;
-VACUUM (FREEZE, ANALYZE) perf_columnar;
+VACUUM VERBOSE perf_row;
+VACUUM VERBOSE perf_columnar;
 
 -- checkpoint if superuser; otherwise wait for system to settle
 CHECKPOINT; CHECKPOINT;
 
 
-SELECT pg_total_relation_size('perf_row')::numeric/
-       pg_total_relation_size('perf_columnar') AS compression_ratio;
+SELECT pg_size_pretty(pg_total_relation_size('perf_row')), pg_size_pretty(pg_total_relation_size('perf_columnar')), 
+       round(pg_total_relation_size('perf_row')::numeric/pg_total_relation_size('perf_columnar'),1) AS compression_ratio;
 
-\d+ perf_row
-\d+ perf_columnar
