@@ -30,6 +30,9 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-05 Materialize SubPlan](docs/Demo05-Materialize-SubPlan.md)
 * [Demo-06 Postgres optimizer NOT IN gotcha - still in pg12](docs/Demo-06-Postgres-optimizer-NOT-IN-gotcha.md)
 * [Demo-07 Index Scan Backward](docs/Demo07-Index-Scan-Backward.md)
+* [Demo-08 Introducing Columnar Projected Columns](docs/Demo08-Columnar-Projected-Columns.md)
+* [Demo-09 More Columnar Projected Columns](docs/Demo09-More-Columnar-Projected-Columns.md)
+
 
 #  Transaction isolation levels
 
@@ -47,6 +50,8 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
 * [plpgsql random_json from ryanbooz's FOSDEM 2022 presenation](docs/FOSDEM_2022_random_json.md)
 * [psql variables and running in parallel schemas](docs/psql-variables-and-parallel-schemas.md)
+* [Install citus RPMs and pg extension](docs/install-citus-RPMs-and-pg-extension.md)
+* [Introduction to Columnar Compression](docs/intro-columnar-compression.md)
 
 # Unindexed foreign keys
 
