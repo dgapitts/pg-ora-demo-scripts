@@ -102,3 +102,64 @@ postgres=# explain select avg(abalance) from pgbench_accounts where aid < 34000;
                Index Cond: (aid < 34000)
 (6 rows)
 ```
+
+
+### Example 05 - paritioning pruning -  needs pgbench_accounts_1 (Seq Scan) and pgbench_accounts_2 (Seq Scan)
+
+I've added `explain (analyze,buffers)` 
+* 547 blocks per partition (33K rows)
+* We have `Rows Removed by Filter: 1669` i.e.only 5% of 33K for `pgbench_accounts_2`
+
+```
+postgres=# explain (analyze,buffers) select avg(abalance) from pgbench_accounts where aid < 65000;
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2415.09..2415.10 rows=1 width=32) (actual time=18.693..18.695 rows=1 loops=1)
+   Buffers: shared hit=1094
+   ->  Append  (cost=0.00..2252.51 rows=65031 width=4) (actual time=0.012..14.335 rows=64999 loops=1)
+         Buffers: shared hit=1094
+         ->  Seq Scan on pgbench_accounts_1  (cost=0.00..963.67 rows=33334 width=4) (actual time=0.012..5.563 rows=33334 loops=1)
+               Filter: (aid < 65000)
+               Buffers: shared hit=547
+         ->  Seq Scan on pgbench_accounts_2  (cost=0.00..963.67 rows=31697 width=4) (actual time=0.027..3.987 rows=31665 loops=1)
+               Filter: (aid < 65000)
+               Rows Removed by Filter: 1669
+               Buffers: shared hit=547
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.150 ms
+ Execution Time: 18.731 ms
+(15 rows)
+```
+
+### Example 06 - no paritioning pruning -  needs pgbench_accounts_1 (Seq Scan), pgbench_accounts_2 (Seq Scan) and pgbench_accounts_3 (Index Scan)
+
+Againg with `explain (analyze,buffers)` 
+* 547 blocks per partition (33K rows) for pgbench_accounts_1 and pgbench_accounts_2
+* 27 blocks read for `Index Scan using pgbench_accounts_3_pkey on pgbench_accounts_3` (returning 1333 rows out of 33K
+
+
+
+```
+postgres=# explain (analyze,buffers) select avg(abalance) from pgbench_accounts where aid < 68000;
+                                                                          QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2501.98..2501.99 rows=1 width=32) (actual time=20.453..20.457 rows=1 loops=1)
+   Buffers: shared hit=1094 read=27
+   ->  Append  (cost=0.00..2331.97 rows=68001 width=4) (actual time=0.012..15.894 rows=67999 loops=1)
+         Buffers: shared hit=1094 read=27
+         ->  Seq Scan on pgbench_accounts_1  (cost=0.00..963.67 rows=33334 width=4) (actual time=0.011..5.312 rows=33334 loops=1)
+               Filter: (aid < 68000)
+               Buffers: shared hit=547
+         ->  Seq Scan on pgbench_accounts_2  (cost=0.00..963.67 rows=33334 width=4) (actual time=0.014..4.777 rows=33334 loops=1)
+               Filter: (aid < 68000)
+               Buffers: shared hit=547
+         ->  Index Scan using pgbench_accounts_3_pkey on pgbench_accounts_3  (cost=0.29..64.62 rows=1333 width=4) (actual time=0.072..0.488 rows=1331 loops=1)
+               Index Cond: (aid < 68000)
+               Buffers: shared read=27
+ Planning:
+   Buffers: shared hit=25 read=3 dirtied=1
+ Planning Time: 0.467 ms
+ Execution Time: 20.553 ms
+(17 rows)
+```
