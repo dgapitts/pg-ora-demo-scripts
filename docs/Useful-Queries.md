@@ -1,5 +1,9 @@
 ## Useful bits and pieces
 
+### Customize psql with ~/.psqlrc - add useful alias commands with tab completion
+
+I've added a [page on .psqlrc](psqlrc.md) this very useful features
+
 
 ### pg startup and running time
 As per [how-can-i-get-my-servers-uptime](https://dba.stackexchange.com/questions/99428/how-can-i-get-my-servers-uptime):
