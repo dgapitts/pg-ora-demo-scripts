@@ -65,6 +65,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Intro Postgres Partitioning `--partition-method=range`](docs/Intro-Postgres-Partitioning.md)
 * [Intro Postgres Partitioning `--partition-method=hash`](docs/Intro-Postgres-Partitioning.md)
 * [Prepared statements can be a lot faster but issues around partitioning](docs/pgbench-prepared-statements.md)
+* [Prepared statements around partitioning faster with `plan_cache_mode` = `force_generic_plan`](docs/pgbench-prepared-statements-force_generic_plan.md)
 
 # Postrgres FillFactor and HOT (Heap Only Tuple) updates
 ### Background 
