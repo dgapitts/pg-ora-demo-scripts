@@ -53,6 +53,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [psql variables and running in parallel schemas](docs/psql-variables-and-parallel-schemas.md)
 * [Install citus RPMs and pg extension](docs/install-citus-RPMs-and-pg-extension.md)
 * [Introduction to Columnar Compression](docs/intro-columnar-compression.md)
+* [auto_explain - setup notes and sample usage](docs/intro-auto_explain-setup-notes-and-sample-usage.md)
 
 # Unindexed foreign keys
 
