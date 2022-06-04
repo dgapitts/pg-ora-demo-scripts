@@ -101,7 +101,7 @@ Timing is off.
 
 
 
-###  Details - plan_cache_mode=force_generic_plan - `Execution Time` low (partition pruning still working as expected) but relatively high `Planning Time`
+###  Details - plan_cache_mode=force_generic_plan - `Execution Time` low (partition pruning still working as expected) and now low `Planning Time` too
 
 
 ```
