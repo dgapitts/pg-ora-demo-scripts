@@ -32,6 +32,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-07 Index Scan Backward](docs/Demo07-Index-Scan-Backward.md)
 * [Demo-08 Introducing Columnar Projected Columns](docs/Demo08-Columnar-Projected-Columns.md)
 * [Demo-09 More Columnar Projected Columns](docs/Demo09-More-Columnar-Projected-Columns.md)
+* [Demo-10 Prepared statements, partitioning pruning and plan_cache_mode](docs/Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
 
 
 #  Transaction isolation levels
