@@ -3,11 +3,11 @@
 
 ### Summary
 
-Prepared statements can massively improve performance (e.g.[pgbench-prepared-statements examples here](pgbench-prepared-statements.md)), however currently this isn't working well partitioning (e.g.[pgbench-prepared-statements-force_generic_plan examples here](pgbench-prepared-statements-force_generic_plan)) although there seems to be a workaround i.e. switch plan_cache_mode from auto to force_generic_plan.
+Prepared statements can massively improve performance (e.g.[pgbench-prepared-statements examples here](pgbench-prepared-statements.md), focus on the regular table example), however currently (pg13.7) this isn't working well with partitioning (e.g.[pgbench-prepared-statements-force_generic_plan examples here](pgbench-prepared-statements-force_generic_plan)) although there seems to be a workaround i.e. switch plan_cache_mode from auto to force_generic_plan.
 
 
 I was curious about these pgbench based tests, which are great as far as they go but as below
-* I wanted to break down the relative `Execution Time` and `Planning Time`
+* I wanted to break down the relative `Execution Time` and `Planning Time` within the query, not just look at the overall performance averages over 100K runs i.e. the focus of the above pgbench tests.
 * As expected (given the pgbench tests linked above) `Execution Time` low (partition pruning working as expected) but relatively high `Planning Time` with plan_cache_mode=auto (i.e. of the order of x10 higher)
 * Also I was curious if with plan_cache_mode=force_generic_plan and prepared statements, we still the partition pruning - which we still do, but planning down is down from around 0.5ms to 0.03ms, and given the exec times for this simple querry is around 0.1ms
 
