@@ -55,7 +55,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Install citus RPMs and pg extension](docs/install-citus-RPMs-and-pg-extension.md)
 * [Introduction to Columnar Compression](docs/intro-columnar-compression.md)
 * [auto_explain - setup notes and sample usage](docs/intro-auto_explain-setup-notes-and-sample-usage.md)
-
+* [tracking replicalag](docs/tracking_replicalag.md)
 # Unindexed foreign keys
 
 * [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
