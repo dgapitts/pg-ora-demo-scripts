@@ -1,6 +1,6 @@
 ## Loading large datasets and exploring text analysis with Ulysses
    
-I'm sure there are many ways to do this, some of which are going to be more efficient, but here is my "first attempt"
+I'm sure there are many ways to do this (e.g. [example two here](loading-large-datasets-and-exploring-text-analysis-alt.md)), some of which are going to be more efficient, but here is my "first attempt"
 * Download .txt version of [Ulysses-James-Joyce from gutenberg](https://www.gutenberg.org/files/4300/4300-0.txt)
 * add line numbers: `cat -n`   
 * I want to use # as my delimiter, so I removed this line
@@ -103,3 +103,5 @@ although there is at lesat one false positive above
 ```
    21825 | with long flowing crimson tail, richly caparisoned, with golden
 ```   
+
+
