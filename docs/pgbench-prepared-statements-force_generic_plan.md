@@ -2,8 +2,8 @@
 
 
 *Note* 
-* also worth reviewing the *ealier* anaylsis [Prepared statements can be a lot faster but issues around partitioning](docs/pgbench-prepared-statements.md)
-* this analysis is then also *continued* here [Prepared statements, partitioning pruning and plan_cache_mode](docs/Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md), but focusing on the actual execution plans for individual queries i.e. do we see partition pruning and what happens to prepare times.
+* also worth reviewing the *ealier* anaylsis [Prepared statements can be a lot faster but issues around partitioning](pgbench-prepared-statements.md)
+* this analysis is then also *continued* here [Prepared statements, partitioning pruning and plan_cache_mode](Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md), but focusing on the actual execution plans for individual queries i.e. do we see partition pruning and what happens to prepare times.
 
 
 
