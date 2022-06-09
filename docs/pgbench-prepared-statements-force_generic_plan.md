@@ -1,6 +1,13 @@
 ## Sumary - prepared statements around partitioning faster with `plan_cache_mode` = `force_generic_plan`
 
 
+*Note* 
+* also worth reviewing the *ealier* anaylsis [Prepared statements can be a lot faster but issues around partitioning](docs/pgbench-prepared-statements.md)
+* this analysis is then also *continued* here [Prepared statements, partitioning pruning and plan_cache_mode](docs/Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md), but focusing on the actual execution plans for individual queries i.e. do we see partition pruning and what happens to prepare times.
+
+
+
+
 Again following this postgres blog post["Postgres: on performance of prepared statements with partitioning"]](https://amitlan.com/2022/05/16/param-query-partition-woes.html):
 
 > Along with the patch I mentioned above which improves the execution performance of generic plans containing partitions, we will also need to fix things such that generic plans don’t appear more expensive than custom plans to the plan caching logic for it to choose the former. Till that’s also fixed, users will need to use plan_cache_mode = force_generic_plan to have plan caching for partitions.

@@ -57,7 +57,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [auto_explain - setup notes and sample usage](docs/intro-auto_explain-setup-notes-and-sample-usage.md)
 * [tracking replicalag](docs/tracking_replicalag.md)
 * [Loading large datasets and exploring text analysis with Ulysses](docs/loading-large-datasets-and-exploring-text-analysis.md)
-* [Starting gin_trgm_ops indexing](docs/Starting-gin_trgm_ops-indexing.md)
+* [Starting gin_trgm_ops indexing with Ulysses](docs/Starting-gin_trgm_ops-indexing.md)
 
 # Unindexed foreign keys
 
