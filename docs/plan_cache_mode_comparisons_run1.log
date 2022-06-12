@@ -1,0 +1,464 @@
+-- extending test from https://franckpachot.medium.com/postgresql-bind-variable-peeking-fb4be4942252
+drop table if exists demo; 
+DROP TABLE
+create table DEMO as select 1 n from generate_series(1,11)
+           union all select 2   from generate_series(1,22)
+           union all select 3   from generate_series(1,33)
+           union all select 4   from generate_series(1,44)
+           union all select 5   from generate_series(1,55)
+           union all select 6   from generate_series(1,66)
+           union all select 7   from generate_series(1,77)
+           union all select 8   from generate_series(1,88)
+           ;
+SELECT 396
+analyze demo;
+ANALYZE
+\d demo
+                Table "public.demo"
+ Column |  Type   | Collation | Nullable | Default 
+--------+---------+-----------+----------+---------
+ n      | integer |           |          | 
+
+\x
+Expanded display is on.
+select * from pg_stats where tablename = 'demo' and attname = 'n';
+-[ RECORD 1 ]----------+--------------------------------------------------------------------------------------------
+schemaname             | public
+tablename              | demo
+attname                | n
+inherited              | f
+null_frac              | 0
+avg_width              | 4
+n_distinct             | 8
+most_common_vals       | {8,7,6,5,4,3,2,1}
+most_common_freqs      | {0.22222222,0.19444445,0.16666667,0.1388889,0.11111111,0.083333336,0.055555556,0.027777778}
+histogram_bounds       | 
+correlation            | 1
+most_common_elems      | 
+most_common_elem_freqs | 
+elem_count_histogram   | 
+
+\x
+Expanded display is off.
+prepare myselect_auto (int) as select count(*) from DEMO where n=$1;
+PREPARE
+set plan_cache_mode=auto;
+SET
+show  plan_cache_mode;
+ plan_cache_mode 
+-----------------
+ auto
+(1 row)
+
+explain (analyze,buffers) execute myselect_auto(1);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=6.98..6.99 rows=1 width=8) (actual time=0.103..0.104 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=11 width=0) (actual time=0.035..0.088 rows=11 loops=1)
+         Filter: (n = 1)
+         Rows Removed by Filter: 385
+         Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=8
+ Planning Time: 0.422 ms
+ Execution Time: 0.193 ms
+(10 rows)
+
+explain (analyze,buffers) execute myselect_auto(1);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=6.98..6.99 rows=1 width=8) (actual time=0.076..0.077 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=11 width=0) (actual time=0.018..0.071 rows=11 loops=1)
+         Filter: (n = 1)
+         Rows Removed by Filter: 385
+         Buffers: shared hit=2
+ Planning Time: 0.074 ms
+ Execution Time: 0.099 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(2);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.00..7.01 rows=1 width=8) (actual time=0.083..0.084 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=22 width=0) (actual time=0.023..0.076 rows=22 loops=1)
+         Filter: (n = 2)
+         Rows Removed by Filter: 374
+         Buffers: shared hit=2
+ Planning Time: 0.080 ms
+ Execution Time: 0.112 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(3);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.03..7.04 rows=1 width=8) (actual time=0.081..0.082 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=33 width=0) (actual time=0.021..0.072 rows=33 loops=1)
+         Filter: (n = 3)
+         Rows Removed by Filter: 363
+         Buffers: shared hit=2
+ Planning Time: 0.059 ms
+ Execution Time: 0.101 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(4);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.06..7.07 rows=1 width=8) (actual time=0.058..0.059 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=44 width=0) (actual time=0.017..0.051 rows=44 loops=1)
+         Filter: (n = 4)
+         Rows Removed by Filter: 352
+         Buffers: shared hit=2
+ Planning Time: 0.059 ms
+ Execution Time: 0.072 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(5);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.064..0.064 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.022..0.055 rows=55 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 341
+         Buffers: shared hit=2
+ Planning Time: 0.045 ms
+ Execution Time: 0.079 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(6);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.089..0.090 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.041..0.077 rows=66 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 330
+         Buffers: shared hit=2
+ Planning Time: 0.006 ms
+ Execution Time: 0.107 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(7);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.084..0.085 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.046..0.071 rows=77 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 319
+         Buffers: shared hit=2
+ Planning Time: 0.008 ms
+ Execution Time: 0.105 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(8);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.102..0.102 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.066..0.086 rows=88 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 308
+         Buffers: shared hit=2
+ Planning Time: 0.007 ms
+ Execution Time: 0.122 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(9);
+                                             QUERY PLAN                                              
+-----------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.066..0.066 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.064..0.064 rows=0 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 396
+         Buffers: shared hit=2
+ Planning Time: 0.007 ms
+ Execution Time: 0.084 ms
+(8 rows)
+
+prepare myselect_force_generic_plan (int) as select count(*) from DEMO where n=$1;
+PREPARE
+set plan_cache_mode=force_generic_plan;
+SET
+show  plan_cache_mode;
+  plan_cache_mode   
+--------------------
+ force_generic_plan
+(1 row)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(1);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.062..0.062 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.014..0.058 rows=11 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 385
+         Buffers: shared hit=2
+ Planning Time: 0.053 ms
+ Execution Time: 0.079 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(1);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.065..0.065 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.017..0.061 rows=11 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 385
+         Buffers: shared hit=2
+ Planning Time: 0.007 ms
+ Execution Time: 0.083 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(2);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.067..0.068 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.018..0.062 rows=22 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 374
+         Buffers: shared hit=2
+ Planning Time: 0.008 ms
+ Execution Time: 0.087 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(3);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.558..0.559 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.022..0.546 rows=33 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 363
+         Buffers: shared hit=2
+ Planning Time: 0.007 ms
+ Execution Time: 0.583 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(4);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.135..0.136 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.042..0.121 rows=44 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 352
+         Buffers: shared hit=2
+ Planning Time: 0.015 ms
+ Execution Time: 0.171 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(5);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.066..0.067 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.030..0.059 rows=55 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 341
+         Buffers: shared hit=2
+ Planning Time: 0.008 ms
+ Execution Time: 0.084 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(6);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.100..0.101 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.042..0.078 rows=66 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 330
+         Buffers: shared hit=2
+ Planning Time: 0.009 ms
+ Execution Time: 0.121 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(7);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.097..0.097 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.039..0.082 rows=77 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 319
+         Buffers: shared hit=2
+ Planning Time: 0.006 ms
+ Execution Time: 0.115 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(8);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.065..0.065 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.044..0.055 rows=88 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 308
+         Buffers: shared hit=2
+ Planning Time: 0.005 ms
+ Execution Time: 0.077 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(9);
+                                             QUERY PLAN                                              
+-----------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.08..7.08 rows=1 width=8) (actual time=0.048..0.048 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=50 width=0) (actual time=0.047..0.047 rows=0 loops=1)
+         Filter: (n = $1)
+         Rows Removed by Filter: 396
+         Buffers: shared hit=2
+ Planning Time: 0.004 ms
+ Execution Time: 0.059 ms
+(8 rows)
+
+prepare myselect_force_custom_plan (int) as select count(*) from DEMO where n=$1;
+PREPARE
+set plan_cache_mode=force_custom_plan;
+SET
+show  plan_cache_mode;
+  plan_cache_mode  
+-------------------
+ force_custom_plan
+(1 row)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(1);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=6.98..6.99 rows=1 width=8) (actual time=0.052..0.053 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=11 width=0) (actual time=0.012..0.049 rows=11 loops=1)
+         Filter: (n = 1)
+         Rows Removed by Filter: 385
+         Buffers: shared hit=2
+ Planning Time: 0.069 ms
+ Execution Time: 0.067 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(1);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=6.98..6.99 rows=1 width=8) (actual time=0.053..0.053 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=11 width=0) (actual time=0.012..0.049 rows=11 loops=1)
+         Filter: (n = 1)
+         Rows Removed by Filter: 385
+         Buffers: shared hit=2
+ Planning Time: 0.048 ms
+ Execution Time: 0.068 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(2);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.00..7.01 rows=1 width=8) (actual time=0.054..0.055 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=22 width=0) (actual time=0.013..0.049 rows=22 loops=1)
+         Filter: (n = 2)
+         Rows Removed by Filter: 374
+         Buffers: shared hit=2
+ Planning Time: 0.041 ms
+ Execution Time: 0.068 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(3);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.03..7.04 rows=1 width=8) (actual time=0.060..0.061 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=33 width=0) (actual time=0.016..0.054 rows=33 loops=1)
+         Filter: (n = 3)
+         Rows Removed by Filter: 363
+         Buffers: shared hit=2
+ Planning Time: 0.048 ms
+ Execution Time: 0.076 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(4);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.06..7.07 rows=1 width=8) (actual time=0.063..0.064 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=44 width=0) (actual time=0.018..0.055 rows=44 loops=1)
+         Filter: (n = 4)
+         Rows Removed by Filter: 352
+         Buffers: shared hit=2
+ Planning Time: 0.048 ms
+ Execution Time: 0.079 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(5);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.09..7.10 rows=1 width=8) (actual time=0.083..0.084 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=55 width=0) (actual time=0.028..0.071 rows=55 loops=1)
+         Filter: (n = 5)
+         Rows Removed by Filter: 341
+         Buffers: shared hit=2
+ Planning Time: 0.061 ms
+ Execution Time: 0.103 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(6);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.12..7.12 rows=1 width=8) (actual time=0.090..0.091 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=66 width=0) (actual time=0.035..0.076 rows=66 loops=1)
+         Filter: (n = 6)
+         Rows Removed by Filter: 330
+         Buffers: shared hit=2
+ Planning Time: 0.079 ms
+ Execution Time: 0.110 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(7);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.14..7.15 rows=1 width=8) (actual time=0.095..0.096 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=77 width=0) (actual time=0.050..0.079 rows=77 loops=1)
+         Filter: (n = 7)
+         Rows Removed by Filter: 319
+         Buffers: shared hit=2
+ Planning Time: 0.066 ms
+ Execution Time: 0.117 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(8);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7.17..7.18 rows=1 width=8) (actual time=0.099..0.100 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=88 width=0) (actual time=0.059..0.080 rows=88 loops=1)
+         Filter: (n = 8)
+         Rows Removed by Filter: 308
+         Buffers: shared hit=2
+ Planning Time: 0.065 ms
+ Execution Time: 0.121 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(9);
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Aggregate  (cost=6.95..6.96 rows=1 width=8) (actual time=0.070..0.071 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Seq Scan on demo  (cost=0.00..6.95 rows=1 width=0) (actual time=0.068..0.068 rows=0 loops=1)
+         Filter: (n = 9)
+         Rows Removed by Filter: 396
+         Buffers: shared hit=2
+ Planning Time: 0.059 ms
+ Execution Time: 0.089 ms
+(8 rows)
+

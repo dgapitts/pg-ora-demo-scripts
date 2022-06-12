@@ -15,7 +15,7 @@ analyze demo;
 \d demo
 
 \x
-select select * from pg_stats where tablename = 'demo' and attname = 'n';
+select * from pg_stats where tablename = 'demo' and attname = 'n';
 \x
 
 prepare myselect_auto (int) as select count(*) from DEMO where n=$1;

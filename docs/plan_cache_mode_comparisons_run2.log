@@ -1,0 +1,370 @@
+-- extending test from https://franckpachot.medium.com/postgresql-bind-variable-peeking-fb4be4942252
+drop table if exists demo; 
+DROP TABLE
+create table DEMO as select 1 n from generate_series(1,1)
+           union all select 2   from generate_series(1,2)
+           union all select 3   from generate_series(1,4)
+           union all select 4   from generate_series(1,8)
+           union all select 5   from generate_series(1,16)
+           union all select 6   from generate_series(1,32)
+           union all select 7   from generate_series(1,64)
+           union all select 8   from generate_series(1,128)
+           union all select 9   from generate_series(1,256)
+           union all select 10  from generate_series(1,518)
+           union all select 11  from generate_series(1,1024)
+           union all select 12  from generate_series(1,2048)
+           union all select 13  from generate_series(1,4096)
+           ;
+SELECT 8197
+create index demo_n on demo(n);
+CREATE INDEX
+ 
+analyze demo;
+ANALYZE
+\d demo
+                Table "public.demo"
+ Column |  Type   | Collation | Nullable | Default 
+--------+---------+-----------+----------+---------
+ n      | integer |           |          | 
+Indexes:
+    "demo_n" btree (n)
+
+\x
+Expanded display is on.
+select * from pg_stats where tablename = 'demo' and attname = 'n';
+-[ RECORD 1 ]----------+-------------------------------------------------------------------------------------------------------------------------------------------------
+schemaname             | public
+tablename              | demo
+attname                | n
+inherited              | f
+null_frac              | 0
+avg_width              | 4
+n_distinct             | 13
+most_common_vals       | {13,12,11,10,9,8,7,6,5,4,3,2}
+most_common_freqs      | {0.499695,0.2498475,0.12492375,0.06319385,0.031230938,0.015615469,0.0078077344,0.0039038672,0.0019519336,0.0009759668,0.0004879834,0.0002439917}
+histogram_bounds       | 
+correlation            | 1
+most_common_elems      | 
+most_common_elem_freqs | 
+elem_count_histogram   | 
+
+\x
+Expanded display is off.
+prepare myselect_auto (int) as select count(*) from DEMO where n=$1;
+PREPARE
+set plan_cache_mode=auto;
+SET
+show  plan_cache_mode;
+ plan_cache_mode 
+-----------------
+ auto
+(1 row)
+
+explain (analyze,buffers) execute myselect_auto(1);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.30..8.31 rows=1 width=8) (actual time=0.087..0.088 rows=1 loops=1)
+   Buffers: shared hit=1 read=2
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.30 rows=1 width=0) (actual time=0.078..0.079 rows=1 loops=1)
+         Index Cond: (n = 1)
+         Heap Fetches: 1
+         Buffers: shared hit=1 read=2
+ Planning:
+   Buffers: shared hit=8 read=1
+ Planning Time: 0.201 ms
+ Execution Time: 0.114 ms
+(10 rows)
+
+explain (analyze,buffers) execute myselect_auto(2);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.33..8.34 rows=1 width=8) (actual time=0.017..0.018 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.32 rows=2 width=0) (actual time=0.013..0.014 rows=2 loops=1)
+         Index Cond: (n = 2)
+         Heap Fetches: 2
+         Buffers: shared hit=3
+ Planning Time: 0.048 ms
+ Execution Time: 0.032 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(3);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.37..8.38 rows=1 width=8) (actual time=0.012..0.012 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.36 rows=4 width=0) (actual time=0.007..0.009 rows=4 loops=1)
+         Index Cond: (n = 3)
+         Heap Fetches: 4
+         Buffers: shared hit=3
+ Planning Time: 0.061 ms
+ Execution Time: 0.027 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(1);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.30..8.31 rows=1 width=8) (actual time=0.011..0.012 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.30 rows=1 width=0) (actual time=0.007..0.008 rows=1 loops=1)
+         Index Cond: (n = 1)
+         Heap Fetches: 1
+         Buffers: shared hit=3
+ Planning Time: 0.056 ms
+ Execution Time: 0.028 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(2);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.33..8.34 rows=1 width=8) (actual time=0.011..0.012 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.32 rows=2 width=0) (actual time=0.007..0.008 rows=2 loops=1)
+         Index Cond: (n = 2)
+         Heap Fetches: 2
+         Buffers: shared hit=3
+ Planning Time: 0.050 ms
+ Execution Time: 0.027 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(3);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.37..8.38 rows=1 width=8) (actual time=0.016..0.017 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.36 rows=4 width=0) (actual time=0.011..0.013 rows=4 loops=1)
+         Index Cond: (n = 3)
+         Heap Fetches: 4
+         Buffers: shared hit=3
+ Planning Time: 0.081 ms
+ Execution Time: 0.044 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(4);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.44..8.45 rows=1 width=8) (actual time=0.021..0.022 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.42 rows=8 width=0) (actual time=0.014..0.018 rows=8 loops=1)
+         Index Cond: (n = 4)
+         Heap Fetches: 8
+         Buffers: shared hit=3
+ Planning Time: 0.049 ms
+ Execution Time: 0.037 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(5);
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.61..8.62 rows=1 width=8) (actual time=0.018..0.019 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.57 rows=16 width=0) (actual time=0.008..0.014 rows=16 loops=1)
+         Index Cond: (n = 5)
+         Heap Fetches: 16
+         Buffers: shared hit=3
+ Planning Time: 0.066 ms
+ Execution Time: 0.036 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(6);
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.93..8.94 rows=1 width=8) (actual time=0.031..0.032 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.85 rows=32 width=0) (actual time=0.010..0.023 rows=32 loops=1)
+         Index Cond: (n = 6)
+         Heap Fetches: 32
+         Buffers: shared hit=3
+ Planning Time: 0.067 ms
+ Execution Time: 0.052 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_auto(13);
+                                                           QUERY PLAN                                                           
+--------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=124.20..124.22 rows=1 width=8) (actual time=2.386..2.386 rows=1 loops=1)
+   Buffers: shared hit=20 read=4
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..113.97 rows=4096 width=0) (actual time=0.049..1.821 rows=4096 loops=1)
+         Index Cond: (n = 13)
+         Heap Fetches: 4096
+         Buffers: shared hit=20 read=4
+ Planning Time: 0.062 ms
+ Execution Time: 2.406 ms
+(8 rows)
+
+prepare myselect_force_generic_plan (int) as select count(*) from DEMO where n=$1;
+PREPARE
+set plan_cache_mode=force_generic_plan;
+SET
+show  plan_cache_mode;
+  plan_cache_mode   
+--------------------
+ force_generic_plan
+(1 row)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(1);
+                                                        QUERY PLAN                                                         
+---------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=22.91..22.92 rows=1 width=8) (actual time=0.014..0.014 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..21.33 rows=631 width=0) (actual time=0.011..0.011 rows=1 loops=1)
+         Index Cond: (n = $1)
+         Heap Fetches: 1
+         Buffers: shared hit=3
+ Planning Time: 0.082 ms
+ Execution Time: 0.032 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_generic_plan(13);
+                                                          QUERY PLAN                                                          
+------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=22.91..22.92 rows=1 width=8) (actual time=1.698..1.699 rows=1 loops=1)
+   Buffers: shared hit=24
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..21.33 rows=631 width=0) (actual time=0.012..1.244 rows=4096 loops=1)
+         Index Cond: (n = $1)
+         Heap Fetches: 4096
+         Buffers: shared hit=24
+ Planning Time: 0.006 ms
+ Execution Time: 1.716 ms
+(8 rows)
+
+prepare myselect_force_custom_plan (int) as select count(*) from DEMO where n=$1;
+PREPARE
+set plan_cache_mode=force_custom_plan;
+SET
+show  plan_cache_mode;
+  plan_cache_mode  
+-------------------
+ force_custom_plan
+(1 row)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(1);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.30..8.31 rows=1 width=8) (actual time=0.013..0.013 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.30 rows=1 width=0) (actual time=0.009..0.010 rows=1 loops=1)
+         Index Cond: (n = 1)
+         Heap Fetches: 1
+         Buffers: shared hit=3
+ Planning Time: 0.078 ms
+ Execution Time: 0.028 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(2);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.33..8.34 rows=1 width=8) (actual time=0.010..0.010 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.32 rows=2 width=0) (actual time=0.006..0.008 rows=2 loops=1)
+         Index Cond: (n = 2)
+         Heap Fetches: 2
+         Buffers: shared hit=3
+ Planning Time: 0.044 ms
+ Execution Time: 0.023 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(3);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.37..8.38 rows=1 width=8) (actual time=0.011..0.011 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.36 rows=4 width=0) (actual time=0.006..0.008 rows=4 loops=1)
+         Index Cond: (n = 3)
+         Heap Fetches: 4
+         Buffers: shared hit=3
+ Planning Time: 0.043 ms
+ Execution Time: 0.024 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(1);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.30..8.31 rows=1 width=8) (actual time=0.009..0.009 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.30 rows=1 width=0) (actual time=0.006..0.006 rows=1 loops=1)
+         Index Cond: (n = 1)
+         Heap Fetches: 1
+         Buffers: shared hit=3
+ Planning Time: 0.042 ms
+ Execution Time: 0.021 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(2);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.33..8.34 rows=1 width=8) (actual time=0.009..0.010 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.32 rows=2 width=0) (actual time=0.006..0.007 rows=2 loops=1)
+         Index Cond: (n = 2)
+         Heap Fetches: 2
+         Buffers: shared hit=3
+ Planning Time: 0.041 ms
+ Execution Time: 0.022 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(3);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.37..8.38 rows=1 width=8) (actual time=0.010..0.010 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.36 rows=4 width=0) (actual time=0.006..0.008 rows=4 loops=1)
+         Index Cond: (n = 3)
+         Heap Fetches: 4
+         Buffers: shared hit=3
+ Planning Time: 0.041 ms
+ Execution Time: 0.022 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(4);
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.44..8.45 rows=1 width=8) (actual time=0.012..0.012 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.42 rows=8 width=0) (actual time=0.006..0.009 rows=8 loops=1)
+         Index Cond: (n = 4)
+         Heap Fetches: 8
+         Buffers: shared hit=3
+ Planning Time: 0.040 ms
+ Execution Time: 0.024 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(5);
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.61..8.62 rows=1 width=8) (actual time=0.015..0.015 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.57 rows=16 width=0) (actual time=0.006..0.011 rows=16 loops=1)
+         Index Cond: (n = 5)
+         Heap Fetches: 16
+         Buffers: shared hit=3
+ Planning Time: 0.041 ms
+ Execution Time: 0.027 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(6);
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.93..8.94 rows=1 width=8) (actual time=0.021..0.022 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..8.85 rows=32 width=0) (actual time=0.006..0.016 rows=32 loops=1)
+         Index Cond: (n = 6)
+         Heap Fetches: 32
+         Buffers: shared hit=3
+ Planning Time: 0.042 ms
+ Execution Time: 0.034 ms
+(8 rows)
+
+explain (analyze,buffers) execute myselect_force_custom_plan(13);
+                                                           QUERY PLAN                                                           
+--------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=124.20..124.22 rows=1 width=8) (actual time=1.588..1.589 rows=1 loops=1)
+   Buffers: shared hit=24
+   ->  Index Only Scan using demo_n on demo  (cost=0.29..113.97 rows=4096 width=0) (actual time=0.021..1.149 rows=4096 loops=1)
+         Index Cond: (n = 13)
+         Heap Fetches: 4096
+         Buffers: shared hit=24
+ Planning Time: 0.041 ms
+ Execution Time: 1.601 ms
+(8 rows)
+
