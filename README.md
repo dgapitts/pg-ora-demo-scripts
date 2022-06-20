@@ -33,7 +33,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-08 Introducing Columnar Projected Columns](docs/Demo08-Columnar-Projected-Columns.md)
 * [Demo-09 More Columnar Projected Columns](docs/Demo09-More-Columnar-Projected-Columns.md)
 * [Demo-10 Prepared statements, partitioning pruning and plan_cache_mode workaround (use )](docs/Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
-* [Demo-11 Reviewung plan_cache_mode options](docs/Demo11-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
+* [Demo-11 Reviewing plan_cache_mode options - the difference between auto, force_generic_plan and force_custom_plan](docs/Demo11-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
 
 #  Transaction isolation levels
 
@@ -62,7 +62,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 # Unindexed foreign keys
 
 * [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
-
+* [Demo02 ERROR:  there is no unique constraint matching given keys for referenced table](docs/Demo02-ERROR-there-is-no-unique-constraint-matching-given-keys-for-referenced-table.md)
 
 # pgbench
 
