@@ -63,6 +63,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 
 * [Demo01 Unindexed_foreign_keys postgres check query](docs/Demo01-Unindexed_foreign_keys-postgres-check-query.md)
 * [Demo02 ERROR:  there is no unique constraint matching given keys for referenced table](docs/Demo02-ERROR-there-is-no-unique-constraint-matching-given-keys-for-referenced-table.md)
+* [Demo03 Unindexing FK example fixed by check script](docs/Demo03-unindexing-FK-example-fixed-by-check-script.md)
 
 # pgbench
 
