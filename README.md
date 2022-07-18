@@ -35,6 +35,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-10 Prepared statements, partitioning pruning and plan_cache_mode workaround (use )](docs/Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
 * [Demo-11 Reviewing plan_cache_mode options - the difference between auto, force_generic_plan and force_custom_plan](docs/Demo11-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
 
+
 #  Transaction isolation levels
 
 Exploring how different DB Engines implement transaction isolation levels - exploring edge cases!
@@ -58,6 +59,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [tracking replicalag](docs/tracking_replicalag.md)
 * [Loading large datasets and exploring text analysis with Ulysses](docs/loading-large-datasets-and-exploring-text-analysis.md)
 * [Starting gin_trgm_ops indexing with Ulysses](docs/Starting-gin_trgm_ops-indexing.md)
+* [Laterial joins intro - more like a correlated subquery](docs/Laterial-joins-intro.md)
 
 # Unindexed foreign keys
 
