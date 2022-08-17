@@ -96,7 +96,89 @@ but for testing/demo purposes, I prefer the flag file approach
 64
 ```
 
+### Cleanup pg_wal on mac - `touch` works differently on mac
 
+
+Running some heavy FF tests down to 2.1G of freespace and I have nearly 3G of WAL (on my macair)
+
+```
+/usr/local/var/postgres $ du -hs *
+4.0K	PG_VERSION
+512M	base
+612K	global
+4.0K	logfile
+...
+2.8G	pg_wal
+8.0K	pg_xact
+...
+/usr/local/var/postgres $ df -h .
+Filesystem     Size   Used  Avail Capacity iused      ifree %iused  Mounted on
+/dev/disk1s1  234Gi  215Gi  2.1Gi   100% 2569927 2446555433    0%   /System/Volumes/Data
+/usr/local/var/postgres $ cd pg_wal/
+/usr/local/var/postgres/pg_wal $ ls -lh|wc -l
+     179
+/usr/local/var/postgres/pg_wal $ ls -lh|head
+total 5799936
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000001
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000002
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000003
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000004
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000005
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000006
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000007
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000008
+-rw-------  1 dave  staff    16M Aug 16 15:36 000000010000000000000009
+/usr/local/var/postgres/pg_wal $ man touch
+```
+
+
+`touch` works differently on mac (maybe I should install standard gnu tools)
+
+```
+     The following options are available:
+
+     -A      Adjust the access and modification time stamps for the file by the specified value.  This flag is intended for use in modifying files with
+             incorrectly set time stamps.
+
+             The argument is of the form ``[-][[hh]mm]SS'' where each pair of letters represents the following:
+
+                   -       Make the adjustment negative: the new time stamp is set to be before the old one.
+                   hh      The number of hours, from 00 to 99.
+                   mm      The number of minutes, from 00 to 59.
+                   SS      The number of seconds, from 00 to 59.
+
+             The -A flag implies the -c flag: if any file specified does not exist, it will be silently ignored.
+
+...
+
+     -c      Do not create the file if it does not exist.  The touch utility does not treat this as an error.  No error messages are displayed and the exit
+             value is not affected.
+
+```
+
+
+i.e. to cleanup every over 13 hours ago `touch start_flag;ls -l start_flag;touch -A '-130000' start_flag;ls -l start_flag ` 
+
+```
+/usr/local/var/postgres/pg_wal $ touch start_flag
+/usr/local/var/postgres/pg_wal $ ls -l start_flag 
+-rw-r--r--  1 dave  staff  0 Aug 17 07:29 start_flag
+/usr/local/var/postgres/pg_wal $ touch -A '-130000' start_flag
+/usr/local/var/postgres/pg_wal $ ls -l start_flag 
+-rw-r--r--  1 dave  staff  0 Aug 16 06:29 start_flag
+/usr/local/var/postgres/pg_wal $ find . -type f -newer start_flag -exec ls -l {} +
+-rw-------  1 dave  staff  16777216 Aug 16 15:36 ./000000010000000000000001
+-rw-------  1 dave  staff  16777216 Aug 16 15:36 ./000000010000000000000003
+...
+-rw-------  1 dave  staff  16777216 Aug 16 19:04 ./0000000100000000000000AE
+-rw-------  1 dave  staff  16777216 Aug 16 19:04 ./0000000100000000000000AF
+-rw-------  1 dave  staff  16777216 Aug 16 19:05 ./0000000100000000000000B0
+-rw-------  1 dave  staff  16777216 Aug 16 19:09 ./0000000100000000000000B1
+/usr/local/var/postgres/pg_wal $ find . -type f -newer start_flag -delete
+/usr/local/var/postgres/pg_wal $ df -h .
+Filesystem     Size   Used  Avail Capacity iused      ifree %iused  Mounted on
+/dev/disk1s1  234Gi  212Gi  4.8Gi    98% 2570098 2446555262    0%   /System/Volumes/Data
+```
 
 
 
