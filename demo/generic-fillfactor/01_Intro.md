@@ -1,10 +1,16 @@
 ## Intro - generic-fillfactor 
 
+**Warning** this exercise can generate a lot of WAL files very quickly on you laptop - both linux and mac notes on cleanup steps [here](../../docs/Useful-Queries.md#cleanup-pg_wal-on-mac---touch-works-differently-on-mac).
+
+## First time - setup fillfactor
+
 The very first you run this, you need to setup the fillfactor database
 ```
 psql -c "create database fillfactor;"
 ```
 
+
+## Running batch tests
 You could run 
 * `./build_new_schema_setup_tables.sh test100k` to populate three 100k tables with fillfactors of 80, 90 and 100
 * `./batch_test100k.sh 3 10000 7` i.e. using mod(3) for every 3rd row and 7 batches of 10000 updates  i.e.  to test whether we get hot updates or regular updates with fillfactors  80, 90 and 100 
