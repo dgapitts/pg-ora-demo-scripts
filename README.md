@@ -80,8 +80,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 
 I want to write up some notes on FF and HOT updates
 * this is a good start point - nice summary https://www.cybertec-postgresql.com/en/hot-updates-in-postgresql-for-better-performance/
-* but I want to work through some of the details
-* also expand on how to monitor and tune this 
+* I have also written a set of demo script under `pg-ora-demo-scripts/demo/generic-fillfactor` with an [Intro](demo/generic-fillfactor/01_Intro.md)
 
 ### Examples
 * [FF and HOT updates - part 01 - simple example with fillfactor 9 - 3 updates and 3 out of 3 are HOT ](docs/FF-and-HOT-updates-part-01.md)
