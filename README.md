@@ -46,7 +46,8 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 
 # Useful bits and pieces
 
-* [Quick setup notes for Mac](docs/Quick-setup-notes-for-Mac.md)
+* [Quick setup notes for Mac (`brew install postgresql`)](docs/Quick-setup-notes-for-Mac.md)
+* [Quick setup notes for Mac (`brew install postgresql@15`)](docs/Quick-setup-notes-for-Mac-pg15.md)
 * [Useful bits and pieces (all)](docs/Useful-Queries.md)
 * [pg startup and running time](docs/Useful-Queries.md#pg-startup-and-running-time)
 * [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
