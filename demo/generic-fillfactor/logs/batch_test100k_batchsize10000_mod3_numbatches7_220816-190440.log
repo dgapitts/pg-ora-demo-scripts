@@ -1,0 +1,642 @@
+19:04  up  3:37, 14 users, load averages: 2.12 2.02 1.88
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   35.516 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   35.516 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   35.516 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   35.516 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   31.258 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   31.258 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   31.258 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   31.258 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 64 MB     | 31 MB      | 33 MB      |         0 |             0 |     100001 |          0
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |         0 |             0 |     100001 |          0
+ test100k   | ff90_100  | 68 MB     | 36 MB      | 33 MB      |         0 |             0 |     100001 |          0
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=344.901..344.902 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=290) (actual time=225.551..230.297 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=290) (actual time=225.547..228.685 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: external merge  Disk: 9872kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=290) (actual time=0.057..80.651 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 3.372 ms
+ Execution Time: 409.614 ms
+(14 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6068.43..6074.68 rows=0 width=0) (actual time=968.637..968.639 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6068.43..6069.68 rows=500 width=290) (actual time=150.325..158.090 rows=10000 loops=1)
+         ->  Sort  (cost=6068.43..6069.68 rows=500 width=290) (actual time=150.322..155.711 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: external merge  Disk: 9872kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6046.01 rows=500 width=290) (actual time=0.029..36.229 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.056 ms
+ Execution Time: 1103.622 ms
+(14 rows)
+
+SET
+                                                                 QUERY PLAN                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=5523.43..5529.68 rows=0 width=0) (actual time=977.789..977.790 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=5523.43..5524.68 rows=500 width=290) (actual time=208.689..216.268 rows=10000 loops=1)
+         ->  Sort  (cost=5523.43..5524.68 rows=500 width=290) (actual time=208.685..214.042 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 9872kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..5501.01 rows=500 width=290) (actual time=0.027..65.724 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 9.024 ms
+ Execution Time: 1172.339 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   36.086 |       10000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   36.086 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   36.086 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   36.086 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       10000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   33.156 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   33.156 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   33.156 |       10000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   33.156 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 69 MB     | 33 MB      | 36 MB      |     10000 |             0 |     100001 |      10000
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     10000 |         10000 |     100001 |      10000
+ test100k   | ff90_100  | 70 MB     | 36 MB      | 34 MB      |     10000 |          6819 |     100001 |      10000
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=105.558..105.559 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=290) (actual time=50.119..52.947 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=290) (actual time=50.115..51.567 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: top-N heapsort  Memory: 2989kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=290) (actual time=0.053..38.973 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.286 ms
+ Execution Time: 105.769 ms
+(14 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6165.94..6172.29 rows=0 width=0) (actual time=263.764..263.766 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6165.94..6167.21 rows=508 width=290) (actual time=53.424..57.304 rows=10000 loops=1)
+         ->  Sort  (cost=6165.94..6167.21 rows=508 width=290) (actual time=53.421..55.550 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: top-N heapsort  Memory: 2947kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6143.10 rows=508 width=290) (actual time=0.069..40.887 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.595 ms
+ Execution Time: 264.150 ms
+(14 rows)
+
+SET
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=5859.11..5865.73 rows=0 width=0) (actual time=717.060..717.063 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=5859.11..5860.43 rows=530 width=290) (actual time=162.255..168.919 rows=10000 loops=1)
+         ->  Sort  (cost=5859.11..5860.43 rows=530 width=290) (actual time=162.252..166.470 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 8640kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..5835.12 rows=530 width=290) (actual time=13.744..42.686 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.215 ms
+ Execution Time: 801.279 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   36.594 |       20000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   36.594 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   36.594 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   36.594 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       20000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   35.063 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   35.063 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   35.063 |       20000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   35.063 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 71 MB     | 35 MB      | 36 MB      |     20000 |             0 |     100001 |      20000
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     20000 |         20000 |     100001 |      10000
+ test100k   | ff90_100  | 71 MB     | 37 MB      | 34 MB      |     20000 |         14410 |     100001 |      13181
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=111.043..111.044 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=290) (actual time=52.364..55.345 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=290) (actual time=52.361..53.888 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: top-N heapsort  Memory: 2989kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=290) (actual time=0.053..41.752 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.026 ms
+ Execution Time: 111.272 ms
+(14 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6252.75..6259.19 rows=0 width=0) (actual time=821.525..821.527 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6252.75..6254.04 rows=515 width=290) (actual time=52.875..57.064 rows=10000 loops=1)
+         ->  Sort  (cost=6252.75..6254.04 rows=515 width=290) (actual time=52.872..55.188 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: top-N heapsort  Memory: 2947kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6229.56 rows=515 width=290) (actual time=0.039..38.552 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.016 ms
+ Execution Time: 822.127 ms
+(14 rows)
+
+SET
+                                                                  QUERY PLAN                                                                   
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=6196.21..6203.22 rows=0 width=0) (actual time=3405.172..3405.175 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6196.21..6197.61 rows=561 width=290) (actual time=239.051..249.081 rows=10000 loops=1)
+         ->  Sort  (cost=6196.21..6197.61 rows=561 width=290) (actual time=239.047..245.890 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 8640kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..6170.60 rows=561 width=290) (actual time=12.129..119.213 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.696 ms
+ Execution Time: 3628.744 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   37.047 |       30000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   37.047 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   37.047 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   37.047 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       30000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   36.969 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   36.969 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   36.969 |       30000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   36.969 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 73 MB     | 37 MB      | 36 MB      |     30000 |             3 |     100001 |      30000
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     30000 |         30000 |     100001 |      10000
+ test100k   | ff90_100  | 71 MB     | 37 MB      | 34 MB      |     30000 |         22276 |     100001 |      17760
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=103.328..103.330 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=290) (actual time=43.514..46.525 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=290) (actual time=43.510..45.097 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: top-N heapsort  Memory: 2989kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=290) (actual time=0.027..32.903 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 0.977 ms
+ Execution Time: 103.674 ms
+(14 rows)
+
+SET
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6330.26..6336.78 rows=0 width=0) (actual time=1510.825..1510.827 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6330.26..6331.56 rows=522 width=290) (actual time=167.666..173.058 rows=10000 loops=1)
+         ->  Sort  (cost=6330.26..6331.56 rows=522 width=290) (actual time=167.661..170.560 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: top-N heapsort  Memory: 2947kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6306.69 rows=522 width=290) (actual time=0.135..146.787 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 2.961 ms
+ Execution Time: 1511.284 ms
+(14 rows)
+
+SET
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=6533.29..6540.67 rows=0 width=0) (actual time=1357.889..1357.891 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6533.29..6534.76 rows=591 width=290) (actual time=204.193..210.597 rows=10000 loops=1)
+         ->  Sort  (cost=6533.29..6534.76 rows=591 width=290) (actual time=204.190..208.479 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 8640kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..6506.08 rows=591 width=290) (actual time=10.125..41.730 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.004 ms
+ Execution Time: 1542.875 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   37.445 |       40000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   37.445 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   37.445 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   37.445 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       40000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   38.875 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   38.875 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   38.875 |       40000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   38.875 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 75 MB     | 39 MB      | 36 MB      |     40000 |            13 |     100001 |      40000
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     40000 |         40000 |     100001 |      10000
+ test100k   | ff90_100  | 72 MB     | 37 MB      | 34 MB      |     40000 |         30385 |     100001 |      19676
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=102.871..102.873 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=277) (actual time=45.755..48.713 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=277) (actual time=45.752..47.272 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: top-N heapsort  Memory: 2989kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=277) (actual time=0.044..35.511 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.007 ms
+ Execution Time: 103.095 ms
+(14 rows)
+
+SET
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6398.33..6404.92 rows=0 width=0) (actual time=280.357..280.359 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6398.33..6399.65 rows=527 width=290) (actual time=114.822..118.620 rows=10000 loops=1)
+         ->  Sort  (cost=6398.33..6399.65 rows=527 width=290) (actual time=114.819..116.934 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: top-N heapsort  Memory: 2947kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6374.51 rows=527 width=290) (actual time=0.040..100.687 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.083 ms
+ Execution Time: 281.083 ms
+(14 rows)
+
+SET
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=6870.41..6878.19 rows=0 width=0) (actual time=1222.759..1222.760 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6870.41..6871.97 rows=622 width=290) (actual time=257.461..263.585 rows=10000 loops=1)
+         ->  Sort  (cost=6870.41..6871.97 rows=622 width=290) (actual time=257.456..261.412 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 8640kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..6841.55 rows=622 width=290) (actual time=17.640..64.237 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 2.333 ms
+ Execution Time: 1315.892 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   37.797 |       50000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   37.797 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   37.797 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   37.797 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       50000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   40.773 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   40.773 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   40.773 |       50000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   40.773 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 78 MB     | 41 MB      | 37 MB      |     50000 |            37 |     100001 |      50000
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     50000 |         50000 |     100001 |      10000
+ test100k   | ff90_100  | 72 MB     | 38 MB      | 34 MB      |     50000 |         38708 |     100001 |      24360
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=138.140..138.142 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=277) (actual time=52.114..56.139 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=277) (actual time=52.111..54.146 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: top-N heapsort  Memory: 2989kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=277) (actual time=0.055..40.489 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.156 ms
+ Execution Time: 138.372 ms
+(14 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6458.45..6465.10 rows=0 width=0) (actual time=304.307..304.309 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6458.45..6459.78 rows=532 width=290) (actual time=54.500..58.892 rows=10000 loops=1)
+         ->  Sort  (cost=6458.45..6459.78 rows=532 width=290) (actual time=54.497..56.874 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: top-N heapsort  Memory: 2947kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6434.36 rows=532 width=290) (actual time=0.060..41.202 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.029 ms
+ Execution Time: 304.739 ms
+(14 rows)
+
+SET
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=7206.14..7214.29 rows=0 width=0) (actual time=1128.989..1128.990 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=7206.14..7207.77 rows=652 width=290) (actual time=141.201..147.810 rows=10000 loops=1)
+         ->  Sort  (cost=7206.14..7207.77 rows=652 width=290) (actual time=141.198..145.460 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 8640kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..7175.66 rows=652 width=290) (actual time=10.131..44.408 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.079 ms
+ Execution Time: 1339.389 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   38.109 |       60000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   38.109 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   38.109 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   38.109 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       60000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   42.672 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   42.672 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   42.672 |       60000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   42.672 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 80 MB     | 43 MB      | 37 MB      |     60000 |            74 |     100001 |      59986
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     60000 |         60000 |     100001 |      10000
+ test100k   | ff90_100  | 72 MB     | 38 MB      | 34 MB      |     60000 |         47225 |     100001 |      24598
+(3 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff80_100  (cost=6523.43..6529.68 rows=0 width=0) (actual time=105.984..105.985 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff80_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6523.43..6524.68 rows=500 width=277) (actual time=47.695..50.747 rows=10000 loops=1)
+         ->  Sort  (cost=6523.43..6524.68 rows=500 width=277) (actual time=47.692..49.245 rows=10000 loops=1)
+               Sort Key: ff80_100_1.id
+               Sort Method: top-N heapsort  Memory: 2989kB
+               ->  Seq Scan on ff80_100 ff80_100_1  (cost=0.00..6501.01 rows=500 width=277) (actual time=0.053..37.066 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 0.996 ms
+ Execution Time: 106.197 ms
+(14 rows)
+
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff90_100  (cost=6511.91..6518.62 rows=0 width=0) (actual time=238.019..238.021 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff90_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=6511.91..6513.25 rows=537 width=290) (actual time=52.281..56.122 rows=10000 loops=1)
+         ->  Sort  (cost=6511.91..6513.25 rows=537 width=290) (actual time=52.277..54.289 rows=10000 loops=1)
+               Sort Key: ff90_100_1.id
+               Sort Method: top-N heapsort  Memory: 2947kB
+               ->  Seq Scan on ff90_100 ff90_100_1  (cost=0.00..6487.56 rows=537 width=290) (actual time=0.037..39.328 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 1.057 ms
+ Execution Time: 238.705 ms
+(14 rows)
+
+SET
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Insert on ff100_100  (cost=7541.91..7550.45 rows=0 width=0) (actual time=794.306..794.308 rows=0 loops=1)
+   Conflict Resolution: UPDATE
+   Conflict Arbiter Indexes: key_uniq_con_ff100_100
+   Tuples Inserted: 0
+   Conflicting Tuples: 10000
+   ->  Limit  (cost=7541.91..7543.62 rows=683 width=290) (actual time=197.202..204.002 rows=10000 loops=1)
+         ->  Sort  (cost=7541.91..7543.62 rows=683 width=290) (actual time=197.199..201.575 rows=10000 loops=1)
+               Sort Key: ff100_100_1.id
+               Sort Method: external merge  Disk: 8640kB
+               ->  Seq Scan on ff100_100 ff100_100_1  (cost=0.00..7509.76 rows=683 width=290) (actual time=21.897..57.992 rows=33334 loops=1)
+                     Filter: (mod(id, '3'::bigint) = 0)
+                     Rows Removed by Filter: 66667
+ Planning Time: 3.043 ms
+ Execution Time: 951.591 ms
+(14 rows)
+
+SET
+ search_path 
+-------------
+ test100k
+(1 row)
+
+ database_name | schema_name | table_name |       index_name       | bloat_pct | bloat_mb | index_mb | table_mb | index_scans 
+---------------+-------------+------------+------------------------+-----------+----------+----------+----------+-------------
+ fillfactor    | test100k    | ff90_100   | key_uniq_con_ff90_100  |        11 |        1 |    4.742 |   38.391 |       70000
+ fillfactor    | test100k    | ff90_100   | ff90_100_key           |        27 |        1 |    4.758 |   38.391 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pad1          |        34 |        7 |   21.375 |   38.391 |           0
+ fillfactor    | test100k    | ff90_100   | ff90_100_pkey          |         1 |        0 |    1.945 |   38.391 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pad1          |        34 |        7 |   21.375 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | ff80_100_pkey          |         1 |        0 |    1.945 |   39.070 |           0
+ fillfactor    | test100k    | ff80_100   | key_uniq_con_ff80_100  |        11 |        1 |    4.742 |   39.070 |       70000
+ fillfactor    | test100k    | ff80_100   | ff80_100_key           |        31 |        2 |    4.984 |   39.070 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_key          |        27 |        1 |    4.742 |   44.570 |           0
+ fillfactor    | test100k    | ff100_100  | ff100_100_pad1         |        34 |        7 |   21.375 |   44.570 |           0
+ fillfactor    | test100k    | ff100_100  | key_uniq_con_ff100_100 |        11 |        1 |    4.742 |   44.570 |       70000
+ fillfactor    | test100k    | ff100_100  | ff100_100_pkey         |         1 |        0 |    1.945 |   44.570 |           0
+(12 rows)
+
+SET
+ schemaname |  relname  | full_size | table_size | index_size | n_tup_upd | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------+-----------+-----------+------------+------------+-----------+---------------+------------+------------
+ test100k   | ff100_100 | 82 MB     | 45 MB      | 37 MB      |     70000 |           126 |     100001 |      69959
+ test100k   | ff80_100  | 72 MB     | 39 MB      | 33 MB      |     70000 |         70000 |     100001 |      10000
+ test100k   | ff90_100  | 73 MB     | 38 MB      | 34 MB      |     70000 |         55909 |     100001 |      29260
+(3 rows)
+
+avgtimes ff100-ff90-ff80: 1371.43 626.286 144
+19:05  up  3:37, 14 users, load averages: 2.12 2.02 1.88
