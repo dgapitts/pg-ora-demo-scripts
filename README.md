@@ -61,6 +61,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Loading large datasets and exploring text analysis with Ulysses](docs/loading-large-datasets-and-exploring-text-analysis.md)
 * [Starting gin_trgm_ops indexing with Ulysses](docs/Starting-gin_trgm_ops-indexing.md)
 * [Laterial joins intro - more like a correlated subquery](docs/Laterial-joins-intro.md)
+* [Extra steps to setup local replica (for testing)](docs/Extra-steps-to-setup-local-replica-test.md)
 
 # Unindexed foreign keys
 
