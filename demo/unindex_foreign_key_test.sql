@@ -1,7 +1,7 @@
 -- https://www.cybertec-postgresql.com/en/index-your-foreign-key/
 
-drop if exists target;
-drop if exists source;
+drop table if exists target cascade;
+drop table if exists source cascade;
 
 
 -- to make the plans look simpler
