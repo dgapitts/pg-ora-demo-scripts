@@ -62,6 +62,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Starting gin_trgm_ops indexing with Ulysses](docs/Starting-gin_trgm_ops-indexing.md)
 * [Laterial joins intro - more like a correlated subquery](docs/Laterial-joins-intro.md)
 * [Extra steps to setup local replica (for testing)](docs/Extra-steps-to-setup-local-replica-test.md)
+* [Exceeding work mem - individual (private) process memory usage can get out-of-control](exceeding_work_mem/README.md)
 
 # Unindexed foreign keys
 
