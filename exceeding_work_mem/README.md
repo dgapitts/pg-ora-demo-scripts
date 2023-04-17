@@ -36,7 +36,7 @@ pg_ctl init -D /usr/local/var/postgres
 createdb dave
 pgbench -i -d dave
 ```
-
+for example running this on my home laptop
 ```
 (base) ~/projects/pg-ora-demo-scripts/exceeding_work_mem $ pg_ctl init -D /usr/local/var/postgres
 The files belonging to this database system will be owned by user "dave".
@@ -104,7 +104,9 @@ done in 1.35 s (drop tables 0.00 s, create tables 0.12 s, client-side generate 0
 ### Running gen_crazy_big_sql_statement.py and logging results over 100, 200, 300, ... 2000 UNION statements
 
 To get started we only need 
-* gen_crazy_big_sql_statement.py
+
+* gen_crazy_big_sql_statement.py (which is called by crazy_big_sql_statement_scale100.sh)
+
 ```
 import sys
 
@@ -162,7 +164,7 @@ psql -f test_100.sql >  test_100.log
 echo `grep 'Execution Time:' test_100.log | awk '{print $3}'` " 100" | tee -a exec_times_gen_crazy_big_sql_statement.log
 echo `grep 'Planning Time:' test_100.log | awk '{print $3}'` " 100" | tee -a plan_times_gen_crazy_big_sql_statement.log
 ```
-* wrapper_crazy_big_sql_bind.sh 
+* wrapper_crazy_big_sql_statement.sh 
 ```
 (base) ~/projects/pg-ora-demo-scripts/exceeding_work_mem $ cat wrapper_crazy_big_sql_statement.sh
 rm  *_times_gen_crazy_big_sql_statement.log
@@ -177,8 +179,10 @@ echo "final results";head -100 *_times_gen_crazy_big_sql_statement.log
 
 ```
 
+And the only script which needs to be run is `wrapper_crazy_big_sql_statement.sh`
+
 ```
-(base) ~/projects/pg-ora-demo-scripts/exceeding_work_mem $ bash wrapper_crazy_big_sql_bind.sh
+(base) ~/projects/pg-ora-demo-scripts/exceeding_work_mem $ bash wrapper_crazy_big_sql_statement.sh
 python3 gen_crazy_big_sql_statement.py 200 > test_200.sql
 #cat test_200.sql
 psql -f test_200.sql >  test_200.log
