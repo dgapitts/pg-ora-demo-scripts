@@ -36,7 +36,7 @@ pg_ctl init -D /usr/local/var/postgres
 createdb dave
 pgbench -i -d dave
 ```
-for example running this on my home laptop
+for example running this on my home laptop:
 ```
 (base) ~/projects/pg-ora-demo-scripts/exceeding_work_mem $ pg_ctl init -D /usr/local/var/postgres
 The files belonging to this database system will be owned by user "dave".
