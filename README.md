@@ -54,6 +54,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
 * [plpgsql random_json from ryanbooz's FOSDEM 2022 presenation](docs/FOSDEM_2022_random_json.md)
 * [psql variables and running in parallel schemas](docs/psql-variables-and-parallel-schemas.md)
+* [psql os-host commands](docs/psql-os-host-commands.md)
 * [Install citus RPMs and pg extension](docs/install-citus-RPMs-and-pg-extension.md)
 * [Introduction to Columnar Compression](docs/intro-columnar-compression.md)
 * [auto_explain - setup notes and sample usage](docs/intro-auto_explain-setup-notes-and-sample-usage.md)
