@@ -54,6 +54,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [WAL Location and Sizing](docs/Useful-Queries.md#wal-location-and-sizing)
 * [plpgsql random_json from ryanbooz's FOSDEM 2022 presenation](docs/FOSDEM_2022_random_json.md)
 * [psql variables and running in parallel schemas](docs/psql-variables-and-parallel-schemas.md)
+* [psql os-host commands](docs/psql-os-host-commands.md)
 * [Install citus RPMs and pg extension](docs/install-citus-RPMs-and-pg-extension.md)
 * [Introduction to Columnar Compression](docs/intro-columnar-compression.md)
 * [auto_explain - setup notes and sample usage](docs/intro-auto_explain-setup-notes-and-sample-usage.md)
@@ -62,6 +63,7 @@ Exploring how different DB Engines implement transaction isolation levels - expl
 * [Starting gin_trgm_ops indexing with Ulysses](docs/Starting-gin_trgm_ops-indexing.md)
 * [Laterial joins intro - more like a correlated subquery](docs/Laterial-joins-intro.md)
 * [Extra steps to setup local replica (for testing)](docs/Extra-steps-to-setup-local-replica-test.md)
+* [Exceeding work mem - individual (private) process memory usage can get out-of-control](exceeding_work_mem/README.md)
 
 # Unindexed foreign keys
 
