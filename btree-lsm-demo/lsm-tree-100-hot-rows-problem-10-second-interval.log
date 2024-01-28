@@ -1,0 +1,47 @@
+postgres@6f5a3bbda7c2:~$ pgbench -i -s 10
+dropping old tables...
+creating tables...
+generating data...
+100000 of 1000000 tuples (10%) done (elapsed 0.32 s, remaining 2.86 s)
+200000 of 1000000 tuples (20%) done (elapsed 0.70 s, remaining 2.80 s)
+300000 of 1000000 tuples (30%) done (elapsed 1.08 s, remaining 2.53 s)
+400000 of 1000000 tuples (40%) done (elapsed 1.42 s, remaining 2.13 s)
+500000 of 1000000 tuples (50%) done (elapsed 1.78 s, remaining 1.78 s)
+600000 of 1000000 tuples (60%) done (elapsed 2.15 s, remaining 1.43 s)
+700000 of 1000000 tuples (70%) done (elapsed 2.52 s, remaining 1.08 s)
+800000 of 1000000 tuples (80%) done (elapsed 2.88 s, remaining 0.72 s)
+900000 of 1000000 tuples (90%) done (elapsed 3.24 s, remaining 0.36 s)
+1000000 of 1000000 tuples (100%) done (elapsed 3.62 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-100.sql
+\set aid random(1, 100)
+UPDATE pgbench_accounts SET abalance=abalance+1  WHERE aid = :aid;
+postgres@6f5a3bbda7c2:~$ pgbench -P 10 -c 10  -t 100000 -f update-abalance-for-aid-100.sql
+starting vacuum...end.
+progress: 10.0 s, 6080.1 tps, lat 1.603 ms stddev 1.047
+progress: 20.0 s, 5985.5 tps, lat 1.657 ms stddev 0.593
+progress: 30.0 s, 5641.3 tps, lat 1.761 ms stddev 0.582
+progress: 40.0 s, 4139.6 tps, lat 2.404 ms stddev 1.022
+progress: 50.0 s, 3423.4 tps, lat 2.917 ms stddev 2.872
+progress: 60.0 s, 3066.6 tps, lat 3.254 ms stddev 1.082
+progress: 70.0 s, 2625.9 tps, lat 3.800 ms stddev 2.948
+progress: 80.0 s, 2507.0 tps, lat 3.981 ms stddev 1.347
+progress: 90.0 s, 2189.5 tps, lat 4.561 ms stddev 1.864
+progress: 100.0 s, 2035.4 tps, lat 4.905 ms stddev 2.041
+progress: 110.0 s, 1950.5 tps, lat 5.120 ms stddev 3.557
+progress: 120.0 s, 1905.1 tps, lat 5.241 ms stddev 1.951
+progress: 130.0 s, 1847.2 tps, lat 5.407 ms stddev 2.306
+progress: 140.0 s, 1735.9 tps, lat 5.752 ms stddev 2.173
+progress: 150.0 s, 1744.7 tps, lat 5.726 ms stddev 2.118
+progress: 160.0 s, 1670.5 tps, lat 5.969 ms stddev 2.207
+progress: 170.0 s, 1541.0 tps, lat 6.494 ms stddev 6.235
+progress: 180.0 s, 1583.2 tps, lat 6.310 ms stddev 2.264
+progress: 190.0 s, 1526.3 tps, lat 6.544 ms stddev 2.462
+progress: 200.0 s, 1454.2 tps, lat 6.872 ms stddev 2.559
+progress: 210.0 s, 3676.9 tps, lat 2.708 ms stddev 2.484
+progress: 220.0 s, 6115.3 tps, lat 1.618 ms stddev 0.575
+progress: 230.0 s, 6020.1 tps, lat 1.649 ms stddev 1.669
+^C
+postgres@6f5a3bbda7c2:~$ 
