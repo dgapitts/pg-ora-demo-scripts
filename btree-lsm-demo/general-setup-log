@@ -1,0 +1,1971 @@
+
+
+ >>  pgbench -i -d postgres -U postgres                              # simple pgbench initialization
+Please choose command by number: 3
+3
+pgbench -i -d postgres -U postgres
+dropping old tables...
+creating tables...
+generating data...
+100000 of 100000 tuples (100%) done (elapsed 0.30 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+root@a28dc07b9b4f:/# psql
+psql: error: could not connect to server: FATAL:  role "root" does not exist
+root@a28dc07b9b4f:/# bash menu.sh
+1 >>  psql -d postgres -U postgres                                    # simple db cli access
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"custom-update.sql" [New File]                                                                                                                                                             0,0-1         All
+update pgbench_accounts set abalance=abalance+1 where aid=1;
+2 >>  psql -d postgres -U postgres -f simple-tablesize-details.sql    # simple tablesize details
+3 >>  pgbench -i -d postgres -U postgres                              # simple pgbench initialization
+Please choose command by number: 3
+3
+pgbench -i -d postgres -U postgres
+dropping old tables...
+creating tables...
+generating data...
+100000 of 100000 tuples (100%) done (elapsed 0.31 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+root@a28dc07b9b4f:/# bash menu.sh
+1 >>  psql -d postgres -U postgres                                    # simple db cli access
+2 >>  psql -d postgres -U postgres -f simple-tablesize-details.sql    # simple tablesize details
+3 >>  pgbench -i -d postgres -U postgres                              # simple pgbench initialization
+Please choose command by number: 2
+2
+psql -d postgres -U postgres -f simple-tablesize-details.sql
+ Schema |       Name       | Type  |  Owner   |  Size   | Description
+--------+------------------+-------+----------+---------+-------------
+ public | pgbench_accounts | table | postgres | 13 MB   |
+ public | pgbench_branches | table | postgres | 40 kB   |
+ public | pgbench_history  | table | postgres | 0 bytes |
+ public | pgbench_tellers  | table | postgres | 40 kB   |
+(4 rows)
+
+root@a28dc07b9b4f:/# exit
+exit
+davidpitts@Davids-MacBook-Pro ~ % docker exec -it a28dc07b9b4f bash
+root@a28dc07b9b4f:/# bash menu.sh
+1 >>  psql -d postgres -U postgres                                    # simple db cli access
+2 >>  psql -d postgres -U postgres -f simple-tablesize-details.sql    # simple tablesize details
+3 >>  pgbench -i -d postgres -U postgres                              # simple pgbench initialization
+Please choose command by number: 2
+2
+psql -d postgres -U postgres -f simple-tablesize-details.sql
+ Schema |       Name       | Type  |  Owner   |  Size   | Description
+--------+------------------+-------+----------+---------+-------------
+ public | pgbench_accounts | table | postgres | 13 MB   |
+ public | pgbench_branches | table | postgres | 40 kB   |
+ public | pgbench_history  | table | postgres | 0 bytes |
+ public | pgbench_tellers  | table | postgres | 40 kB   |
+(4 rows)
+
+root@a28dc07b9b4f:/# vi custom-update.sql
+root@a28dc07b9b4f:/# cat menu.sh
+i=1
+while read p; do
+  echo "$((i++)) >>  $p"
+  commands+=(`echo $p | cut -f1 -d'#'`)
+done <notes.txt
+
+read -p "Please choose command by number: " command_int
+echo ${command_int}
+head -n ${command_int} notes.txt | tail -1 | cut -f1 -d'#'
+`head -n ${command_int} notes.txt | tail -1 | cut -f1 -d'#'`
+root@a28dc07b9b4f:/# cat notes
+cat: notes: No such file or directory
+root@a28dc07b9b4f:/# cat notes.txt
+psql -d postgres -U postgres                                    # simple db cli access
+psql -d postgres -U postgres -f simple-tablesize-details.sql    # simple tablesize details
+pgbench -i -d postgres -U postgres                              # simple pgbench initialization
+root@a28dc07b9b4f:/# psql -E -c '\d+'
+psql: error: could not connect to server: FATAL:  role "root" does not exist
+root@a28dc07b9b4f:/# psql -E -c -d postgres -U postgres '\d+'
+psql: warning: extra command-line argument "\d+" ignored
+ERROR:  syntax error at or near "-"
+LINE 1: -d
+        ^
+root@a28dc07b9b4f:/# psql -E -d postgres -U postgres -c '\d+'
+********* QUERY **********
+SELECT n.nspname as "Schema",
+  c.relname as "Name",
+  CASE c.relkind WHEN 'r' THEN 'table' WHEN 'v' THEN 'view' WHEN 'm' THEN 'materialized view' WHEN 'i' THEN 'index' WHEN 'S' THEN 'sequence' WHEN 's' THEN 'special' WHEN 'f' THEN 'foreign table' WHEN 'p' THEN 'partitioned table' WHEN 'I' THEN 'partitioned index' END as "Type",
+  pg_catalog.pg_get_userbyid(c.relowner) as "Owner",
+  pg_catalog.pg_size_pretty(pg_catalog.pg_table_size(c.oid)) as "Size",
+  pg_catalog.obj_description(c.oid, 'pg_class') as "Description"
+FROM pg_catalog.pg_class c
+     LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+WHERE c.relkind IN ('r','p','v','m','S','f','')
+      AND n.nspname <> 'pg_catalog'
+      AND n.nspname <> 'information_schema'
+      AND n.nspname !~ '^pg_toast'
+  AND pg_catalog.pg_table_is_visible(c.oid)
+ORDER BY 1,2;
+**************************
+
+                          List of relations
+ Schema |       Name       | Type  |  Owner   |  Size   | Description
+--------+------------------+-------+----------+---------+-------------
+ public | pgbench_accounts | table | postgres | 13 MB   |
+ public | pgbench_branches | table | postgres | 40 kB   |
+ public | pgbench_history  | table | postgres | 0 bytes |
+ public | pgbench_tellers  | table | postgres | 40 kB   |
+(4 rows)
+
+root@a28dc07b9b4f:/# exit
+exit
+davidpitts@Davids-MacBook-Pro ~ % docker exec -it a28dc07b9b4f bash
+root@a28dc07b9b4f:/# ls
+bin   custom-update.sql  docker-entrypoint-initdb.d  etc   lib	  media    mnt	      opt   root  sbin				srv  tmp  var
+boot  dev		 docker-entrypoint.sh	     home  lib64  menu.sh  notes.txt  proc  run   simple-tablesize-details.sql	sys  usr
+root@a28dc07b9b4f:/# ls -ltre
+ls: invalid option -- 'e'
+Try 'ls --help' for more information.
+root@a28dc07b9b4f:/# ls -ltr
+total 100
+drwxr-xr-x   2 root root 4096 Jul 10  2020 home
+drwxr-xr-x   2 root root 4096 Jul 10  2020 boot
+drwxr-xr-x   1 root root 4096 Sep  8  2020 var
+drwxr-xr-x   2 root root 4096 Sep  8  2020 srv
+drwxr-xr-x   2 root root 4096 Sep  8  2020 sbin
+drwxr-xr-x   2 root root 4096 Sep  8  2020 opt
+drwxr-xr-x   2 root root 4096 Sep  8  2020 mnt
+drwxr-xr-x   2 root root 4096 Sep  8  2020 media
+drwxr-xr-x   2 root root 4096 Sep  8  2020 lib64
+drwxr-xr-x   2 root root 4096 Sep  8  2020 bin
+drwxr-xr-x   2 root root 4096 Sep 10  2020 docker-entrypoint-initdb.d
+drwxr-xr-x   1 root root 4096 Sep 10  2020 run
+lrwxrwxrwx   1 root root   34 Sep 18  2020 docker-entrypoint.sh -> usr/local/bin/docker-entrypoint.sh
+drwxr-xr-x   1 root root 4096 Sep 27  2020 usr
+drwxr-xr-x   1 root root 4096 Sep 27  2020 lib
+drwxr-xr-x   1 root root 4096 Jan 25 07:05 etc
+dr-xr-xr-x  12 root root    0 Jan 25 07:05 sys
+dr-xr-xr-x 236 root root    0 Jan 25 07:05 proc
+drwxr-xr-x   5 root root  340 Jan 25 07:05 dev
+drwxrwxrwt   1 root root 4096 Jan 25 07:05 tmp
+-rw-r--r--   1 root root  300 Jan 25 22:34 menu.sh
+-rw-r--r--   1 root root  836 Jan 25 22:37 simple-tablesize-details.sql
+-rw-r--r--   1 root root  276 Jan 25 22:38 notes.txt
+-rw-r--r--   1 root root   61 Jan 25 22:46 custom-update.sql
+drwx------   1 root root 4096 Jan 25 22:46 root
+root@a28dc07b9b4f:/# sar -q
+bash: sar: command not found
+root@a28dc07b9b4f:/# exit
+exit
+davidpitts@Davids-MacBook-Pro ~ % docker ps
+CONTAINER ID   IMAGE                                     COMMAND                  CREATED        STATUS        PORTS      NAMES
+8e62023880d7   879470dde8c0                              "docker-entrypoint.s…"   20 hours ago   Up 20 hours   5432/tcp   friendly_tharp
+51950d7f2812   vidardb/postgresql:rocksdb-6.2.4_demo04   "docker-entrypoint.s…"   20 hours ago   Up 20 hours   5432/tcp   pg_rocksdb_test2
+a28dc07b9b4f   vidardb/postgresql:rocksdb-6.2.4_demo03   "docker-entrypoint.s…"   37 hours ago   Up 37 hours   5432/tcp   pg_rocksdb_test
+davidpitts@Davids-MacBook-Pro ~ % docker exec -it 51950d7f2812  bash
+root@51950d7f2812:/# ls -ltr
+total 84
+drwxr-xr-x   2 root root 4096 Jul 10  2020 home
+drwxr-xr-x   2 root root 4096 Jul 10  2020 boot
+drwxr-xr-x   1 root root 4096 Sep  8  2020 var
+drwxr-xr-x   2 root root 4096 Sep  8  2020 srv
+drwxr-xr-x   2 root root 4096 Sep  8  2020 sbin
+drwxr-xr-x   2 root root 4096 Sep  8  2020 opt
+drwxr-xr-x   2 root root 4096 Sep  8  2020 mnt
+drwxr-xr-x   2 root root 4096 Sep  8  2020 media
+drwxr-xr-x   2 root root 4096 Sep  8  2020 lib64
+drwxr-xr-x   2 root root 4096 Sep  8  2020 bin
+drwxr-xr-x   2 root root 4096 Sep 10  2020 docker-entrypoint-initdb.d
+drwxr-xr-x   1 root root 4096 Sep 10  2020 run
+lrwxrwxrwx   1 root root   34 Sep 18  2020 docker-entrypoint.sh -> usr/local/bin/docker-entrypoint.sh
+drwxr-xr-x   1 root root 4096 Sep 27  2020 usr
+drwxr-xr-x   1 root root 4096 Sep 27  2020 lib
+drwx------   1 root root 4096 Jan 25 06:55 root
+-rw-r--r--   1 root root  204 Jan 25 06:55 notes.txt
+drwxr-xr-x   1 root root 4096 Jan 25 23:15 etc
+dr-xr-xr-x 243 root root    0 Jan 25 23:15 proc
+dr-xr-xr-x  12 root root    0 Jan 25 23:15 sys
+drwxr-xr-x   5 root root  340 Jan 25 23:15 dev
+drwxrwxrwt   1 root root 4096 Jan 25 23:15 tmp
+root@51950d7f2812:/# cat notes.txt
+psql -d postgres -U postgres            # simple db cli access
+psql -d postgres -U postgres -c '\d+'   # simple tablesize details
+pgbench -i -d postgres -U postgres      # simple pgbench initialization
+root@51950d7f2812:/# bash m
+media/ mnt/
+root@51950d7f2812:/# bash m
+media/ mnt/
+root@51950d7f2812:/# exit
+exit
+davidpitts@Davids-MacBook-Pro ~ % history
+    1  docker run -d --name pg_rocksdb -p 5432:5432 vidardb/postgresql:rocksdb-6.2.4_demo03
+    2  docker run -d --name pg_rocksdb2 -p 5432:5432 vidardb/postgresql:rocksdb-6.2.4_demo03
+    3  docker ps
+    4  docker run -d --name pg_rocksdb2  vidardb/postgresql:rocksdb-6.2.4_demo03
+    5  docker ps
+    6  docker run -d --name pg_rocksdb_test  vidardb/postgresql:rocksdb-6.2.4_demo03
+    7  docker ps
+    8  docker exec -it a28dc07b9b4f bash
+    9  docker exec -it a28dc07b9b4f bash
+   10  docker exec -it a28dc07b9b4f bash
+   11  docker exec -it a28dc07b9b4f bash
+   12  docker ps
+   13  docker exec -it 51950d7f2812  bash
+davidpitts@Davids-MacBook-Pro ~ % docker images
+REPOSITORY           TAG                        IMAGE ID       CREATED          SIZE
+vidardb/postgresql   rocksdb-6.2.4_demo03_new   f3ab9afa2894   47 seconds ago   776MB
+vidardb/postgresql   rocksdb-6.2.4_demo03_bkp   60b6fee51c76   21 hours ago     776MB
+vidardb/postgresql   rocksdb-6.2.4_demo04       879470dde8c0   21 hours ago     776MB
+vidardb/postgresql   rocksdb-6.2.4_demo03       92f02055e739   37 hours ago     776MB
+vidardb/postgresql   rocksdb-6.2.4_demo02       5f748c21a7d5   37 hours ago     776MB
+vidardb/postgresql   rocksdb-6.2.4_demo01       930b42e81d97   46 hours ago     723MB
+postgres             16.1                       230cf55862f3   3 weeks ago      448MB
+cassandra            latest                     731829ff5143   3 weeks ago      340MB
+kindest/node         <none>                     6e360fda99b5   7 months ago     850MB
+vidardb/postgresql   rocksdb-6.2.4              463b20a9b417   3 years ago      723MB
+nuvo/docker-cqlsh    latest                     52318ea1aaa0   5 years ago      71.6MB
+davidpitts@Davids-MacBook-Pro ~ % docker docker run -it f3ab9afa2894 /bin/bash
+unknown shorthand flag: 'i' in -it
+See 'docker --help'.
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Log in to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  builder     Manage builds
+  buildx*     Docker Buildx (Docker Inc., v0.12.0-desktop.2)
+  compose*    Docker Compose (Docker Inc., v2.23.3-desktop.2)
+  container   Manage containers
+  context     Manage contexts
+  dev*        Docker Dev Environments (Docker Inc., v0.1.0)
+  extension*  Manages Docker extensions (Docker Inc., v0.2.21)
+  feedback*   Provide feedback, right in your terminal! (Docker Inc., 0.1)
+  image       Manage images
+  init*       Creates Docker-related starter files for your project (Docker Inc., v0.1.0-beta.10)
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  sbom*       View the packaged-based Software Bill Of Materials (SBOM) for an image (Anchore Inc., 0.6.0)
+  scan*       Docker Scan (Docker Inc., v0.26.0)
+  scout*      Docker Scout (Docker Inc., v1.2.0)
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Global Options:
+      --config string      Location of client config files (default "/Users/davidpitts/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket to connect to
+  -l, --log-level string   Set the logging level ("debug", "info", "warn", "error", "fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/Users/davidpitts/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/Users/davidpitts/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/Users/davidpitts/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Run 'docker COMMAND --help' for more information on a command.
+
+For more help on how to use Docker, head to https://docs.docker.com/go/guides/
+
+davidpitts@Davids-MacBook-Pro ~ % docker docker run -it f3ab9afa2894 bash
+unknown shorthand flag: 'i' in -it
+See 'docker --help'.
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Log in to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  builder     Manage builds
+  buildx*     Docker Buildx (Docker Inc., v0.12.0-desktop.2)
+  compose*    Docker Compose (Docker Inc., v2.23.3-desktop.2)
+  container   Manage containers
+  context     Manage contexts
+  dev*        Docker Dev Environments (Docker Inc., v0.1.0)
+  extension*  Manages Docker extensions (Docker Inc., v0.2.21)
+  feedback*   Provide feedback, right in your terminal! (Docker Inc., 0.1)
+  image       Manage images
+  init*       Creates Docker-related starter files for your project (Docker Inc., v0.1.0-beta.10)
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  sbom*       View the packaged-based Software Bill Of Materials (SBOM) for an image (Anchore Inc., 0.6.0)
+  scan*       Docker Scan (Docker Inc., v0.26.0)
+  scout*      Docker Scout (Docker Inc., v1.2.0)
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Global Options:
+      --config string      Location of client config files (default "/Users/davidpitts/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket to connect to
+  -l, --log-level string   Set the logging level ("debug", "info", "warn", "error", "fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/Users/davidpitts/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/Users/davidpitts/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/Users/davidpitts/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Run 'docker COMMAND --help' for more information on a command.
+
+For more help on how to use Docker, head to https://docs.docker.com/go/guides/
+
+davidpitts@Davids-MacBook-Pro ~ % history
+    2  docker run -d --name pg_rocksdb2 -p 5432:5432 vidardb/postgresql:rocksdb-6.2.4_demo03
+    3  docker ps
+    4  docker run -d --name pg_rocksdb2  vidardb/postgresql:rocksdb-6.2.4_demo03
+    5  docker ps
+    6  docker run -d --name pg_rocksdb_test  vidardb/postgresql:rocksdb-6.2.4_demo03
+    7  docker ps
+    8  docker exec -it a28dc07b9b4f bash
+    9  docker exec -it a28dc07b9b4f bash
+   10  docker exec -it a28dc07b9b4f bash
+   11  docker exec -it a28dc07b9b4f bash
+   12  docker ps
+   13  docker exec -it 51950d7f2812  bash
+   14  history
+   15  docker images
+   16  docker docker run -it f3ab9afa2894 /bin/bash
+   17  docker docker run -it f3ab9afa2894 bash
+davidpitts@Davids-MacBook-Pro ~ % docker exec -it f3ab9afa2894 bash
+Error response from daemon: No such container: f3ab9afa2894
+davidpitts@Davids-MacBook-Pro ~ % docker run -d --name pg_rocksdb3 vidardb/postgresql:rocksdb-6.2.4_demo03_bkp
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+6f5a3bbda7c26eee3adcaca851d5223550507e9af4e9a4e2ff4f0cccf179dd25
+davidpitts@Davids-MacBook-Pro ~ % ls -ltr
+total 12440
+drwxr-xr-x+  4 davidpitts  staff      128 Jan  4 18:23 Public
+drwx------+  3 davidpitts  staff       96 Jan  4 18:23 Documents
+drwx------+  4 davidpitts  staff      128 Jan  4 18:23 Pictures
+drwx------   4 davidpitts  staff      128 Jan  4 20:58 Movies
+drwx------@ 86 davidpitts  staff     2752 Jan  4 20:59 Library
+drwx------+  6 davidpitts  staff      192 Jan  4 23:04 Music
+drwx------+ 10 davidpitts  staff      320 Jan 22 14:35 Downloads
+-rw-r--r--@  1 davidpitts  staff       64 Jan 22 15:36 kubectl.sha256
+-rwxr-xr-x@  1 davidpitts  staff  6358514 Jan 22 15:42 kind
+drwx------+  7 davidpitts  staff      224 Jan 22 23:05 Desktop
+-rw-r--r--@  1 davidpitts  staff      533 Jan 23 00:34 data.sql
+drwxr-xr-x   2 davidpitts  staff       64 Jan 23 00:34 data.cql
+drwxr-xr-x@  9 davidpitts  staff      288 Jan 25 07:19 projects
+davidpitts@Davids-MacBook-Pro ~ % docker ps
+CONTAINER ID   IMAGE                                         COMMAND                  CREATED          STATUS          PORTS      NAMES
+6f5a3bbda7c2   vidardb/postgresql:rocksdb-6.2.4_demo03_bkp   "docker-entrypoint.s…"   18 seconds ago   Up 17 seconds   5432/tcp   pg_rocksdb3
+51950d7f2812   vidardb/postgresql:rocksdb-6.2.4_demo04       "docker-entrypoint.s…"   21 hours ago     Up 21 hours     5432/tcp   pg_rocksdb_test2
+a28dc07b9b4f   vidardb/postgresql:rocksdb-6.2.4_demo03       "docker-entrypoint.s…"   37 hours ago     Up 37 hours     5432/tcp   pg_rocksdb_test
+davidpitts@Davids-MacBook-Pro ~ % docker docker exec -it 6f5a3bbda7c2 bash
+unknown shorthand flag: 'i' in -it
+See 'docker --help'.
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Log in to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  builder     Manage builds
+  buildx*     Docker Buildx (Docker Inc., v0.12.0-desktop.2)
+  compose*    Docker Compose (Docker Inc., v2.23.3-desktop.2)
+  container   Manage containers
+  context     Manage contexts
+  dev*        Docker Dev Environments (Docker Inc., v0.1.0)
+  extension*  Manages Docker extensions (Docker Inc., v0.2.21)
+  feedback*   Provide feedback, right in your terminal! (Docker Inc., 0.1)
+  image       Manage images
+  init*       Creates Docker-related starter files for your project (Docker Inc., v0.1.0-beta.10)
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  sbom*       View the packaged-based Software Bill Of Materials (SBOM) for an image (Anchore Inc., 0.6.0)
+  scan*       Docker Scan (Docker Inc., v0.26.0)
+  scout*      Docker Scout (Docker Inc., v1.2.0)
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Global Options:
+      --config string      Location of client config files (default "/Users/davidpitts/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket to connect to
+  -l, --log-level string   Set the logging level ("debug", "info", "warn", "error", "fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/Users/davidpitts/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/Users/davidpitts/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/Users/davidpitts/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Run 'docker COMMAND --help' for more information on a command.
+
+For more help on how to use Docker, head to https://docs.docker.com/go/guides/
+
+davidpitts@Davids-MacBook-Pro ~ % docker  exec -it 6f5a3bbda7c2 bash
+root@6f5a3bbda7c2:/# ls -ltr
+total 84
+drwxr-xr-x   2 root root 4096 Jul 10  2020 home
+drwxr-xr-x   2 root root 4096 Jul 10  2020 boot
+drwxr-xr-x   1 root root 4096 Sep  8  2020 var
+drwxr-xr-x   2 root root 4096 Sep  8  2020 srv
+drwxr-xr-x   2 root root 4096 Sep  8  2020 sbin
+drwxr-xr-x   2 root root 4096 Sep  8  2020 opt
+drwxr-xr-x   2 root root 4096 Sep  8  2020 mnt
+drwxr-xr-x   2 root root 4096 Sep  8  2020 media
+drwxr-xr-x   2 root root 4096 Sep  8  2020 lib64
+drwxr-xr-x   2 root root 4096 Sep  8  2020 bin
+drwxr-xr-x   2 root root 4096 Sep 10  2020 docker-entrypoint-initdb.d
+drwxr-xr-x   1 root root 4096 Sep 10  2020 run
+lrwxrwxrwx   1 root root   34 Sep 18  2020 docker-entrypoint.sh -> usr/local/bin/docker-entrypoint.sh
+drwxr-xr-x   1 root root 4096 Sep 27  2020 usr
+drwxr-xr-x   1 root root 4096 Sep 27  2020 lib
+drwx------   1 root root 4096 Jan 25 06:55 root
+-rw-r--r--   1 root root  204 Jan 25 06:55 notes.txt
+drwxr-xr-x   1 root root 4096 Jan 26 19:51 etc
+dr-xr-xr-x  12 root root    0 Jan 26 19:51 sys
+dr-xr-xr-x 254 root root    0 Jan 26 19:51 proc
+drwxr-xr-x   5 root root  340 Jan 26 19:51 dev
+drwxrwxrwt   1 root root 4096 Jan 26 19:51 tmp
+root@6f5a3bbda7c2:/# alias h='history'
+root@6f5a3bbda7c2:/# alias h40='history|tail -40'
+root@6f5a3bbda7c2:/# alias hl='history|less'
+root@6f5a3bbda7c2:/# alias l40='ls -ltr|tail -40'
+root@6f5a3bbda7c2:/# alias lt='ls -ltr|tail -10'
+root@6f5a3bbda7c2:/# alias ht='history|tail -10'
+root@6f5a3bbda7c2:/#
+root@6f5a3bbda7c2:/# pgbench -i
+connection to database "" failed:
+FATAL:  role "root" does not exist
+root@6f5a3bbda7c2:/# pgbench -i -d postgres -U postgres
+dropping old tables...
+NOTICE:  table "pgbench_accounts" does not exist, skipping
+NOTICE:  table "pgbench_branches" does not exist, skipping
+NOTICE:  table "pgbench_history" does not exist, skipping
+NOTICE:  table "pgbench_tellers" does not exist, skipping
+creating tables...
+generating data...
+100000 of 100000 tuples (100%) done (elapsed 0.30 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+
+^C
+root@6f5a3bbda7c2:/# pgbench -d postgres -U postgres  -P 1 -t 100000 --aggregate-interval=10
+log aggregation is allowed only when actually logging transactions
+root@6f5a3bbda7c2:/# pgbench -d postgres -U postgres^C-P 1 -t 100000 --aggregate-interval=10 postgres
+root@6f5a3bbda7c2:/# createdb root
+createdb: error: could not connect to database template1: FATAL:  role "root" does not exist
+root@6f5a3bbda7c2:/# createuser root
+createuser: error: could not connect to database postgres: FATAL:  role "root" does not exist
+root@6f5a3bbda7c2:/# su - postgres
+postgres@6f5a3bbda7c2:~$ psql
+psql (12.4 (Debian 12.4-1.pgdg100+1))
+Type "help" for help.
+
+postgres=# \q
+postgres@6f5a3bbda7c2:~$ pgbench -i
+dropping old tables...
+creating tables...
+generating data...
+100000 of 100000 tuples (100%) done (elapsed 0.31 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -t 100000
+starting vacuum...end.
+progress: 1.0 s, 851.0 tps, lat 1.154 ms stddev 0.932
+progress: 2.0 s, 910.0 tps, lat 1.098 ms stddev 0.073
+progress: 3.0 s, 903.0 tps, lat 1.107 ms stddev 0.113
+progress: 4.0 s, 899.0 tps, lat 1.111 ms stddev 0.104
+progress: 5.0 s, 900.0 tps, lat 1.111 ms stddev 0.057
+progress: 6.0 s, 895.0 tps, lat 1.117 ms stddev 0.139
+progress: 7.0 s, 632.8 tps, lat 1.573 ms stddev 0.967
+progress: 8.0 s, 572.2 tps, lat 1.754 ms stddev 1.007
+progress: 9.0 s, 675.0 tps, lat 1.481 ms stddev 0.840
+progress: 10.0 s, 890.1 tps, lat 1.123 ms stddev 0.099
+progress: 11.0 s, 880.9 tps, lat 1.134 ms stddev 0.314
+progress: 12.0 s, 918.0 tps, lat 1.089 ms stddev 0.106
+progress: 13.0 s, 895.9 tps, lat 1.115 ms stddev 0.234
+progress: 14.0 s, 901.0 tps, lat 1.109 ms stddev 0.069
+progress: 15.0 s, 899.1 tps, lat 1.112 ms stddev 0.060
+progress: 16.0 s, 903.0 tps, lat 1.106 ms stddev 0.092
+progress: 17.0 s, 902.0 tps, lat 1.109 ms stddev 0.113
+progress: 18.0 s, 903.0 tps, lat 1.107 ms stddev 0.051
+progress: 19.0 s, 888.0 tps, lat 1.125 ms stddev 0.134
+progress: 20.0 s, 883.0 tps, lat 1.132 ms stddev 0.095
+progress: 21.0 s, 895.9 tps, lat 1.116 ms stddev 0.058
+progress: 22.0 s, 904.0 tps, lat 1.105 ms stddev 0.059
+progress: 23.0 s, 891.1 tps, lat 1.122 ms stddev 0.078
+progress: 24.0 s, 893.0 tps, lat 1.120 ms stddev 0.096
+progress: 25.0 s, 826.0 tps, lat 1.209 ms stddev 1.083
+progress: 26.0 s, 908.0 tps, lat 1.101 ms stddev 0.058
+progress: 27.0 s, 914.0 tps, lat 1.094 ms stddev 0.055
+progress: 28.0 s, 844.3 tps, lat 1.164 ms stddev 1.864
+progress: 29.0 s, 824.7 tps, lat 1.232 ms stddev 0.869
+progress: 30.0 s, 883.0 tps, lat 1.132 ms stddev 0.135
+progress: 31.0 s, 888.9 tps, lat 1.124 ms stddev 0.066
+progress: 32.0 s, 898.0 tps, lat 1.113 ms stddev 0.051
+progress: 33.0 s, 886.0 tps, lat 1.128 ms stddev 0.077
+progress: 34.0 s, 910.0 tps, lat 1.098 ms stddev 0.061
+progress: 35.0 s, 915.0 tps, lat 1.092 ms stddev 0.047
+progress: 36.0 s, 905.0 tps, lat 1.104 ms stddev 0.043
+progress: 37.0 s, 886.0 tps, lat 1.127 ms stddev 0.266
+progress: 38.0 s, 856.1 tps, lat 1.168 ms stddev 0.375
+progress: 39.0 s, 883.9 tps, lat 1.131 ms stddev 0.140
+progress: 40.0 s, 890.1 tps, lat 1.124 ms stddev 0.080
+progress: 41.0 s, 888.0 tps, lat 1.126 ms stddev 0.063
+progress: 42.0 s, 889.0 tps, lat 1.124 ms stddev 0.176
+progress: 43.0 s, 881.0 tps, lat 1.134 ms stddev 0.086
+progress: 44.0 s, 894.0 tps, lat 1.118 ms stddev 0.052
+progress: 45.0 s, 891.0 tps, lat 1.122 ms stddev 0.069
+progress: 46.0 s, 898.0 tps, lat 1.112 ms stddev 0.044
+progress: 47.0 s, 903.0 tps, lat 1.107 ms stddev 0.046
+progress: 48.0 s, 907.0 tps, lat 1.101 ms stddev 0.044
+progress: 49.0 s, 899.0 tps, lat 1.112 ms stddev 0.175
+progress: 50.0 s, 878.0 tps, lat 1.139 ms stddev 0.194
+progress: 51.0 s, 916.0 tps, lat 1.091 ms stddev 0.063
+progress: 52.0 s, 902.0 tps, lat 1.108 ms stddev 0.057
+progress: 53.0 s, 881.1 tps, lat 1.134 ms stddev 0.279
+progress: 54.0 s, 895.9 tps, lat 1.115 ms stddev 0.052
+progress: 55.0 s, 887.0 tps, lat 1.127 ms stddev 0.076
+progress: 56.0 s, 889.0 tps, lat 1.125 ms stddev 0.101
+progress: 57.0 s, 900.0 tps, lat 1.110 ms stddev 0.045
+progress: 58.0 s, 904.1 tps, lat 1.106 ms stddev 0.051
+progress: 59.0 s, 893.0 tps, lat 1.119 ms stddev 0.078
+progress: 60.0 s, 894.0 tps, lat 1.117 ms stddev 0.092
+progress: 61.0 s, 895.0 tps, lat 1.117 ms stddev 0.301
+progress: 62.0 s, 905.0 tps, lat 1.105 ms stddev 0.058
+progress: 63.0 s, 905.1 tps, lat 1.104 ms stddev 0.069
+progress: 64.0 s, 918.0 tps, lat 1.088 ms stddev 0.068
+progress: 65.0 s, 918.0 tps, lat 1.089 ms stddev 0.055
+progress: 66.0 s, 913.0 tps, lat 1.094 ms stddev 0.049
+progress: 67.0 s, 924.0 tps, lat 1.082 ms stddev 0.093
+progress: 68.0 s, 930.1 tps, lat 1.074 ms stddev 0.042
+progress: 69.0 s, 929.9 tps, lat 1.074 ms stddev 0.094
+progress: 70.0 s, 888.0 tps, lat 1.125 ms stddev 0.084
+progress: 71.0 s, 883.0 tps, lat 1.132 ms stddev 0.051
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"update-abalance-for-aid-1.sql" [New File]                                                                                                                                                 0,0-1         All
+
+progress: 72.0 s, 895.0 tps, lat 1.116 ms stddev 0.049
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"update-abalance-for-aid-1.sql" 0L, 0C                                                                                                                                                     0,0-1         All
+update pgbench_accounts set abalance=abalance+1 where aid = '1';
+progress: 73.0 s, 869.0 tps, lat 1.150 ms stddev 0.226
+progress: 74.0 s, 889.0 tps, lat 1.124 ms stddev 0.054
+progress: 75.0 s, 902.0 tps, lat 1.108 ms stddev 0.056
+progress: 76.0 s, 875.0 tps, lat 1.142 ms stddev 0.540
+progress: 77.0 s, 887.0 tps, lat 1.127 ms stddev 0.070
+progress: 78.0 s, 891.0 tps, lat 1.122 ms stddev 0.041
+progress: 79.0 s, 885.0 tps, lat 1.129 ms stddev 0.092
+progress: 80.0 s, 883.0 tps, lat 1.132 ms stddev 0.085
+progress: 81.0 s, 895.0 tps, lat 1.117 ms stddev 0.056
+progress: 82.0 s, 892.0 tps, lat 1.121 ms stddev 0.047
+progress: 83.0 s, 871.0 tps, lat 1.147 ms stddev 0.074
+progress: 84.0 s, 864.0 tps, lat 1.158 ms stddev 0.192
+progress: 85.0 s, 874.0 tps, lat 1.143 ms stddev 0.056
+progress: 86.0 s, 894.1 tps, lat 1.118 ms stddev 0.051
+progress: 87.0 s, 897.0 tps, lat 1.113 ms stddev 0.046
+progress: 88.0 s, 855.0 tps, lat 1.170 ms stddev 1.134
+progress: 89.0 s, 877.0 tps, lat 1.139 ms stddev 0.097
+progress: 90.0 s, 879.1 tps, lat 1.137 ms stddev 0.138
+progress: 91.0 s, 889.9 tps, lat 1.122 ms stddev 0.057
+progress: 92.0 s, 880.0 tps, lat 1.136 ms stddev 0.133
+progress: 93.0 s, 878.0 tps, lat 1.138 ms stddev 0.233
+^C
+postgres@6f5a3bbda7c2:~$ psql
+psql (12.4 (Debian 12.4-1.pgdg100+1))
+Type "help" for help.
+
+postgres=# \d pgbench_accounts
+              Table "public.pgbench_accounts"
+  Column  |     Type      | Collation | Nullable | Default
+----------+---------------+-----------+----------+---------
+ aid      | integer       |           | not null |
+ bid      | integer       |           |          |
+ abalance | integer       |           |          |
+ filler   | character(84) |           |          |
+Indexes:
+    "pgbench_accounts_pkey" PRIMARY KEY, btree (aid)
+
+postgres=# update pgbench_accounts ser abalance=abalance+1 where aid = '1';
+ERROR:  syntax error at or near "abalance"
+LINE 1: update pgbench_accounts ser abalance=abalance+1 where aid = ...
+                                    ^
+postgres=# update pgbench_accounts set abalance=abalance+1 where aid = '1';
+UPDATE 1
+postgres=# exit
+postgres@6f5a3bbda7c2:~$ vi update-abalance-for-aid-1.sql
+postgres@6f5a3bbda7c2:~$ vi update-abalance-for-aid-1.sql
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -t 100000 -f update-abalance-for-aid-1.sql
+starting vacuum...end.
+progress: 1.0 s, 2824.0 tps, lat 0.347 ms stddev 0.404
+progress: 2.0 s, 3005.7 tps, lat 0.332 ms stddev 0.037
+progress: 3.0 s, 3058.1 tps, lat 0.327 ms stddev 0.042
+progress: 4.0 s, 3242.9 tps, lat 0.308 ms stddev 0.022
+progress: 5.0 s, 3278.0 tps, lat 0.305 ms stddev 0.022
+progress: 6.0 s, 3230.2 tps, lat 0.309 ms stddev 0.035
+progress: 7.0 s, 3234.0 tps, lat 0.309 ms stddev 0.045
+progress: 8.0 s, 2964.7 tps, lat 0.337 ms stddev 0.201
+progress: 9.0 s, 3261.1 tps, lat 0.306 ms stddev 0.080
+progress: 10.0 s, 3381.0 tps, lat 0.295 ms stddev 0.053
+progress: 11.0 s, 3352.1 tps, lat 0.298 ms stddev 0.030
+progress: 12.0 s, 3198.9 tps, lat 0.312 ms stddev 0.031
+progress: 13.0 s, 3189.0 tps, lat 0.313 ms stddev 0.051
+progress: 14.0 s, 3194.0 tps, lat 0.313 ms stddev 0.060
+progress: 15.0 s, 3269.1 tps, lat 0.305 ms stddev 0.050
+progress: 16.0 s, 3257.0 tps, lat 0.306 ms stddev 0.020
+progress: 17.0 s, 3220.9 tps, lat 0.310 ms stddev 0.020
+progress: 18.0 s, 3236.0 tps, lat 0.308 ms stddev 0.031
+progress: 19.0 s, 3277.0 tps, lat 0.305 ms stddev 0.022
+progress: 20.0 s, 3191.1 tps, lat 0.313 ms stddev 0.114
+progress: 21.0 s, 3303.9 tps, lat 0.302 ms stddev 0.020
+progress: 22.0 s, 3278.1 tps, lat 0.305 ms stddev 0.022
+progress: 23.0 s, 3243.0 tps, lat 0.308 ms stddev 0.026
+progress: 24.0 s, 3281.9 tps, lat 0.304 ms stddev 0.021
+progress: 25.0 s, 3251.3 tps, lat 0.307 ms stddev 0.044
+progress: 26.0 s, 3251.9 tps, lat 0.307 ms stddev 0.291
+progress: 27.0 s, 3262.8 tps, lat 0.306 ms stddev 0.038
+progress: 28.0 s, 3201.1 tps, lat 0.312 ms stddev 0.044
+progress: 29.0 s, 3290.0 tps, lat 0.303 ms stddev 0.020
+progress: 30.0 s, 3252.8 tps, lat 0.307 ms stddev 0.099
+progress: 31.0 s, 3249.1 tps, lat 0.307 ms stddev 0.019
+transaction type: update-abalance-for-aid-1.sql
+scaling factor: 1
+query mode: simple
+number of clients: 1
+number of threads: 1
+number of transactions per client: 100000
+number of transactions actually processed: 100000/100000
+latency average = 0.310 ms
+latency stddev = 0.103 ms
+tps = 3217.497898 (including connections establishing)
+tps = 3219.446995 (excluding connections establishing)
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -t 100000 -f update-abalance-for-aid-1.sql
+starting vacuum...end.
+progress: 1.0 s, 3014.7 tps, lat 0.325 ms stddev 0.358
+progress: 2.0 s, 3117.9 tps, lat 0.320 ms stddev 0.222
+progress: 3.0 s, 2275.9 tps, lat 0.439 ms stddev 3.548
+progress: 4.0 s, 3138.3 tps, lat 0.318 ms stddev 0.200
+progress: 5.0 s, 3220.9 tps, lat 0.310 ms stddev 0.024
+progress: 6.0 s, 3198.1 tps, lat 0.312 ms stddev 0.035
+progress: 7.0 s, 3208.9 tps, lat 0.311 ms stddev 0.092
+progress: 8.0 s, 3262.0 tps, lat 0.306 ms stddev 0.032
+progress: 9.0 s, 3260.3 tps, lat 0.306 ms stddev 0.023
+progress: 10.0 s, 3211.9 tps, lat 0.311 ms stddev 0.028
+progress: 11.0 s, 3149.7 tps, lat 0.317 ms stddev 0.049
+progress: 12.0 s, 3299.3 tps, lat 0.303 ms stddev 0.024
+progress: 13.0 s, 3231.8 tps, lat 0.309 ms stddev 0.030
+progress: 14.0 s, 3268.2 tps, lat 0.306 ms stddev 0.059
+progress: 15.0 s, 3252.8 tps, lat 0.307 ms stddev 0.024
+progress: 16.0 s, 3178.9 tps, lat 0.314 ms stddev 0.087
+progress: 17.0 s, 3218.1 tps, lat 0.310 ms stddev 0.025
+progress: 18.0 s, 3241.1 tps, lat 0.308 ms stddev 0.052
+progress: 19.0 s, 3236.1 tps, lat 0.309 ms stddev 0.022
+progress: 20.0 s, 3277.8 tps, lat 0.305 ms stddev 0.022
+progress: 21.0 s, 3203.9 tps, lat 0.312 ms stddev 0.041
+progress: 22.0 s, 3268.0 tps, lat 0.305 ms stddev 0.024
+progress: 23.0 s, 3201.9 tps, lat 0.312 ms stddev 0.029
+progress: 24.0 s, 3396.2 tps, lat 0.294 ms stddev 0.107
+progress: 25.0 s, 3306.0 tps, lat 0.302 ms stddev 0.023
+progress: 26.0 s, 3219.2 tps, lat 0.310 ms stddev 0.049
+progress: 27.0 s, 3418.0 tps, lat 0.292 ms stddev 0.032
+progress: 28.0 s, 3263.7 tps, lat 0.306 ms stddev 0.040
+progress: 29.0 s, 3198.0 tps, lat 0.312 ms stddev 0.091
+progress: 30.0 s, 3329.1 tps, lat 0.300 ms stddev 0.022
+progress: 31.0 s, 3374.9 tps, lat 0.296 ms stddev 0.037
+transaction type: update-abalance-for-aid-1.sql
+scaling factor: 1
+query mode: simple
+number of clients: 1
+number of threads: 1
+number of transactions per client: 100000
+number of transactions actually processed: 100000/100000
+latency average = 0.311 ms
+latency stddev = 0.544 ms
+tps = 3207.983476 (including connections establishing)
+tps = 3209.841776 (excluding connections establishing)
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -c 3  -t 100000 -f update-abalance-for-aid-1.sql
+starting vacuum...end.
+progress: 1.0 s, 5175.6 tps, lat 0.549 ms stddev 0.675
+progress: 2.0 s, 5268.4 tps, lat 0.569 ms stddev 0.208
+progress: 3.0 s, 5536.7 tps, lat 0.541 ms stddev 0.052
+progress: 4.0 s, 5827.9 tps, lat 0.514 ms stddev 0.047
+progress: 5.0 s, 5409.0 tps, lat 0.554 ms stddev 0.039
+progress: 6.0 s, 5454.1 tps, lat 0.549 ms stddev 0.231
+progress: 7.0 s, 5624.3 tps, lat 0.533 ms stddev 0.072
+progress: 8.0 s, 5945.1 tps, lat 0.504 ms stddev 0.044
+progress: 9.0 s, 5501.5 tps, lat 0.545 ms stddev 0.086
+progress: 10.0 s, 5294.0 tps, lat 0.566 ms stddev 0.291
+progress: 11.0 s, 5554.4 tps, lat 0.539 ms stddev 0.086
+progress: 12.0 s, 5335.0 tps, lat 0.562 ms stddev 0.079
+progress: 13.0 s, 5177.9 tps, lat 0.579 ms stddev 0.580
+progress: 14.0 s, 5428.7 tps, lat 0.552 ms stddev 0.081
+progress: 15.0 s, 5471.0 tps, lat 0.548 ms stddev 0.052
+progress: 16.0 s, 5560.0 tps, lat 0.539 ms stddev 0.093
+progress: 17.0 s, 5605.0 tps, lat 0.534 ms stddev 0.033
+progress: 18.0 s, 5694.0 tps, lat 0.526 ms stddev 0.038
+progress: 19.0 s, 5385.9 tps, lat 0.556 ms stddev 0.030
+progress: 20.0 s, 5232.4 tps, lat 0.573 ms stddev 0.097
+progress: 21.0 s, 5546.7 tps, lat 0.540 ms stddev 0.048
+progress: 22.0 s, 5238.0 tps, lat 0.572 ms stddev 0.194
+progress: 23.0 s, 5764.4 tps, lat 0.520 ms stddev 0.086
+progress: 24.0 s, 5657.0 tps, lat 0.530 ms stddev 0.083
+progress: 25.0 s, 5364.6 tps, lat 0.558 ms stddev 0.066
+progress: 26.0 s, 5525.0 tps, lat 0.542 ms stddev 0.032
+progress: 27.0 s, 5457.3 tps, lat 0.549 ms stddev 0.024
+progress: 28.0 s, 5644.7 tps, lat 0.531 ms stddev 0.125
+progress: 29.0 s, 5424.0 tps, lat 0.552 ms stddev 0.028
+progress: 30.0 s, 5751.9 tps, lat 0.521 ms stddev 0.070
+progress: 31.0 s, 5786.0 tps, lat 0.518 ms stddev 0.086
+progress: 32.0 s, 5402.0 tps, lat 0.555 ms stddev 0.023
+progress: 33.0 s, 5373.0 tps, lat 0.558 ms stddev 0.032
+progress: 34.0 s, 5616.1 tps, lat 0.533 ms stddev 0.072
+progress: 35.0 s, 5541.4 tps, lat 0.541 ms stddev 0.055
+progress: 36.0 s, 5802.6 tps, lat 0.516 ms stddev 0.070
+progress: 37.0 s, 5589.9 tps, lat 0.536 ms stddev 0.035
+progress: 38.0 s, 5513.2 tps, lat 0.544 ms stddev 0.032
+progress: 39.0 s, 5424.4 tps, lat 0.552 ms stddev 0.037
+progress: 40.0 s, 5632.4 tps, lat 0.532 ms stddev 0.092
+progress: 41.0 s, 5912.5 tps, lat 0.507 ms stddev 0.047
+progress: 42.0 s, 5507.6 tps, lat 0.544 ms stddev 0.173
+progress: 43.0 s, 5923.2 tps, lat 0.506 ms stddev 0.038
+progress: 44.0 s, 5781.2 tps, lat 0.518 ms stddev 0.066
+progress: 45.0 s, 5766.8 tps, lat 0.519 ms stddev 0.042
+progress: 46.0 s, 5454.0 tps, lat 0.549 ms stddev 0.024
+progress: 47.0 s, 5631.8 tps, lat 0.532 ms stddev 0.034
+progress: 48.0 s, 5479.3 tps, lat 0.547 ms stddev 0.032
+progress: 49.0 s, 5395.9 tps, lat 0.555 ms stddev 0.033
+progress: 50.0 s, 5428.8 tps, lat 0.552 ms stddev 0.126
+progress: 51.0 s, 5274.9 tps, lat 0.568 ms stddev 0.106
+progress: 52.0 s, 5822.5 tps, lat 0.515 ms stddev 0.048
+progress: 53.0 s, 5498.0 tps, lat 0.545 ms stddev 0.041
+progress: 54.0 s, 5787.2 tps, lat 0.518 ms stddev 0.145
+transaction type: update-abalance-for-aid-1.sql
+scaling factor: 1
+query mode: simple
+number of clients: 3
+number of threads: 1
+number of transactions per client: 100000
+number of transactions actually processed: 300000/300000
+latency average = 0.540 ms
+latency stddev = 0.149 ms
+tps = 5540.047912 (including connections establishing)
+tps = 5541.763941 (excluding connections establishing)
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -c 10  -t 100000 -f update-abalance-for-aid-1.sql
+starting vacuum...end.
+progress: 1.0 s, 2046.5 tps, lat 4.095 ms stddev 4.745
+progress: 2.0 s, 2618.3 tps, lat 3.813 ms stddev 3.289
+progress: 3.0 s, 2673.1 tps, lat 3.743 ms stddev 3.008
+progress: 4.0 s, 2786.9 tps, lat 3.585 ms stddev 2.791
+progress: 5.0 s, 2708.9 tps, lat 3.691 ms stddev 3.219
+progress: 6.0 s, 2691.1 tps, lat 3.715 ms stddev 2.844
+progress: 7.0 s, 2823.0 tps, lat 3.537 ms stddev 2.781
+progress: 8.0 s, 2830.9 tps, lat 3.532 ms stddev 2.744
+progress: 9.0 s, 2814.0 tps, lat 3.549 ms stddev 2.785
+progress: 10.0 s, 2744.1 tps, lat 3.643 ms stddev 2.906
+progress: 11.0 s, 2766.0 tps, lat 3.612 ms stddev 2.757
+progress: 12.0 s, 2732.9 tps, lat 3.659 ms stddev 3.297
+progress: 13.0 s, 2734.1 tps, lat 3.654 ms stddev 2.914
+progress: 14.0 s, 2797.1 tps, lat 3.574 ms stddev 2.818
+progress: 15.0 s, 2792.1 tps, lat 3.577 ms stddev 2.663
+progress: 16.0 s, 2788.9 tps, lat 3.587 ms stddev 2.841
+progress: 17.0 s, 2770.9 tps, lat 3.603 ms stddev 2.725
+progress: 18.0 s, 2840.1 tps, lat 3.522 ms stddev 2.816
+progress: 19.0 s, 2820.7 tps, lat 3.540 ms stddev 2.791
+progress: 20.0 s, 2762.3 tps, lat 3.620 ms stddev 2.727
+progress: 21.0 s, 2793.0 tps, lat 3.581 ms stddev 2.762
+progress: 22.0 s, 2804.9 tps, lat 3.559 ms stddev 2.699
+progress: 23.0 s, 2722.1 tps, lat 3.673 ms stddev 2.982
+progress: 24.0 s, 2778.9 tps, lat 3.595 ms stddev 2.813
+progress: 25.0 s, 2760.0 tps, lat 3.622 ms stddev 2.835
+progress: 26.0 s, 2798.0 tps, lat 3.572 ms stddev 2.773
+progress: 27.0 s, 2822.1 tps, lat 3.539 ms stddev 2.720
+progress: 28.0 s, 2625.7 tps, lat 3.749 ms stddev 3.203
+progress: 29.0 s, 2709.2 tps, lat 3.746 ms stddev 3.399
+progress: 30.0 s, 2754.0 tps, lat 3.633 ms stddev 2.859
+progress: 31.0 s, 2780.9 tps, lat 3.592 ms stddev 2.909
+progress: 32.0 s, 2827.1 tps, lat 3.537 ms stddev 2.718
+progress: 33.0 s, 2737.3 tps, lat 3.650 ms stddev 2.738
+progress: 34.0 s, 2805.9 tps, lat 3.560 ms stddev 2.750
+progress: 35.0 s, 2773.1 tps, lat 3.608 ms stddev 2.765
+progress: 36.0 s, 2803.1 tps, lat 3.564 ms stddev 2.820
+progress: 37.0 s, 2786.8 tps, lat 3.586 ms stddev 2.721
+progress: 38.0 s, 2796.7 tps, lat 3.574 ms stddev 2.745
+progress: 39.0 s, 2514.0 tps, lat 3.974 ms stddev 6.060
+progress: 40.0 s, 2743.1 tps, lat 3.643 ms stddev 2.917
+progress: 41.0 s, 2793.3 tps, lat 3.579 ms stddev 2.743
+progress: 42.0 s, 2767.8 tps, lat 3.609 ms stddev 2.837
+progress: 43.0 s, 2667.1 tps, lat 3.748 ms stddev 3.075
+progress: 44.0 s, 2791.0 tps, lat 3.581 ms stddev 2.786
+progress: 45.0 s, 2810.9 tps, lat 3.550 ms stddev 2.830
+progress: 46.0 s, 2823.0 tps, lat 3.547 ms stddev 2.830
+progress: 47.0 s, 2812.1 tps, lat 3.556 ms stddev 2.699
+progress: 48.0 s, 2806.9 tps, lat 3.558 ms stddev 2.679
+progress: 49.0 s, 2777.1 tps, lat 3.595 ms stddev 2.743
+progress: 50.0 s, 2767.0 tps, lat 3.616 ms stddev 2.779
+progress: 51.0 s, 2832.0 tps, lat 3.526 ms stddev 2.753
+progress: 52.0 s, 2822.8 tps, lat 3.545 ms stddev 2.750
+progress: 53.0 s, 2724.1 tps, lat 3.666 ms stddev 2.949
+progress: 54.0 s, 2777.1 tps, lat 3.603 ms stddev 2.724
+progress: 55.0 s, 2771.9 tps, lat 3.604 ms stddev 2.817
+progress: 56.0 s, 2790.0 tps, lat 3.578 ms stddev 2.773
+progress: 57.0 s, 2811.0 tps, lat 3.559 ms stddev 2.752
+progress: 58.0 s, 2812.0 tps, lat 3.554 ms stddev 2.795
+progress: 59.0 s, 2794.0 tps, lat 3.576 ms stddev 2.899
+progress: 60.0 s, 2748.9 tps, lat 3.636 ms stddev 2.842
+progress: 61.0 s, 2783.0 tps, lat 3.596 ms stddev 2.855
+progress: 62.0 s, 2796.1 tps, lat 3.571 ms stddev 2.749
+progress: 63.0 s, 2705.0 tps, lat 3.698 ms stddev 3.013
+progress: 64.0 s, 2781.2 tps, lat 3.591 ms stddev 2.742
+progress: 65.0 s, 2749.7 tps, lat 3.636 ms stddev 2.778
+progress: 66.0 s, 2690.1 tps, lat 3.713 ms stddev 2.826
+progress: 67.0 s, 2835.2 tps, lat 3.529 ms stddev 2.849
+progress: 68.0 s, 2807.9 tps, lat 3.558 ms stddev 2.724
+progress: 69.0 s, 2733.9 tps, lat 3.655 ms stddev 2.775
+progress: 70.0 s, 2633.1 tps, lat 3.791 ms stddev 3.005
+progress: 71.0 s, 2729.0 tps, lat 3.668 ms stddev 2.787
+progress: 72.0 s, 2656.1 tps, lat 3.760 ms stddev 2.872
+progress: 73.0 s, 2665.9 tps, lat 3.754 ms stddev 3.027
+progress: 74.0 s, 2630.0 tps, lat 3.798 ms stddev 3.148
+progress: 75.0 s, 2738.0 tps, lat 3.648 ms stddev 2.810
+progress: 76.0 s, 2781.0 tps, lat 3.597 ms stddev 2.817
+progress: 77.0 s, 2711.9 tps, lat 3.684 ms stddev 2.900
+progress: 78.0 s, 2769.1 tps, lat 3.609 ms stddev 2.716
+progress: 79.0 s, 2747.9 tps, lat 3.636 ms stddev 2.812
+progress: 80.0 s, 2695.1 tps, lat 3.711 ms stddev 2.873
+progress: 81.0 s, 2749.9 tps, lat 3.633 ms stddev 2.913
+progress: 82.0 s, 2739.8 tps, lat 3.651 ms stddev 2.782
+progress: 83.0 s, 2662.1 tps, lat 3.752 ms stddev 3.018
+progress: 84.0 s, 2726.0 tps, lat 3.663 ms stddev 2.878
+progress: 85.0 s, 2581.5 tps, lat 3.874 ms stddev 3.197
+progress: 86.0 s, 2732.4 tps, lat 3.655 ms stddev 2.796
+progress: 87.0 s, 2301.0 tps, lat 4.349 ms stddev 4.800
+progress: 88.0 s, 2469.1 tps, lat 4.045 ms stddev 3.507
+progress: 89.0 s, 2622.2 tps, lat 3.809 ms stddev 3.011
+progress: 90.0 s, 2609.8 tps, lat 3.833 ms stddev 2.981
+progress: 91.0 s, 2630.9 tps, lat 3.800 ms stddev 2.871
+progress: 92.0 s, 2455.2 tps, lat 4.065 ms stddev 3.288
+progress: 93.0 s, 2271.9 tps, lat 4.405 ms stddev 3.710
+progress: 94.0 s, 2706.0 tps, lat 3.691 ms stddev 2.832
+progress: 95.0 s, 2686.0 tps, lat 3.722 ms stddev 2.785
+progress: 96.0 s, 2530.1 tps, lat 3.948 ms stddev 3.581
+progress: 97.0 s, 2562.7 tps, lat 3.901 ms stddev 2.912
+progress: 98.0 s, 2193.2 tps, lat 4.558 ms stddev 5.800
+progress: 99.0 s, 1526.9 tps, lat 6.545 ms stddev 16.832
+progress: 100.0 s, 2530.1 tps, lat 3.950 ms stddev 3.242
+progress: 101.0 s, 2671.0 tps, lat 3.744 ms stddev 2.892
+progress: 102.0 s, 2703.9 tps, lat 3.698 ms stddev 2.879
+progress: 103.0 s, 2325.0 tps, lat 4.293 ms stddev 3.847
+progress: 104.0 s, 2445.1 tps, lat 4.088 ms stddev 3.416
+progress: 105.0 s, 1753.1 tps, lat 5.707 ms stddev 6.868
+progress: 106.0 s, 2322.9 tps, lat 4.300 ms stddev 3.521
+progress: 107.0 s, 2273.8 tps, lat 4.396 ms stddev 4.122
+progress: 108.0 s, 2696.2 tps, lat 3.706 ms stddev 2.794
+progress: 109.0 s, 2700.0 tps, lat 3.705 ms stddev 2.843
+progress: 110.0 s, 2591.0 tps, lat 3.855 ms stddev 3.003
+progress: 111.0 s, 2638.0 tps, lat 3.788 ms stddev 3.024
+progress: 112.0 s, 2745.0 tps, lat 3.642 ms stddev 2.765
+progress: 113.0 s, 2684.0 tps, lat 3.726 ms stddev 2.861
+progress: 114.0 s, 2760.2 tps, lat 3.621 ms stddev 2.773
+progress: 115.0 s, 2582.0 tps, lat 3.868 ms stddev 2.831
+progress: 116.0 s, 2701.8 tps, lat 3.700 ms stddev 2.980
+progress: 117.0 s, 2622.0 tps, lat 3.814 ms stddev 3.004
+progress: 118.0 s, 2728.0 tps, lat 3.659 ms stddev 2.696
+progress: 119.0 s, 2256.9 tps, lat 4.419 ms stddev 4.084
+progress: 120.0 s, 1814.0 tps, lat 5.528 ms stddev 9.153
+progress: 121.0 s, 2654.0 tps, lat 3.765 ms stddev 2.882
+progress: 122.0 s, 2649.1 tps, lat 3.773 ms stddev 2.847
+progress: 123.0 s, 2537.9 tps, lat 3.934 ms stddev 3.111
+progress: 124.0 s, 2531.0 tps, lat 3.950 ms stddev 3.718
+progress: 125.0 s, 2709.9 tps, lat 3.691 ms stddev 2.790
+progress: 126.0 s, 2616.0 tps, lat 3.819 ms stddev 3.021
+progress: 127.0 s, 2729.1 tps, lat 3.663 ms stddev 2.796
+progress: 128.0 s, 2683.0 tps, lat 3.722 ms stddev 2.769
+progress: 129.0 s, 2665.9 tps, lat 3.751 ms stddev 2.853
+progress: 130.0 s, 2665.0 tps, lat 3.754 ms stddev 2.960
+progress: 131.0 s, 2696.1 tps, lat 3.705 ms stddev 2.857
+progress: 132.0 s, 2703.0 tps, lat 3.697 ms stddev 2.809
+progress: 133.0 s, 2597.1 tps, lat 3.848 ms stddev 3.038
+progress: 134.0 s, 2600.4 tps, lat 3.842 ms stddev 2.997
+progress: 135.0 s, 2413.5 tps, lat 4.146 ms stddev 3.347
+progress: 136.0 s, 2638.8 tps, lat 3.786 ms stddev 2.931
+progress: 137.0 s, 2737.9 tps, lat 3.649 ms stddev 2.837
+progress: 138.0 s, 2637.2 tps, lat 3.787 ms stddev 2.863
+progress: 139.0 s, 2696.0 tps, lat 3.711 ms stddev 2.693
+progress: 140.0 s, 2701.0 tps, lat 3.702 ms stddev 2.852
+progress: 141.0 s, 2581.1 tps, lat 3.868 ms stddev 2.880
+progress: 142.0 s, 2627.1 tps, lat 3.810 ms stddev 2.980
+progress: 143.0 s, 2606.9 tps, lat 3.833 ms stddev 3.138
+progress: 144.0 s, 2676.1 tps, lat 3.737 ms stddev 2.763
+progress: 145.0 s, 2674.9 tps, lat 3.734 ms stddev 2.888
+progress: 146.0 s, 2733.0 tps, lat 3.655 ms stddev 2.716
+progress: 147.0 s, 2728.0 tps, lat 3.666 ms stddev 2.808
+progress: 148.0 s, 2615.1 tps, lat 3.815 ms stddev 3.060
+progress: 149.0 s, 2702.9 tps, lat 3.702 ms stddev 2.872
+progress: 150.0 s, 2511.0 tps, lat 3.983 ms stddev 3.072
+progress: 151.0 s, 2712.0 tps, lat 3.684 ms stddev 2.839
+progress: 152.0 s, 2653.9 tps, lat 3.763 ms stddev 2.945
+progress: 153.0 s, 2327.1 tps, lat 4.297 ms stddev 4.795
+progress: 154.0 s, 2508.1 tps, lat 3.988 ms stddev 5.647
+progress: 155.0 s, 2713.8 tps, lat 3.682 ms stddev 2.853
+progress: 156.0 s, 2782.2 tps, lat 3.591 ms stddev 2.770
+progress: 157.0 s, 2748.0 tps, lat 3.638 ms stddev 2.719
+progress: 158.0 s, 2766.0 tps, lat 3.610 ms stddev 2.678
+progress: 159.0 s, 2243.9 tps, lat 4.454 ms stddev 7.937
+progress: 160.0 s, 2660.0 tps, lat 3.759 ms stddev 2.908
+progress: 161.0 s, 2736.0 tps, lat 3.651 ms stddev 2.685
+progress: 162.0 s, 2723.1 tps, lat 3.673 ms stddev 2.856
+progress: 163.0 s, 2220.1 tps, lat 4.504 ms stddev 6.855
+progress: 164.0 s, 2563.8 tps, lat 3.893 ms stddev 2.922
+progress: 165.0 s, 2615.1 tps, lat 3.820 ms stddev 2.904
+progress: 166.0 s, 2699.8 tps, lat 3.710 ms stddev 2.848
+progress: 167.0 s, 2673.2 tps, lat 3.735 ms stddev 2.870
+progress: 168.0 s, 2675.0 tps, lat 3.737 ms stddev 2.784
+progress: 169.0 s, 2554.9 tps, lat 3.888 ms stddev 3.191
+progress: 170.0 s, 1422.9 tps, lat 7.028 ms stddev 7.674
+progress: 171.0 s, 1973.2 tps, lat 5.092 ms stddev 8.352
+progress: 172.0 s, 2593.2 tps, lat 3.851 ms stddev 2.784
+progress: 173.0 s, 2586.8 tps, lat 3.865 ms stddev 3.040
+progress: 174.0 s, 2737.0 tps, lat 3.652 ms stddev 2.880
+progress: 175.0 s, 2639.0 tps, lat 3.790 ms stddev 2.818
+progress: 176.0 s, 2562.1 tps, lat 3.898 ms stddev 2.856
+progress: 177.0 s, 2676.8 tps, lat 3.738 ms stddev 2.827
+progress: 178.0 s, 2735.2 tps, lat 3.652 ms stddev 2.789
+progress: 179.0 s, 2742.0 tps, lat 3.647 ms stddev 2.772
+progress: 180.0 s, 2680.1 tps, lat 3.725 ms stddev 2.815
+progress: 181.0 s, 2745.9 tps, lat 3.639 ms stddev 2.701
+progress: 182.0 s, 2763.0 tps, lat 3.616 ms stddev 2.851
+progress: 183.0 s, 2661.0 tps, lat 3.760 ms stddev 2.919
+progress: 184.0 s, 2752.8 tps, lat 3.631 ms stddev 2.751
+progress: 185.0 s, 2732.1 tps, lat 3.659 ms stddev 2.853
+progress: 186.0 s, 2687.9 tps, lat 3.717 ms stddev 2.892
+progress: 187.0 s, 2272.2 tps, lat 4.392 ms stddev 3.837
+progress: 188.0 s, 2396.9 tps, lat 4.178 ms stddev 3.356
+progress: 189.0 s, 2542.1 tps, lat 3.930 ms stddev 3.374
+progress: 190.0 s, 2659.0 tps, lat 3.761 ms stddev 2.950
+progress: 191.0 s, 2523.1 tps, lat 3.961 ms stddev 3.121
+progress: 192.0 s, 2716.7 tps, lat 3.678 ms stddev 2.925
+progress: 193.0 s, 2695.2 tps, lat 3.704 ms stddev 2.917
+progress: 194.0 s, 2737.8 tps, lat 3.655 ms stddev 2.824
+progress: 195.0 s, 2723.2 tps, lat 3.670 ms stddev 2.770
+progress: 196.0 s, 2751.9 tps, lat 3.633 ms stddev 2.759
+progress: 197.0 s, 2744.0 tps, lat 3.641 ms stddev 2.821
+progress: 198.0 s, 2748.1 tps, lat 3.640 ms stddev 2.932
+progress: 199.0 s, 2749.8 tps, lat 3.630 ms stddev 2.751
+progress: 200.0 s, 2674.1 tps, lat 3.736 ms stddev 2.933
+progress: 201.0 s, 2720.0 tps, lat 3.679 ms stddev 2.821
+progress: 202.0 s, 2770.9 tps, lat 3.607 ms stddev 2.768
+progress: 203.0 s, 2664.0 tps, lat 3.752 ms stddev 3.062
+progress: 204.0 s, 2724.0 tps, lat 3.665 ms stddev 2.770
+progress: 205.0 s, 2740.1 tps, lat 3.649 ms stddev 2.834
+progress: 206.0 s, 2764.0 tps, lat 3.616 ms stddev 2.774
+progress: 207.0 s, 2767.8 tps, lat 3.613 ms stddev 2.737
+progress: 208.0 s, 2761.1 tps, lat 3.622 ms stddev 2.802
+progress: 209.0 s, 2726.0 tps, lat 3.663 ms stddev 2.876
+progress: 210.0 s, 2433.1 tps, lat 4.108 ms stddev 4.160
+progress: 211.0 s, 2754.9 tps, lat 3.630 ms stddev 2.851
+progress: 212.0 s, 2714.2 tps, lat 3.681 ms stddev 2.918
+progress: 213.0 s, 2699.8 tps, lat 3.702 ms stddev 2.817
+progress: 214.0 s, 2747.1 tps, lat 3.639 ms stddev 2.693
+progress: 215.0 s, 2736.1 tps, lat 3.653 ms stddev 2.848
+progress: 216.0 s, 2704.0 tps, lat 3.693 ms stddev 2.933
+progress: 217.0 s, 2765.0 tps, lat 3.617 ms stddev 2.806
+progress: 218.0 s, 2773.9 tps, lat 3.601 ms stddev 2.688
+progress: 219.0 s, 2140.1 tps, lat 4.672 ms stddev 11.199
+progress: 220.0 s, 2586.8 tps, lat 3.864 ms stddev 3.113
+progress: 221.0 s, 2681.1 tps, lat 3.726 ms stddev 2.807
+progress: 222.0 s, 2632.0 tps, lat 3.796 ms stddev 3.132
+progress: 223.0 s, 2703.0 tps, lat 3.700 ms stddev 2.880
+progress: 224.0 s, 2765.9 tps, lat 3.614 ms stddev 2.834
+progress: 225.0 s, 2742.0 tps, lat 3.647 ms stddev 2.764
+progress: 226.0 s, 2756.1 tps, lat 3.627 ms stddev 2.757
+progress: 227.0 s, 2743.2 tps, lat 3.640 ms stddev 2.793
+progress: 228.0 s, 2683.4 tps, lat 3.652 ms stddev 2.835
+progress: 229.0 s, 2224.4 tps, lat 4.586 ms stddev 6.876
+progress: 230.0 s, 2511.1 tps, lat 3.978 ms stddev 3.299
+progress: 231.0 s, 2689.2 tps, lat 3.717 ms stddev 2.857
+progress: 232.0 s, 2708.7 tps, lat 3.686 ms stddev 2.740
+progress: 233.0 s, 2705.0 tps, lat 3.700 ms stddev 2.898
+progress: 234.0 s, 2811.1 tps, lat 3.555 ms stddev 2.768
+progress: 235.0 s, 2732.1 tps, lat 3.654 ms stddev 2.721
+progress: 236.0 s, 2809.0 tps, lat 3.559 ms stddev 2.750
+^C
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -c 10  -t 100000 -f update-abalance-for-aid-1.sql^C
+postgres@6f5a3bbda7c2:~$ history
+    1  psql
+    2  pgbench -i
+    3  pgbench -P 1 -t 100000
+    4  psql
+    5  vi update-abalance-for-aid-1.sql
+    6  vi update-abalance-for-aid-1.sql
+    7  pgbench -P 1 -t 100000 -f update-abalance-for-aid-1.sql
+    8  pgbench -P 1 -t 100000 -f update-abalance-for-aid-1.sql
+    9  pgbench -P 1 -c 3  -t 100000 -f update-abalance-for-aid-1.sql
+   10  pgbench -P 1 -c 10  -t 100000 -f update-abalance-for-aid-1.sql
+   11  history
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-1.sql
+update pgbench_accounts set abalance=abalance+1 where aid = '1';
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -c 10  -t 100000 -f update-abalance-for-aid-1.sql
+starting vacuum...end.
+progress: 1.0 s, 1960.0 tps, lat 4.193 ms stddev 5.261
+progress: 2.0 s, 2359.9 tps, lat 4.237 ms stddev 2.854
+progress: 3.0 s, 1990.0 tps, lat 5.023 ms stddev 3.093
+progress: 4.0 s, 1754.9 tps, lat 5.690 ms stddev 3.493
+progress: 5.0 s, 1535.1 tps, lat 6.512 ms stddev 3.934
+progress: 6.0 s, 1434.0 tps, lat 6.968 ms stddev 3.627
+progress: 7.0 s, 1318.9 tps, lat 7.576 ms stddev 4.021
+progress: 8.0 s, 1108.1 tps, lat 9.003 ms stddev 6.025
+progress: 9.0 s, 1254.0 tps, lat 7.982 ms stddev 4.094
+progress: 10.0 s, 1266.0 tps, lat 7.893 ms stddev 3.670
+progress: 11.0 s, 1226.0 tps, lat 8.140 ms stddev 3.626
+progress: 12.0 s, 1160.0 tps, lat 8.622 ms stddev 3.865
+progress: 13.0 s, 1111.9 tps, lat 8.984 ms stddev 4.156
+progress: 14.0 s, 1097.1 tps, lat 9.091 ms stddev 4.326
+progress: 15.0 s, 1042.0 tps, lat 9.611 ms stddev 4.507
+progress: 16.0 s, 1039.0 tps, lat 9.627 ms stddev 4.384
+progress: 17.0 s, 977.0 tps, lat 10.222 ms stddev 4.198
+progress: 18.0 s, 626.9 tps, lat 15.019 ms stddev 18.176
+progress: 19.0 s, 141.0 tps, lat 72.263 ms stddev 52.071
+progress: 20.0 s, 132.0 tps, lat 75.583 ms stddev 53.645
+progress: 21.0 s, 136.0 tps, lat 72.712 ms stddev 43.529
+progress: 22.0 s, 131.0 tps, lat 75.043 ms stddev 58.413
+progress: 23.0 s, 128.0 tps, lat 78.353 ms stddev 59.340
+progress: 24.0 s, 125.0 tps, lat 81.775 ms stddev 54.357
+progress: 25.0 s, 122.0 tps, lat 80.521 ms stddev 49.743
+progress: 26.0 s, 118.0 tps, lat 84.333 ms stddev 62.069
+progress: 27.0 s, 114.0 tps, lat 88.221 ms stddev 76.794
+progress: 28.0 s, 114.0 tps, lat 87.940 ms stddev 72.510
+progress: 29.0 s, 112.0 tps, lat 88.029 ms stddev 65.507
+progress: 30.0 s, 111.0 tps, lat 90.993 ms stddev 77.388
+progress: 31.0 s, 109.0 tps, lat 89.946 ms stddev 60.136
+progress: 32.0 s, 208.0 tps, lat 50.996 ms stddev 41.272
+progress: 33.0 s, 217.0 tps, lat 46.177 ms stddev 32.790
+progress: 34.0 s, 219.0 tps, lat 45.190 ms stddev 27.221
+progress: 35.0 s, 213.0 tps, lat 47.130 ms stddev 32.745
+progress: 36.0 s, 217.0 tps, lat 45.927 ms stddev 30.013
+progress: 37.0 s, 216.9 tps, lat 46.043 ms stddev 28.829
+progress: 38.0 s, 216.0 tps, lat 46.475 ms stddev 31.077
+progress: 39.0 s, 217.0 tps, lat 45.888 ms stddev 29.845
+progress: 40.0 s, 218.0 tps, lat 45.773 ms stddev 28.694
+progress: 41.0 s, 218.0 tps, lat 45.577 ms stddev 32.723
+progress: 42.0 s, 214.0 tps, lat 47.473 ms stddev 36.373
+progress: 43.0 s, 220.0 tps, lat 45.674 ms stddev 25.049
+progress: 44.0 s, 217.0 tps, lat 45.069 ms stddev 30.754
+progress: 45.0 s, 216.0 tps, lat 47.117 ms stddev 32.705
+progress: 46.0 s, 218.0 tps, lat 46.098 ms stddev 34.003
+progress: 47.0 s, 216.0 tps, lat 45.337 ms stddev 30.812
+progress: 48.0 s, 215.0 tps, lat 47.071 ms stddev 32.223
+progress: 49.0 s, 172.0 tps, lat 58.120 ms stddev 56.034
+progress: 50.0 s, 216.0 tps, lat 46.035 ms stddev 33.292
+progress: 51.0 s, 217.0 tps, lat 46.709 ms stddev 31.037
+progress: 52.0 s, 207.0 tps, lat 48.066 ms stddev 34.050
+progress: 53.0 s, 191.0 tps, lat 52.509 ms stddev 45.385
+progress: 54.0 s, 215.0 tps, lat 45.525 ms stddev 29.697
+progress: 55.0 s, 209.0 tps, lat 48.759 ms stddev 37.950
+progress: 56.0 s, 214.0 tps, lat 46.630 ms stddev 28.486
+progress: 57.0 s, 217.0 tps, lat 46.118 ms stddev 30.486
+progress: 58.0 s, 215.0 tps, lat 45.728 ms stddev 27.670
+progress: 59.0 s, 215.0 tps, lat 46.951 ms stddev 35.305
+progress: 60.0 s, 216.0 tps, lat 46.471 ms stddev 29.680
+progress: 61.0 s, 216.0 tps, lat 45.949 ms stddev 28.058
+progress: 62.0 s, 214.0 tps, lat 47.050 ms stddev 31.476
+progress: 63.0 s, 217.0 tps, lat 46.125 ms stddev 28.445
+progress: 64.0 s, 217.0 tps, lat 46.057 ms stddev 28.887
+progress: 65.0 s, 212.0 tps, lat 46.238 ms stddev 30.620
+progress: 66.0 s, 215.0 tps, lat 46.853 ms stddev 33.393
+progress: 67.0 s, 216.0 tps, lat 46.504 ms stddev 31.188
+progress: 68.0 s, 216.0 tps, lat 46.645 ms stddev 31.374
+progress: 69.0 s, 213.0 tps, lat 47.365 ms stddev 32.969
+progress: 70.0 s, 217.0 tps, lat 45.830 ms stddev 30.689
+progress: 71.0 s, 213.0 tps, lat 47.007 ms stddev 34.494
+progress: 72.0 s, 216.0 tps, lat 46.392 ms stddev 30.324
+progress: 73.0 s, 215.0 tps, lat 45.598 ms stddev 30.804
+progress: 74.0 s, 216.0 tps, lat 47.075 ms stddev 31.167
+progress: 75.0 s, 208.0 tps, lat 47.397 ms stddev 33.271
+progress: 76.0 s, 214.0 tps, lat 47.040 ms stddev 29.516
+progress: 77.0 s, 211.0 tps, lat 47.820 ms stddev 29.263
+progress: 78.0 s, 214.0 tps, lat 46.174 ms stddev 27.435
+progress: 79.0 s, 210.0 tps, lat 47.757 ms stddev 32.856
+progress: 80.0 s, 212.0 tps, lat 46.279 ms stddev 32.586
+progress: 81.0 s, 208.0 tps, lat 49.090 ms stddev 36.269
+progress: 82.0 s, 211.0 tps, lat 46.602 ms stddev 35.023
+progress: 83.0 s, 207.0 tps, lat 48.672 ms stddev 43.474
+progress: 84.0 s, 210.0 tps, lat 48.046 ms stddev 37.698
+progress: 85.0 s, 208.0 tps, lat 48.184 ms stddev 39.394
+progress: 86.0 s, 205.0 tps, lat 48.742 ms stddev 35.636
+progress: 87.0 s, 208.0 tps, lat 47.570 ms stddev 37.947
+progress: 88.0 s, 206.0 tps, lat 48.178 ms stddev 36.765
+progress: 89.0 s, 210.0 tps, lat 48.365 ms stddev 39.102
+progress: 90.0 s, 209.0 tps, lat 47.069 ms stddev 36.979
+progress: 91.0 s, 211.0 tps, lat 48.548 ms stddev 34.660
+progress: 92.0 s, 212.0 tps, lat 46.574 ms stddev 31.500
+progress: 93.0 s, 210.0 tps, lat 47.613 ms stddev 34.187
+progress: 94.0 s, 1567.0 tps, lat 6.607 ms stddev 17.480
+progress: 95.0 s, 2668.8 tps, lat 3.747 ms stddev 2.988
+progress: 96.0 s, 2758.1 tps, lat 3.622 ms stddev 2.821
+progress: 97.0 s, 2761.0 tps, lat 3.620 ms stddev 2.819
+progress: 98.0 s, 2635.1 tps, lat 3.789 ms stddev 3.094
+progress: 99.0 s, 2735.9 tps, lat 3.657 ms stddev 2.810
+progress: 100.0 s, 2740.0 tps, lat 3.647 ms stddev 2.858
+progress: 101.0 s, 2748.1 tps, lat 3.636 ms stddev 2.783
+progress: 102.0 s, 2757.9 tps, lat 3.625 ms stddev 2.802
+progress: 103.0 s, 2674.1 tps, lat 3.738 ms stddev 3.024
+progress: 104.0 s, 2714.0 tps, lat 3.672 ms stddev 2.910
+progress: 105.0 s, 2663.7 tps, lat 3.762 ms stddev 2.960
+progress: 106.0 s, 2605.9 tps, lat 3.834 ms stddev 3.145
+progress: 107.0 s, 2754.2 tps, lat 3.629 ms stddev 2.782
+progress: 108.0 s, 2473.9 tps, lat 4.042 ms stddev 3.973
+progress: 109.0 s, 2094.1 tps, lat 4.772 ms stddev 10.836
+progress: 110.0 s, 2686.9 tps, lat 3.723 ms stddev 2.900
+progress: 111.0 s, 2697.3 tps, lat 3.700 ms stddev 2.833
+progress: 112.0 s, 2761.0 tps, lat 3.619 ms stddev 2.808
+progress: 113.0 s, 2753.1 tps, lat 3.633 ms stddev 2.730
+progress: 114.0 s, 2749.8 tps, lat 3.632 ms stddev 2.761
+progress: 115.0 s, 2713.2 tps, lat 3.686 ms stddev 2.956
+progress: 116.0 s, 2746.8 tps, lat 3.637 ms stddev 2.959
+progress: 117.0 s, 2678.0 tps, lat 3.732 ms stddev 3.096
+progress: 118.0 s, 2681.1 tps, lat 3.727 ms stddev 3.034
+progress: 119.0 s, 2752.0 tps, lat 3.633 ms stddev 2.710
+progress: 120.0 s, 2741.9 tps, lat 3.645 ms stddev 2.778
+progress: 121.0 s, 2796.0 tps, lat 3.575 ms stddev 2.781
+progress: 122.0 s, 2802.0 tps, lat 3.566 ms stddev 2.783
+progress: 123.0 s, 2801.9 tps, lat 3.566 ms stddev 2.748
+progress: 124.0 s, 2774.1 tps, lat 3.602 ms stddev 2.863
+progress: 125.0 s, 2661.0 tps, lat 3.758 ms stddev 2.909
+progress: 126.0 s, 2764.2 tps, lat 3.615 ms stddev 2.766
+progress: 127.0 s, 2473.9 tps, lat 4.028 ms stddev 4.121
+progress: 128.0 s, 2671.8 tps, lat 3.753 ms stddev 2.911
+progress: 129.0 s, 2785.1 tps, lat 3.584 ms stddev 2.715
+progress: 130.0 s, 2765.9 tps, lat 3.615 ms stddev 2.713
+progress: 131.0 s, 2788.0 tps, lat 3.586 ms stddev 2.795
+progress: 132.0 s, 2806.3 tps, lat 3.564 ms stddev 2.697
+progress: 133.0 s, 2807.9 tps, lat 3.558 ms stddev 2.687
+progress: 134.0 s, 2797.9 tps, lat 3.570 ms stddev 2.829
+progress: 135.0 s, 2732.8 tps, lat 3.658 ms stddev 2.849
+progress: 136.0 s, 2784.2 tps, lat 3.589 ms stddev 2.742
+progress: 137.0 s, 2687.2 tps, lat 3.722 ms stddev 3.001
+progress: 138.0 s, 2712.1 tps, lat 3.683 ms stddev 2.983
+progress: 139.0 s, 2782.7 tps, lat 3.593 ms stddev 2.759
+progress: 140.0 s, 2764.1 tps, lat 3.617 ms stddev 2.817
+progress: 141.0 s, 2763.8 tps, lat 3.614 ms stddev 2.814
+progress: 142.0 s, 2799.2 tps, lat 3.572 ms stddev 2.741
+progress: 143.0 s, 2789.8 tps, lat 3.581 ms stddev 2.825
+progress: 144.0 s, 2798.3 tps, lat 3.571 ms stddev 2.710
+progress: 145.0 s, 2734.9 tps, lat 3.657 ms stddev 2.823
+progress: 146.0 s, 2751.1 tps, lat 3.632 ms stddev 2.785
+progress: 147.0 s, 2782.8 tps, lat 3.590 ms stddev 2.794
+progress: 148.0 s, 2731.1 tps, lat 3.659 ms stddev 2.803
+progress: 149.0 s, 2775.1 tps, lat 3.603 ms stddev 2.759
+progress: 150.0 s, 2770.6 tps, lat 3.611 ms stddev 2.664
+progress: 151.0 s, 2810.5 tps, lat 3.554 ms stddev 2.871
+progress: 152.0 s, 2755.9 tps, lat 3.624 ms stddev 2.960
+progress: 153.0 s, 2782.2 tps, lat 3.594 ms stddev 2.706
+progress: 154.0 s, 2791.8 tps, lat 3.579 ms stddev 2.643
+progress: 155.0 s, 2717.1 tps, lat 3.678 ms stddev 2.814
+progress: 156.0 s, 2785.9 tps, lat 3.589 ms stddev 2.773
+progress: 157.0 s, 2784.9 tps, lat 3.591 ms stddev 2.815
+progress: 158.0 s, 2696.0 tps, lat 3.705 ms stddev 2.938
+progress: 159.0 s, 2784.2 tps, lat 3.590 ms stddev 2.752
+progress: 160.0 s, 2779.9 tps, lat 3.594 ms stddev 2.869
+progress: 161.0 s, 2774.2 tps, lat 3.604 ms stddev 2.837
+progress: 162.0 s, 2788.8 tps, lat 3.580 ms stddev 2.808
+progress: 163.0 s, 2787.0 tps, lat 3.587 ms stddev 2.791
+progress: 164.0 s, 2792.9 tps, lat 3.580 ms stddev 2.653
+progress: 165.0 s, 2752.0 tps, lat 3.628 ms stddev 2.870
+progress: 166.0 s, 2801.9 tps, lat 3.568 ms stddev 2.796
+progress: 167.0 s, 2716.2 tps, lat 3.682 ms stddev 2.861
+progress: 168.0 s, 2713.9 tps, lat 3.681 ms stddev 2.809
+progress: 169.0 s, 2288.9 tps, lat 4.370 ms stddev 9.756
+progress: 170.0 s, 2712.1 tps, lat 3.683 ms stddev 2.794
+progress: 171.0 s, 2790.2 tps, lat 3.581 ms stddev 2.793
+progress: 172.0 s, 2787.7 tps, lat 3.583 ms stddev 2.769
+progress: 173.0 s, 2773.0 tps, lat 3.604 ms stddev 2.718
+progress: 174.0 s, 2784.3 tps, lat 3.590 ms stddev 2.726
+progress: 175.0 s, 2618.7 tps, lat 3.817 ms stddev 3.156
+progress: 176.0 s, 2635.1 tps, lat 3.793 ms stddev 3.189
+progress: 177.0 s, 2698.7 tps, lat 3.705 ms stddev 2.945
+progress: 178.0 s, 2690.1 tps, lat 3.715 ms stddev 3.038
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"update-abalance-for-aid-1000000.sql" [New File]                                                                                                                                           0,0-1         All
+\set aid random(1, 1000000)
+progress: 179.0 s, 2718.1 tps, lat 3.675 ms stddev 2.862
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"update-abalance-for-aid-10.sql" [New File]                                                                                                                                                0,0-1         All
+progress: 180.0 s, 2767.8 tps, lat 3.613 ms stddev 2.778
+progress: 181.0 s, 2784.4 tps, lat 3.589 ms stddev 2.797
+\set aid random(1, 1000000)
+UPDATE pgbench_accounts SET abalance = abalance + :delta WHERE aid = :aid;
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"update-abalance-for-aid-10.sql" 2L, 103C                                                                                                                                                  1,1           All
+\set aid random(1, 100)
+progress: 182.0 s, 2784.0 tps, lat 3.590 ms stddev 2.731
+progress: 183.0 s, 2723.0 tps, lat 3.667 ms stddev 2.762
+progress: 184.0 s, 2647.8 tps, lat 3.776 ms stddev 2.908
+^C
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-1.sql
+update pgbench_accounts set abalance=abalance+1 where aid = '1';
+postgres@6f5a3bbda7c2:~$ pgbench -i
+dropping old tables...
+creating tables...
+generating data...
+100000 of 100000 tuples (100%) done (elapsed 0.31 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-1.sql
+update pgbench_accounts set abalance=abalance+1 where aid = '1';
+postgres@6f5a3bbda7c2:~$ pgbench -i -s 10
+dropping old tables...
+creating tables...
+generating data...
+100000 of 1000000 tuples (10%) done (elapsed 0.31 s, remaining 2.75 s)
+200000 of 1000000 tuples (20%) done (elapsed 0.66 s, remaining 2.66 s)
+300000 of 1000000 tuples (30%) done (elapsed 1.02 s, remaining 2.37 s)
+400000 of 1000000 tuples (40%) done (elapsed 1.36 s, remaining 2.04 s)
+500000 of 1000000 tuples (50%) done (elapsed 1.68 s, remaining 1.68 s)
+600000 of 1000000 tuples (60%) done (elapsed 2.05 s, remaining 1.36 s)
+700000 of 1000000 tuples (70%) done (elapsed 2.41 s, remaining 1.03 s)
+800000 of 1000000 tuples (80%) done (elapsed 2.75 s, remaining 0.69 s)
+900000 of 1000000 tuples (90%) done (elapsed 3.12 s, remaining 0.35 s)
+1000000 of 1000000 tuples (100%) done (elapsed 3.52 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+postgres@6f5a3bbda7c2:~$ vi update-abalance-for-aid-1000000.sql
+postgres@6f5a3bbda7c2:~$ vi update-abalance-for-aid-10.sql
+postgres@6f5a3bbda7c2:~$ cp update-abalance-for-aid-1000000.sql update-abalance-for-aid-10.sql
+postgres@6f5a3bbda7c2:~$ vi update-abalance-for-aid-10.sql
+postgres@6f5a3bbda7c2:~$ mv update-abalance-for-aid-10.sql update-abalance-for-aid-100.sql
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -c 10  -t 100000 -f update-abalance-for-aid-100.sql
+starting vacuum...end.
+client 0 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 1 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+\set aid random(1, 100)
+UPDATE pgbench_accounts SET abalance = abalance + :delta WHERE aid = :aid;
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"update-abalance-for-aid-100.sql" 2L, 99C                                                                                                                                                  1,1           All
+\set aid random(1, 100)
+                                                          ^
+client 2 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 8 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 3 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 4 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 5 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 6 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 7 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+client 9 script 0 aborted in command 1 query 0: ERROR:  syntax error at or near ":"
+LINE 1: UPDATE pgbench_accounts SET abalance = abalance + :delta WHE...
+                                                          ^
+transaction type: update-abalance-for-aid-100.sql
+scaling factor: 1
+query mode: simple
+number of clients: 10
+number of threads: 1
+number of transactions per client: 100000
+number of transactions actually processed: 0/1000000
+Run was aborted; the above results are incomplete.
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-100.sql
+\set aid random(1, 100)
+UPDATE pgbench_accounts SET abalance = abalance + :delta WHERE aid = :aid;
+postgres@6f5a3bbda7c2:~$ vi update-abalance-for-aid-100.sql
+postgres@6f5a3bbda7c2:~$ pgbench -P 1 -c 10  -t 100000 -f update-abalance-for-aid-100.sql
+starting vacuum...end.
+progress: 1.0 s, 5009.5 tps, lat 1.649 ms stddev 1.932
+progress: 2.0 s, 6083.1 tps, lat 1.634 ms stddev 0.652
+progress: 3.0 s, 6402.3 tps, lat 1.550 ms stddev 0.433
+progress: 4.0 s, 6386.8 tps, lat 1.555 ms stddev 0.440
+progress: 5.0 s, 6454.3 tps, lat 1.535 ms stddev 0.439
+progress: 6.0 s, 6432.8 tps, lat 1.540 ms stddev 0.440
+progress: 7.0 s, 6259.8 tps, lat 1.584 ms stddev 0.458
+progress: 8.0 s, 6180.9 tps, lat 1.600 ms stddev 0.474
+progress: 9.0 s, 6195.6 tps, lat 1.604 ms stddev 0.500
+progress: 10.0 s, 6145.7 tps, lat 1.613 ms stddev 0.485
+progress: 11.0 s, 6103.1 tps, lat 1.625 ms stddev 0.491
+progress: 12.0 s, 6065.1 tps, lat 1.633 ms stddev 0.544
+progress: 13.0 s, 6365.4 tps, lat 1.558 ms stddev 0.468
+progress: 14.0 s, 6320.3 tps, lat 1.568 ms stddev 0.464
+progress: 15.0 s, 6270.7 tps, lat 1.581 ms stddev 0.472
+progress: 16.0 s, 6331.5 tps, lat 1.566 ms stddev 0.476
+progress: 17.0 s, 6205.9 tps, lat 1.597 ms stddev 0.499
+progress: 18.0 s, 5946.8 tps, lat 1.671 ms stddev 0.530
+progress: 19.0 s, 5709.3 tps, lat 1.741 ms stddev 0.534
+progress: 20.0 s, 5474.9 tps, lat 1.819 ms stddev 0.571
+progress: 21.0 s, 5345.0 tps, lat 1.863 ms stddev 0.560
+progress: 22.0 s, 5007.8 tps, lat 1.990 ms stddev 0.738
+progress: 23.0 s, 4969.0 tps, lat 2.006 ms stddev 0.617
+progress: 24.0 s, 4729.9 tps, lat 2.107 ms stddev 0.662
+progress: 25.0 s, 4692.1 tps, lat 2.124 ms stddev 0.651
+progress: 26.0 s, 4643.0 tps, lat 2.147 ms stddev 0.647
+progress: 27.0 s, 4465.9 tps, lat 2.233 ms stddev 0.684
+progress: 28.0 s, 4366.3 tps, lat 2.282 ms stddev 0.712
+progress: 29.0 s, 4291.6 tps, lat 2.323 ms stddev 0.719
+progress: 30.0 s, 3887.0 tps, lat 2.518 ms stddev 1.602
+progress: 31.0 s, 3800.8 tps, lat 2.670 ms stddev 1.692
+progress: 32.0 s, 3876.3 tps, lat 2.573 ms stddev 0.844
+progress: 33.0 s, 3878.0 tps, lat 2.571 ms stddev 0.804
+progress: 34.0 s, 3885.0 tps, lat 2.568 ms stddev 0.831
+progress: 35.0 s, 3808.0 tps, lat 2.617 ms stddev 0.889
+progress: 36.0 s, 3738.3 tps, lat 2.670 ms stddev 0.863
+progress: 37.0 s, 3617.8 tps, lat 2.756 ms stddev 0.899
+progress: 38.0 s, 3544.0 tps, lat 2.816 ms stddev 0.973
+progress: 39.0 s, 3526.0 tps, lat 2.827 ms stddev 0.933
+progress: 40.0 s, 3482.0 tps, lat 2.867 ms stddev 0.963
+progress: 41.0 s, 3411.2 tps, lat 2.928 ms stddev 0.968
+progress: 42.0 s, 3244.8 tps, lat 3.070 ms stddev 1.065
+progress: 43.0 s, 3298.9 tps, lat 3.021 ms stddev 0.996
+progress: 44.0 s, 3308.2 tps, lat 3.020 ms stddev 0.955
+progress: 45.0 s, 3261.1 tps, lat 3.061 ms stddev 0.976
+progress: 46.0 s, 3170.7 tps, lat 3.141 ms stddev 1.042
+progress: 47.0 s, 3140.2 tps, lat 3.182 ms stddev 1.110
+progress: 48.0 s, 3135.0 tps, lat 3.183 ms stddev 1.018
+progress: 49.0 s, 3123.2 tps, lat 3.196 ms stddev 1.026
+progress: 50.0 s, 3036.8 tps, lat 3.287 ms stddev 1.105
+progress: 51.0 s, 3043.0 tps, lat 3.276 ms stddev 1.058
+progress: 52.0 s, 2949.0 tps, lat 3.388 ms stddev 1.097
+progress: 53.0 s, 2969.2 tps, lat 3.362 ms stddev 1.133
+progress: 54.0 s, 2936.9 tps, lat 3.398 ms stddev 1.099
+progress: 55.0 s, 2879.0 tps, lat 3.468 ms stddev 1.113
+progress: 56.0 s, 2894.9 tps, lat 3.444 ms stddev 1.067
+progress: 57.0 s, 2846.3 tps, lat 3.504 ms stddev 1.057
+progress: 58.0 s, 2827.0 tps, lat 3.533 ms stddev 1.155
+progress: 59.0 s, 2606.8 tps, lat 3.831 ms stddev 1.424
+progress: 60.0 s, 2504.0 tps, lat 3.987 ms stddev 1.451
+progress: 61.0 s, 2542.0 tps, lat 3.929 ms stddev 1.376
+progress: 62.0 s, 2498.6 tps, lat 3.964 ms stddev 1.480
+progress: 63.0 s, 2642.3 tps, lat 3.804 ms stddev 1.444
+progress: 64.0 s, 2644.0 tps, lat 3.779 ms stddev 1.295
+progress: 65.0 s, 2544.1 tps, lat 3.920 ms stddev 1.462
+progress: 66.0 s, 2570.0 tps, lat 3.885 ms stddev 1.261
+progress: 67.0 s, 2551.0 tps, lat 3.916 ms stddev 1.280
+progress: 68.0 s, 2524.0 tps, lat 3.958 ms stddev 1.378
+progress: 69.0 s, 2537.0 tps, lat 3.934 ms stddev 1.394
+progress: 70.0 s, 2482.1 tps, lat 4.020 ms stddev 1.426
+progress: 71.0 s, 2498.9 tps, lat 3.994 ms stddev 1.362
+progress: 72.0 s, 2419.9 tps, lat 4.125 ms stddev 1.461
+progress: 73.0 s, 2464.1 tps, lat 4.056 ms stddev 1.333
+progress: 74.0 s, 2446.0 tps, lat 4.078 ms stddev 1.406
+progress: 75.0 s, 2432.0 tps, lat 4.105 ms stddev 1.428
+progress: 76.0 s, 2404.1 tps, lat 4.153 ms stddev 1.431
+progress: 77.0 s, 2389.0 tps, lat 4.184 ms stddev 1.510
+progress: 78.0 s, 2363.1 tps, lat 4.226 ms stddev 1.571
+progress: 79.0 s, 2340.0 tps, lat 4.265 ms stddev 1.441
+progress: 80.0 s, 2069.9 tps, lat 4.825 ms stddev 1.828
+progress: 81.0 s, 2326.0 tps, lat 4.292 ms stddev 1.589
+progress: 82.0 s, 2225.1 tps, lat 4.461 ms stddev 1.606
+progress: 83.0 s, 2289.9 tps, lat 4.387 ms stddev 1.604
+progress: 84.0 s, 2287.9 tps, lat 4.362 ms stddev 1.535
+progress: 85.0 s, 2262.0 tps, lat 4.411 ms stddev 1.547
+progress: 86.0 s, 2228.0 tps, lat 4.487 ms stddev 1.586
+progress: 87.0 s, 2234.0 tps, lat 4.466 ms stddev 1.566
+progress: 88.0 s, 2220.0 tps, lat 4.496 ms stddev 1.572
+progress: 89.0 s, 2220.0 tps, lat 4.495 ms stddev 1.529
+progress: 90.0 s, 2034.9 tps, lat 4.862 ms stddev 3.650
+progress: 91.0 s, 2158.1 tps, lat 4.675 ms stddev 2.184
+progress: 92.0 s, 2077.0 tps, lat 4.805 ms stddev 1.782
+progress: 93.0 s, 2173.9 tps, lat 4.594 ms stddev 1.585
+progress: 94.0 s, 2158.1 tps, lat 4.630 ms stddev 1.664
+progress: 95.0 s, 2171.0 tps, lat 4.598 ms stddev 1.628
+progress: 96.0 s, 2119.0 tps, lat 4.708 ms stddev 1.663
+progress: 97.0 s, 2116.0 tps, lat 4.733 ms stddev 1.601
+progress: 98.0 s, 2114.0 tps, lat 4.720 ms stddev 1.644
+progress: 99.0 s, 2082.0 tps, lat 4.795 ms stddev 1.780
+progress: 100.0 s, 1973.0 tps, lat 5.059 ms stddev 2.396
+progress: 101.0 s, 2064.0 tps, lat 4.843 ms stddev 1.667
+progress: 102.0 s, 1989.9 tps, lat 5.016 ms stddev 1.876
+progress: 103.0 s, 1975.0 tps, lat 5.047 ms stddev 1.889
+progress: 104.0 s, 2035.1 tps, lat 4.917 ms stddev 1.767
+progress: 105.0 s, 2021.0 tps, lat 4.941 ms stddev 1.816
+progress: 106.0 s, 1984.0 tps, lat 5.029 ms stddev 1.881
+progress: 107.0 s, 1974.0 tps, lat 5.064 ms stddev 1.877
+progress: 108.0 s, 1996.0 tps, lat 5.004 ms stddev 1.745
+progress: 109.0 s, 1990.0 tps, lat 5.026 ms stddev 1.765
+progress: 110.0 s, 1949.0 tps, lat 5.122 ms stddev 1.897
+progress: 111.0 s, 1963.0 tps, lat 5.084 ms stddev 1.841
+progress: 112.0 s, 1913.0 tps, lat 5.217 ms stddev 1.944
+progress: 113.0 s, 1946.0 tps, lat 5.131 ms stddev 1.858
+progress: 114.0 s, 1933.0 tps, lat 5.167 ms stddev 1.797
+progress: 115.0 s, 1920.9 tps, lat 5.200 ms stddev 1.885
+progress: 116.0 s, 1899.0 tps, lat 5.259 ms stddev 2.017
+progress: 117.0 s, 1933.0 tps, lat 5.168 ms stddev 1.951
+progress: 118.0 s, 1910.0 tps, lat 5.235 ms stddev 1.800
+progress: 119.0 s, 1893.0 tps, lat 5.272 ms stddev 1.919
+progress: 120.0 s, 1778.0 tps, lat 5.613 ms stddev 2.029
+progress: 121.0 s, 1786.9 tps, lat 5.593 ms stddev 1.973
+progress: 122.0 s, 1750.1 tps, lat 5.710 ms stddev 2.076
+progress: 123.0 s, 1822.0 tps, lat 5.479 ms stddev 2.180
+progress: 124.0 s, 1816.0 tps, lat 5.487 ms stddev 2.195
+progress: 125.0 s, 1807.1 tps, lat 5.507 ms stddev 2.052
+progress: 126.0 s, 1815.9 tps, lat 5.538 ms stddev 2.219
+progress: 127.0 s, 1800.0 tps, lat 5.542 ms stddev 1.951
+progress: 128.0 s, 1802.0 tps, lat 5.543 ms stddev 1.947
+progress: 129.0 s, 1837.0 tps, lat 5.438 ms stddev 1.934
+progress: 130.0 s, 1784.0 tps, lat 5.603 ms stddev 2.046
+progress: 131.0 s, 1810.0 tps, lat 5.517 ms stddev 1.947
+progress: 132.0 s, 1771.9 tps, lat 5.634 ms stddev 1.998
+progress: 133.0 s, 1781.1 tps, lat 5.611 ms stddev 2.039
+progress: 134.0 s, 1787.9 tps, lat 5.590 ms stddev 1.980
+progress: 135.0 s, 1791.2 tps, lat 5.582 ms stddev 2.082
+progress: 136.0 s, 1778.0 tps, lat 5.609 ms stddev 2.073
+progress: 137.0 s, 1721.9 tps, lat 5.791 ms stddev 2.162
+progress: 138.0 s, 1689.9 tps, lat 5.928 ms stddev 2.187
+progress: 139.0 s, 1771.1 tps, lat 5.644 ms stddev 2.064
+progress: 140.0 s, 1731.0 tps, lat 5.764 ms stddev 2.142
+progress: 141.0 s, 1733.0 tps, lat 5.758 ms stddev 2.116
+progress: 142.0 s, 1702.9 tps, lat 5.864 ms stddev 2.176
+progress: 143.0 s, 1708.1 tps, lat 5.841 ms stddev 2.230
+progress: 144.0 s, 1725.0 tps, lat 5.800 ms stddev 2.147
+progress: 145.0 s, 1713.0 tps, lat 5.836 ms stddev 2.225
+progress: 146.0 s, 1707.0 tps, lat 5.855 ms stddev 2.165
+progress: 147.0 s, 1669.0 tps, lat 5.970 ms stddev 2.289
+progress: 148.0 s, 1696.0 tps, lat 5.906 ms stddev 2.202
+progress: 149.0 s, 1697.1 tps, lat 5.886 ms stddev 2.177
+progress: 150.0 s, 1537.7 tps, lat 6.266 ms stddev 4.115
+progress: 151.0 s, 1347.7 tps, lat 7.149 ms stddev 8.164
+progress: 152.0 s, 1607.6 tps, lat 6.656 ms stddev 7.161
+progress: 153.0 s, 1649.0 tps, lat 6.055 ms stddev 2.238
+progress: 154.0 s, 1681.0 tps, lat 5.955 ms stddev 2.192
+progress: 155.0 s, 1648.0 tps, lat 6.061 ms stddev 2.279
+progress: 156.0 s, 1653.0 tps, lat 6.032 ms stddev 2.218
+progress: 157.0 s, 1637.9 tps, lat 6.100 ms stddev 2.229
+progress: 158.0 s, 1651.1 tps, lat 6.055 ms stddev 2.227
+progress: 159.0 s, 1632.0 tps, lat 6.112 ms stddev 2.262
+progress: 160.0 s, 1629.0 tps, lat 6.140 ms stddev 2.284
+progress: 161.0 s, 1621.0 tps, lat 6.159 ms stddev 2.360
+progress: 162.0 s, 1577.0 tps, lat 6.334 ms stddev 2.371
+progress: 163.0 s, 1586.1 tps, lat 6.297 ms stddev 2.448
+progress: 164.0 s, 1626.9 tps, lat 6.147 ms stddev 2.307
+progress: 165.0 s, 1616.0 tps, lat 6.175 ms stddev 2.310
+progress: 166.0 s, 1608.0 tps, lat 6.211 ms stddev 2.402
+progress: 167.0 s, 1526.0 tps, lat 6.555 ms stddev 2.730
+progress: 168.0 s, 1599.0 tps, lat 6.256 ms stddev 2.362
+progress: 169.0 s, 1589.0 tps, lat 6.281 ms stddev 2.415
+progress: 170.0 s, 1582.0 tps, lat 6.313 ms stddev 2.331
+progress: 171.0 s, 1580.0 tps, lat 6.320 ms stddev 2.329
+progress: 172.0 s, 1562.0 tps, lat 6.403 ms stddev 2.407
+progress: 173.0 s, 1519.0 tps, lat 6.572 ms stddev 2.483
+progress: 174.0 s, 1548.0 tps, lat 6.453 ms stddev 2.386
+progress: 175.0 s, 1549.0 tps, lat 6.432 ms stddev 2.363
+progress: 176.0 s, 1539.0 tps, lat 6.501 ms stddev 2.400
+progress: 177.0 s, 1531.0 tps, lat 6.515 ms stddev 2.382
+progress: 178.0 s, 1549.0 tps, lat 6.472 ms stddev 2.447
+progress: 179.0 s, 1541.0 tps, lat 6.479 ms stddev 2.362
+progress: 180.0 s, 3288.9 tps, lat 3.040 ms stddev 2.750
+progress: 181.0 s, 6002.3 tps, lat 1.652 ms stddev 0.668
+progress: 182.0 s, 6058.4 tps, lat 1.637 ms stddev 0.532
+progress: 183.0 s, 6132.6 tps, lat 1.617 ms stddev 0.526
+progress: 184.0 s, 6383.1 tps, lat 1.553 ms stddev 0.469
+progress: 185.0 s, 6158.7 tps, lat 1.608 ms stddev 0.647
+progress: 186.0 s, 6360.4 tps, lat 1.561 ms stddev 0.480
+progress: 187.0 s, 6282.9 tps, lat 1.577 ms stddev 0.488
+progress: 188.0 s, 6283.2 tps, lat 1.578 ms stddev 0.496
+progress: 189.0 s, 6263.6 tps, lat 1.582 ms stddev 0.486
+progress: 190.0 s, 6144.1 tps, lat 1.615 ms stddev 0.515
+progress: 191.0 s, 6216.1 tps, lat 1.595 ms stddev 0.501
+progress: 192.0 s, 5972.8 tps, lat 1.660 ms stddev 0.609
+progress: 193.0 s, 5935.2 tps, lat 1.671 ms stddev 0.628
+progress: 194.0 s, 6249.2 tps, lat 1.584 ms stddev 0.486
+progress: 195.0 s, 6326.8 tps, lat 1.567 ms stddev 0.486
+progress: 196.0 s, 6324.8 tps, lat 1.567 ms stddev 0.490
+progress: 197.0 s, 6273.8 tps, lat 1.581 ms stddev 0.548
+progress: 198.0 s, 6383.7 tps, lat 1.554 ms stddev 0.474
+progress: 199.0 s, 6367.9 tps, lat 1.557 ms stddev 0.469
+progress: 200.0 s, 6234.5 tps, lat 1.590 ms stddev 0.494
+progress: 201.0 s, 6257.8 tps, lat 1.583 ms stddev 0.493
+progress: 202.0 s, 6099.7 tps, lat 1.623 ms stddev 0.510
+progress: 203.0 s, 6174.2 tps, lat 1.608 ms stddev 0.535
+progress: 204.0 s, 6259.3 tps, lat 1.583 ms stddev 0.485
+progress: 205.0 s, 6280.5 tps, lat 1.579 ms stddev 0.513
+progress: 206.0 s, 6225.7 tps, lat 1.592 ms stddev 0.505
+progress: 207.0 s, 6208.1 tps, lat 1.598 ms stddev 0.487
+progress: 208.0 s, 6419.9 tps, lat 1.543 ms stddev 0.468
+progress: 209.0 s, 6400.7 tps, lat 1.547 ms stddev 0.468
+progress: 210.0 s, 5821.0 tps, lat 1.620 ms stddev 1.149
+progress: 211.0 s, 5838.8 tps, lat 1.784 ms stddev 3.313
+progress: 212.0 s, 5785.8 tps, lat 1.713 ms stddev 0.649
+progress: 213.0 s, 6010.5 tps, lat 1.651 ms stddev 0.580
+progress: 214.0 s, 5632.9 tps, lat 1.759 ms stddev 0.934
+^C
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-100.sql
+\set aid random(1, 100)
+UPDATE pgbench_accounts SET abalance=abalance+1  WHERE aid = :aid;
+postgres@6f5a3bbda7c2:~$ pgbench -i -s 10
+dropping old tables...
+creating tables...
+generating data...
+100000 of 1000000 tuples (10%) done (elapsed 0.32 s, remaining 2.86 s)
+200000 of 1000000 tuples (20%) done (elapsed 0.70 s, remaining 2.80 s)
+300000 of 1000000 tuples (30%) done (elapsed 1.08 s, remaining 2.53 s)
+400000 of 1000000 tuples (40%) done (elapsed 1.42 s, remaining 2.13 s)
+500000 of 1000000 tuples (50%) done (elapsed 1.78 s, remaining 1.78 s)
+600000 of 1000000 tuples (60%) done (elapsed 2.15 s, remaining 1.43 s)
+700000 of 1000000 tuples (70%) done (elapsed 2.52 s, remaining 1.08 s)
+800000 of 1000000 tuples (80%) done (elapsed 2.88 s, remaining 0.72 s)
+900000 of 1000000 tuples (90%) done (elapsed 3.24 s, remaining 0.36 s)
+1000000 of 1000000 tuples (100%) done (elapsed 3.62 s, remaining 0.00 s)
+vacuuming...
+creating primary keys...
+done.
+postgres@6f5a3bbda7c2:~$ cat update-abalance-for-aid-100.sql
+\set aid random(1, 100)
+UPDATE pgbench_accounts SET abalance=abalance+1  WHERE aid = :aid;
+postgres@6f5a3bbda7c2:~$ pgbench -P 10 -c 10  -t 100000 -f update-abalance-for-aid-100.sql
+starting vacuum...end.
+progress: 10.0 s, 6080.1 tps, lat 1.603 ms stddev 1.047
+progress: 20.0 s, 5985.5 tps, lat 1.657 ms stddev 0.593
+progress: 30.0 s, 5641.3 tps, lat 1.761 ms stddev 0.582
+progress: 40.0 s, 4139.6 tps, lat 2.404 ms stddev 1.022
+progress: 50.0 s, 3423.4 tps, lat 2.917 ms stddev 2.872
+progress: 60.0 s, 3066.6 tps, lat 3.254 ms stddev 1.082
+progress: 70.0 s, 2625.9 tps, lat 3.800 ms stddev 2.948
+progress: 80.0 s, 2507.0 tps, lat 3.981 ms stddev 1.347
+progress: 90.0 s, 2189.5 tps, lat 4.561 ms stddev 1.864
+progress: 100.0 s, 2035.4 tps, lat 4.905 ms stddev 2.041
+progress: 110.0 s, 1950.5 tps, lat 5.120 ms stddev 3.557
+progress: 120.0 s, 1905.1 tps, lat 5.241 ms stddev 1.951
+progress: 130.0 s, 1847.2 tps, lat 5.407 ms stddev 2.306
+progress: 140.0 s, 1735.9 tps, lat 5.752 ms stddev 2.173
+progress: 150.0 s, 1744.7 tps, lat 5.726 ms stddev 2.118
+progress: 160.0 s, 1670.5 tps, lat 5.969 ms stddev 2.207
+progress: 170.0 s, 1541.0 tps, lat 6.494 ms stddev 6.235
+progress: 180.0 s, 1583.2 tps, lat 6.310 ms stddev 2.264
+progress: 190.0 s, 1526.3 tps, lat 6.544 ms stddev 2.462
+progress: 200.0 s, 1454.2 tps, lat 6.872 ms stddev 2.559
+progress: 210.0 s, 3676.9 tps, lat 2.708 ms stddev 2.484
+progress: 220.0 s, 6115.3 tps, lat 1.618 ms stddev 0.575
+progress: 230.0 s, 6020.1 tps, lat 1.649 ms stddev 1.669
+^C
