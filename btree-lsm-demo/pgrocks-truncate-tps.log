@@ -1,0 +1,121 @@
+root@51950d7f2812:/# pgbench -P 1 -f select-abalance-for-aid-10000000.sql -t 400000
+starting vacuum...end.
+progress: 1.0 s, 2995.7 tps, lat 0.326 ms stddev 0.469
+progress: 2.0 s, 2816.1 tps, lat 0.354 ms stddev 0.886
+progress: 3.0 s, 3010.0 tps, lat 0.331 ms stddev 1.090
+progress: 4.0 s, 3988.3 tps, lat 0.250 ms stddev 0.084
+progress: 5.0 s, 4321.1 tps, lat 0.231 ms stddev 0.062
+progress: 6.0 s, 4529.7 tps, lat 0.220 ms stddev 0.049
+progress: 7.0 s, 4364.9 tps, lat 0.228 ms stddev 0.066
+progress: 8.0 s, 4490.1 tps, lat 0.222 ms stddev 0.044
+progress: 9.0 s, 4120.1 tps, lat 0.242 ms stddev 0.190
+progress: 10.0 s, 4183.8 tps, lat 0.238 ms stddev 0.128
+progress: 11.0 s, 4383.0 tps, lat 0.227 ms stddev 0.049
+progress: 12.0 s, 4004.3 tps, lat 0.249 ms stddev 0.119
+progress: 13.0 s, 4374.6 tps, lat 0.228 ms stddev 0.032
+progress: 14.0 s, 4320.0 tps, lat 0.231 ms stddev 0.041
+progress: 15.0 s, 4442.9 tps, lat 0.224 ms stddev 0.032
+progress: 16.0 s, 4433.4 tps, lat 0.225 ms stddev 0.038
+progress: 17.0 s, 4212.8 tps, lat 0.237 ms stddev 0.078
+progress: 18.0 s, 4236.9 tps, lat 0.235 ms stddev 0.139
+progress: 19.0 s, 4364.0 tps, lat 0.229 ms stddev 0.042
+progress: 20.0 s, 4365.9 tps, lat 0.228 ms stddev 0.095
+progress: 21.0 s, 4498.1 tps, lat 0.222 ms stddev 0.028
+progress: 22.0 s, 4430.9 tps, lat 0.225 ms stddev 0.031
+progress: 23.0 s, 4298.2 tps, lat 0.232 ms stddev 0.111
+progress: 24.0 s, 4397.9 tps, lat 0.227 ms stddev 0.066
+progress: 25.0 s, 4374.3 tps, lat 0.228 ms stddev 0.029
+progress: 26.0 s, 4449.7 tps, lat 0.224 ms stddev 0.031
+progress: 27.0 s, 4105.2 tps, lat 0.243 ms stddev 0.183
+progress: 28.0 s, 4438.8 tps, lat 0.225 ms stddev 0.028
+progress: 29.0 s, 4259.0 tps, lat 0.234 ms stddev 0.056
+progress: 30.0 s, 4412.1 tps, lat 0.226 ms stddev 0.030
+progress: 31.0 s, 4483.8 tps, lat 0.222 ms stddev 0.026
+progress: 32.0 s, 4439.2 tps, lat 0.225 ms stddev 0.031
+progress: 33.0 s, 4423.0 tps, lat 0.225 ms stddev 0.029
+progress: 34.0 s, 4392.9 tps, lat 0.227 ms stddev 0.046
+progress: 35.0 s, 4507.0 tps, lat 0.221 ms stddev 0.022
+progress: 36.0 s, 4535.3 tps, lat 0.220 ms stddev 0.025
+progress: 37.0 s, 4392.7 tps, lat 0.227 ms stddev 0.040
+progress: 38.0 s, 4373.0 tps, lat 0.228 ms stddev 0.115
+progress: 39.0 s, 4372.9 tps, lat 0.228 ms stddev 0.036
+progress: 40.0 s, 4316.3 tps, lat 0.231 ms stddev 0.089
+progress: 41.0 s, 4455.8 tps, lat 0.224 ms stddev 0.040
+progress: 42.0 s, 4354.0 tps, lat 0.229 ms stddev 0.035
+progress: 43.0 s, 4155.0 tps, lat 0.240 ms stddev 0.176
+progress: 44.0 s, 2152.5 tps, lat 0.462 ms stddev 0.332
+progress: 45.0 s, 1853.3 tps, lat 0.538 ms stddev 0.660
+progress: 46.0 s, 2308.6 tps, lat 0.432 ms stddev 0.320
+progress: 47.0 s, 1936.1 tps, lat 0.514 ms stddev 0.430
+progress: 48.0 s, 1230.2 tps, lat 0.809 ms stddev 0.835
+progress: 49.0 s, 1699.0 tps, lat 0.586 ms stddev 0.485
+progress: 50.0 s, 1743.7 tps, lat 0.571 ms stddev 0.497
+progress: 51.0 s, 2082.0 tps, lat 0.478 ms stddev 0.469
+progress: 52.0 s, 2219.1 tps, lat 0.449 ms stddev 0.382
+progress: 53.0 s, 1709.0 tps, lat 0.582 ms stddev 0.612
+progress: 54.0 s, 1856.2 tps, lat 0.536 ms stddev 0.461
+progress: 55.0 s, 1816.4 tps, lat 0.547 ms stddev 0.516
+progress: 56.0 s, 650.1 tps, lat 1.526 ms stddev 2.058
+progress: 57.0 s, 1566.1 tps, lat 0.635 ms stddev 0.605
+progress: 58.0 s, 1957.4 tps, lat 0.508 ms stddev 0.511
+progress: 59.0 s, 1114.8 tps, lat 0.894 ms stddev 1.776
+progress: 60.0 s, 1767.2 tps, lat 0.563 ms stddev 0.583
+progress: 61.0 s, 2064.0 tps, lat 0.483 ms stddev 0.419
+progress: 62.0 s, 2018.1 tps, lat 0.494 ms stddev 2.276
+progress: 63.0 s, 1977.5 tps, lat 0.503 ms stddev 0.620
+progress: 64.0 s, 1665.5 tps, lat 0.597 ms stddev 0.515
+progress: 65.0 s, 1861.2 tps, lat 0.533 ms stddev 0.488
+progress: 66.0 s, 2221.3 tps, lat 0.449 ms stddev 0.400
+progress: 67.0 s, 2795.2 tps, lat 0.357 ms stddev 0.325
+progress: 68.0 s, 2745.3 tps, lat 0.363 ms stddev 0.313
+progress: 69.0 s, 2062.1 tps, lat 0.482 ms stddev 0.462
+progress: 70.0 s, 1933.3 tps, lat 0.514 ms stddev 0.691
+progress: 71.0 s, 3876.3 tps, lat 0.257 ms stddev 0.161
+progress: 72.0 s, 4039.2 tps, lat 0.247 ms stddev 0.082
+progress: 73.0 s, 4158.4 tps, lat 0.240 ms stddev 0.187
+progress: 74.0 s, 4328.6 tps, lat 0.230 ms stddev 0.048
+progress: 75.0 s, 4193.0 tps, lat 0.238 ms stddev 0.072
+progress: 76.0 s, 4497.2 tps, lat 0.222 ms stddev 0.027
+progress: 77.0 s, 4466.8 tps, lat 0.223 ms stddev 0.032
+progress: 78.0 s, 4285.0 tps, lat 0.233 ms stddev 0.084
+progress: 79.0 s, 4328.0 tps, lat 0.230 ms stddev 0.071
+progress: 80.0 s, 4304.0 tps, lat 0.232 ms stddev 0.080
+progress: 81.0 s, 4463.0 tps, lat 0.223 ms stddev 0.029
+progress: 82.0 s, 3797.0 tps, lat 0.263 ms stddev 0.377
+progress: 83.0 s, 4398.0 tps, lat 0.227 ms stddev 0.031
+progress: 84.0 s, 4395.0 tps, lat 0.227 ms stddev 0.031
+progress: 85.0 s, 4396.1 tps, lat 0.227 ms stddev 0.031
+progress: 86.0 s, 4493.9 tps, lat 0.222 ms stddev 0.023
+progress: 87.0 s, 4415.1 tps, lat 0.226 ms stddev 0.051
+progress: 88.0 s, 4387.9 tps, lat 0.227 ms stddev 0.069
+progress: 89.0 s, 4382.4 tps, lat 0.228 ms stddev 0.061
+progress: 90.0 s, 4358.6 tps, lat 0.229 ms stddev 0.037
+progress: 91.0 s, 4395.4 tps, lat 0.227 ms stddev 0.049
+progress: 92.0 s, 4553.7 tps, lat 0.219 ms stddev 0.023
+progress: 93.0 s, 4489.9 tps, lat 0.222 ms stddev 0.021
+progress: 94.0 s, 4351.1 tps, lat 0.229 ms stddev 0.068
+progress: 95.0 s, 4346.6 tps, lat 0.229 ms stddev 0.097
+progress: 96.0 s, 4461.3 tps, lat 0.224 ms stddev 0.027
+progress: 97.0 s, 4387.1 tps, lat 0.227 ms stddev 0.044
+progress: 98.0 s, 4383.1 tps, lat 0.227 ms stddev 0.045
+progress: 99.0 s, 4449.9 tps, lat 0.224 ms stddev 0.033
+progress: 100.0 s, 4288.9 tps, lat 0.232 ms stddev 0.101
+progress: 101.0 s, 4423.1 tps, lat 0.225 ms stddev 0.031
+progress: 102.0 s, 4361.9 tps, lat 0.229 ms stddev 0.036
+progress: 103.0 s, 4443.2 tps, lat 0.224 ms stddev 0.027
+progress: 104.0 s, 4208.8 tps, lat 0.237 ms stddev 0.107
+progress: 105.0 s, 4431.1 tps, lat 0.225 ms stddev 0.027
+progress: 106.0 s, 4407.8 tps, lat 0.226 ms stddev 0.030
+progress: 107.0 s, 4493.1 tps, lat 0.222 ms stddev 0.033
+progress: 108.0 s, 4250.0 tps, lat 0.235 ms stddev 0.208
+transaction type: select-abalance-for-aid-10000000.sql
+scaling factor: 1
+query mode: simple
+number of clients: 1
+number of threads: 1
+number of transactions per client: 400000
+number of transactions actually processed: 400000/400000
+latency average = 0.270 ms
+latency stddev = 0.326 ms
+tps = 3695.104399 (including connections establishing)
+tps = 3695.794623 (excluding connections establishing)

@@ -13,6 +13,7 @@
 
 
 * [RocksDB Test - one VERY hot block](Rocky-Test-one-VERY-hot-block.md)
+* [RocksDB Test - interesting edge cases](RocksDB-Test-interesting-edge-case.md)
 * [RocksDB Test - big table demo](rocksdb-big-table-demo.md)
 * [CockroachDB Test - Very big transaction - compaction spike](crdb-compaction-spike.md)
 * [Exploring-Yugabytedb.md](Exploring-Yugabytedb.md)
