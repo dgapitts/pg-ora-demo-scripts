@@ -1,0 +1,2150 @@
+davidpitts@Davids-MacBook-Pro ~ % docker run -d --name citus -p 5432:5432 -e POSTGRES_PASSWORD=mypass citusdata/citus:12.1
+Unable to find image 'citusdata/citus:12.1' locally
+12.1: Pulling from citusdata/citus
+e1caac4eb9d2: Pull complete
+f3f2d5b672fb: Pull complete
+09bbd9ebb4bf: Pull complete
+73af4999342c: Pull complete
+410224db6f54: Pull complete
+00c8397ea547: Pull complete
+8de37ed8017f: Pull complete
+cafd8b2980da: Pull complete
+446f52a8411a: Pull complete
+3eb5d6c884ad: Pull complete
+152d5aad8c0d: Pull complete
+0859b7e55055: Pull complete
+8d723bf86e14: Pull complete
+5a108fed7862: Pull complete
+63e1e4f08461: Pull complete
+7245bbe6b2fa: Pull complete
+6a95e64363d7: Pull complete
+2c6b44d727ed: Pull complete
+416a3f907b1c: Pull complete
+f2c2a550fb36: Pull complete
+Digest: sha256:b1227c182bf6a086eb15e6f1416647bead7bc1ddf717b459e9406a6b8fb44b96
+Status: Downloaded newer image for citusdata/citus:12.1
+davidpitts@Davids-MacBook-Pro ~ % docker ps
+CONTAINER ID   IMAGE                   COMMAND                  CREATED        STATUS                  PORTS                     NAMES
+d4137e2cdaeb   jupyter/base-notebook   "tini -g -- start-no…"   41 hours ago   Up 41 hours (healthy)   0.0.0.0:10000->8888/tcp   elated_brattain
+davidpitts@Davids-MacBook-Pro ~ % docker images
+REPOSITORY                       TAG                        IMAGE ID       CREATED        SIZE
+citusdata/citus                  12.1                       45d55f2bfc13   11 days ago    446MB
+postgres                         latest                     0d774dc2e01c   2 weeks ago    453MB
+cockroach-docker-postgresql      latest                     065012b426d4   4 weeks ago    448MB
+cockroach-docker-lb              latest                     bceac692c332   4 weeks ago    98.1MB
+flyway/flyway                    latest                     0b6b0d0dba98   4 weeks ago    386MB
+vidardb/postgresql               rocksdb-6.2.4_demo03_new   f3ab9afa2894   4 weeks ago    776MB
+vidardb/postgresql               rocksdb-6.2.4_demo03_bkp   60b6fee51c76   4 weeks ago    776MB
+vidardb/postgresql               rocksdb-6.2.4_demo04       879470dde8c0   4 weeks ago    776MB
+vidardb/postgresql               rocksdb-6.2.4_demo03       92f02055e739   4 weeks ago    776MB
+vidardb/postgresql               rocksdb-6.2.4_demo02       5f748c21a7d5   4 weeks ago    776MB
+vidardb/postgresql               rocksdb-6.2.4_demo01       930b42e81d97   4 weeks ago    723MB
+cockroachdb/cockroach-unstable   latest                     bef01724ed31   7 weeks ago    385MB
+postgres                         16.1                       230cf55862f3   7 weeks ago    448MB
+cassandra                        latest                     731829ff5143   8 weeks ago    340MB
+cockroachdb/cockroach-unstable   v23.2.0-beta.1             4baefdad299c   3 months ago   576MB
+jupyter/base-notebook            latest                     db91d6bb3855   4 months ago   977MB
+yugabytedb/yugabyte              2.19.3.0-b140              9474f15f0653   4 months ago   2.28GB
+kindest/node                     <none>                     6e360fda99b5   8 months ago   850MB
+vidardb/postgresql               rocksdb-6.2.4              463b20a9b417   3 years ago    723MB
+nuvo/docker-cqlsh                latest                     52318ea1aaa0   5 years ago    71.6MB
+davidpitts@Davids-MacBook-Pro ~ % docker run -d --name citus2 -p 5432:5433 -e POSTGRES_PASSWORD=mypass citusdata/citus:12.1
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+3aadce9fb67a0da3b449b0e46c336f2b8675172995a35510ac286bbaa57b4b74
+davidpitts@Davids-MacBook-Pro ~ % docker ps
+CONTAINER ID   IMAGE                   COMMAND                  CREATED          STATUS                      PORTS                              NAMES
+3aadce9fb67a   citusdata/citus:12.1    "docker-entrypoint.s…"   42 seconds ago   Up 41 seconds (unhealthy)   5432/tcp, 0.0.0.0:5432->5433/tcp   citus2
+d4137e2cdaeb   jupyter/base-notebook   "tini -g -- start-no…"   41 hours ago     Up 41 hours (healthy)       0.0.0.0:10000->8888/tcp            elated_brattain
+davidpitts@Davids-MacBook-Pro ~ % docker exec -it 3aadce9fb67a bash
+root@3aadce9fb67a:/# su - postgres
+postgres@3aadce9fb67a:~$ psql
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+	Is the server running locally and accepting connections on that socket?
+postgres@3aadce9fb67a:~$ exit
+logout
+root@3aadce9fb67a:/# service list
+list: unrecognized service
+root@3aadce9fb67a:/# sys
+sys
+root@3aadce9fb67a:/# sys
+sys
+root@3aadce9fb67a:/# cat /etc/os-release
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+root@3aadce9fb67a:/# service --status-all
+ [ ? ]  hwclock.sh
+ [ - ]  postgresql
+root@3aadce9fb67a:/# service postgresql start
+No PostgreSQL clusters exist; see "man pg_createcluster" ... (warning).
+root@3aadce9fb67a:/# su - postgres
+postgres@3aadce9fb67a:~$ ls /usr/lib/postgresql/16/
+bin/ lib/
+postgres@3aadce9fb67a:~$ ls /usr/lib/postgresql/16/
+bin/ lib/
+postgres@3aadce9fb67a:~$ ls /usr/lib/postgresql/16/bin/
+clusterdb   dropdb    oid2name		 pg_basebackup	pg_controldata	pg_dumpall     pg_recvlogical  pg_rewind       pg_upgrade	pgbench   reindexdb
+createdb    dropuser  pg_amcheck	 pg_checksums	pg_ctl		pg_isready     pg_resetwal     pg_test_fsync   pg_verifybackup	postgres  vacuumdb
+createuser  initdb    pg_archivecleanup  pg_config	pg_dump		pg_receivewal  pg_restore      pg_test_timing  pg_waldump	psql	  vacuumlo
+postgres@3aadce9fb67a:~$ export PATH=$PATH:/usr/lib/postgresql/16/bin
+postgres@3aadce9fb67a:~$ cd ~
+mkdir citus
+initdb -D citus
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory citus ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... 2024-02-28 11:12:36.785 UTC [1243] LOG:  number of prepared transactions has not been configured, overriding
+2024-02-28 11:12:36.785 UTC [1243] DETAIL:  max_prepared_transactions is now set to 200
+ok
+syncing data to disk ... ok
+
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    pg_ctl -D citus -l logfile start
+
+postgres@3aadce9fb67a:~$ echo "shared_preload_libraries = 'citus'" >> citus/postgresql.conf
+postgres@3aadce9fb67a:~$ pg_ctl -D citus -o "-p 9700" -l citus_logfile start
+waiting for server to start.... done
+server started
+postgres@3aadce9fb67a:~$ psql
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+	Is the server running locally and accepting connections on that socket?
+postgres@3aadce9fb67a:~$ psql -p 9700
+psql (16.2 (Debian 16.2-1.pgdg120+2))
+Type "help" for help.
+
+postgres=#
+postgres=# CREATE EXTENSION citus;
+CREATE EXTENSION
+postgres=# create table normal_dist  as SELECT round (random_normal()::pg_catalog.numeric,1) as v, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler from generate_series( 1, 1000000 );
+SELECT 1000000
+postgres=# create index normal_dist_v on normal_dist(v);
+CREATE INDEX
+postgres=# create table normal_dist  as SELECT round (random_normal()::pg_catalog.numeric,1) as v, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler from generate_series( 1, 1000000 ) using columnar;
+ERROR:  syntax error at or near "using"
+LINE 1: ...qua' as filler from generate_series( 1, 1000000 ) using colu...
+                                                             ^
+postgres=# create table normal_dist  as SELECT round (random_normal()::pg_catalog.numeric,1) as v using columnar, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler from generate_series( 1, 1000000 );
+ERROR:  syntax error at or near "using"
+LINE 1: ...ound (random_normal()::pg_catalog.numeric,1) as v using colu...
+                                                             ^
+postgres=# CREATE TABLE normal_dist_columnar(LIKE normal_dist) USING COLUMNAR;
+CREATE TABLE
+postgres=# \d normal_dist_columnar
+        Table "public.normal_dist_columnar"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ v      | numeric |           |          |
+ filler | text    |           |          |
+
+postgres=# \d+ normal_dist_columnar
+                                   Table "public.normal_dist_columnar"
+ Column |  Type   | Collation | Nullable | Default | Storage  | Compression | Stats target | Description
+--------+---------+-----------+----------+---------+----------+-------------+--------------+-------------
+ v      | numeric |           |          |         | main     |             |              |
+ filler | text    |           |          |         | extended |             |              |
+Access method: columnar
+
+postgres=# explain select * from normal_dist_columnar where v1 = '-0.2';
+ERROR:  column "v1" does not exist
+LINE 1: explain select * from normal_dist_columnar where v1 = '-0.2'...
+                                                         ^
+HINT:  Perhaps you meant to reference the column "normal_dist_columnar.v".
+postgres=# explain select * from normal_dist_columnar where v = '-0.2';
+                                      QUERY PLAN
+---------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64)
+   Filter: (v = '-0.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-0.2'::numeric)
+(4 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-0.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=1.124..1.182 rows=0 loops=1)
+   Filter: (v = '-0.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-0.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 13.763 ms
+ Execution Time: 2.174 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-0.2';
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=748.62..20893.71 rows=39767 width=128) (actual time=57.369..557.828 rows=38992 loops=1)
+   Recheck Cond: (v = '-0.2'::numeric)
+   Heap Blocks: exact=17066
+   Buffers: shared hit=72 read=17103 written=1444
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..738.68 rows=39767 width=0) (actual time=47.441..47.443 rows=38992 loops=1)
+         Index Cond: (v = '-0.2'::numeric)
+         Buffers: shared read=109
+ Planning:
+   Buffers: shared hit=24
+ Planning Time: 13.129 ms
+ Execution Time: 567.943 ms
+(11 rows)
+
+postgres=# \d normal_dist
+            Table "public.normal_dist"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ v      | numeric |           |          |
+ filler | text    |           |          |
+Indexes:
+    "normal_dist_v" btree (v)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-1.2';
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=379.68..20993.17 rows=20033 width=128) (actual time=42.206..234.861 rows=19471 loops=1)
+   Recheck Cond: (v = '-1.2'::numeric)
+   Heap Blocks: exact=12460
+   Buffers: shared hit=7191 read=5325
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..374.67 rows=20033 width=0) (actual time=35.053..35.055 rows=19471 loops=1)
+         Index Cond: (v = '-1.2'::numeric)
+         Buffers: shared read=56
+ Planning Time: 2.087 ms
+ Execution Time: 239.848 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-1.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.375..0.385 rows=0 loops=1)
+   Filter: (v = '-1.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-1.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 4.600 ms
+ Execution Time: 0.841 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-0.2';
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=748.62..20893.71 rows=39767 width=128) (actual time=68.752..643.238 rows=38992 loops=1)
+   Recheck Cond: (v = '-0.2'::numeric)
+   Heap Blocks: exact=17066
+   Buffers: shared hit=6051 read=11124
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..738.68 rows=39767 width=0) (actual time=59.830..59.845 rows=38992 loops=1)
+         Index Cond: (v = '-0.2'::numeric)
+         Buffers: shared hit=1 read=108
+ Planning Time: 20.953 ms
+ Execution Time: 664.049 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-0.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.283..0.286 rows=0 loops=1)
+   Filter: (v = '-0.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-0.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 6.700 ms
+ Execution Time: 0.724 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-0.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.249..0.255 rows=0 loops=1)
+   Filter: (v = '-0.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-0.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 3.412 ms
+ Execution Time: 0.761 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-0.2';
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=748.62..20893.71 rows=39767 width=128) (actual time=61.292..712.252 rows=38992 loops=1)
+   Recheck Cond: (v = '-0.2'::numeric)
+   Heap Blocks: exact=17066
+   Buffers: shared hit=4182 read=12993
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..738.68 rows=39767 width=0) (actual time=53.130..53.132 rows=38992 loops=1)
+         Index Cond: (v = '-0.2'::numeric)
+         Buffers: shared hit=1 read=108
+ Planning Time: 2.450 ms
+ Execution Time: 721.868 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-1.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.177..0.180 rows=0 loops=1)
+   Filter: (v = '-1.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-1.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 6.003 ms
+ Execution Time: 0.494 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-1.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.218..0.225 rows=0 loops=1)
+   Filter: (v = '-1.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-1.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 3.519 ms
+ Execution Time: 0.579 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-1.2';
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=379.68..20993.17 rows=20033 width=128) (actual time=47.891..296.259 rows=19471 loops=1)
+   Recheck Cond: (v = '-1.2'::numeric)
+   Heap Blocks: exact=12460
+   Buffers: shared hit=9418 read=3098
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..374.67 rows=20033 width=0) (actual time=40.255..40.257 rows=19471 loops=1)
+         Index Cond: (v = '-1.2'::numeric)
+         Buffers: shared read=56
+ Planning Time: 2.588 ms
+ Execution Time: 301.429 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-1.2';
+                                                            QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=379.68..20993.17 rows=20033 width=128) (actual time=33.243..74.936 rows=19471 loops=1)
+   Recheck Cond: (v = '-1.2'::numeric)
+   Heap Blocks: exact=12460
+   Buffers: shared hit=12516
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..374.67 rows=20033 width=0) (actual time=23.993..23.996 rows=19471 loops=1)
+         Index Cond: (v = '-1.2'::numeric)
+         Buffers: shared hit=56
+ Planning Time: 1.858 ms
+ Execution Time: 81.031 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-2.2';
+                                                          QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=60.19..8230.76 rows=3067 width=128) (actual time=13.788..67.402 rows=3495 loops=1)
+   Recheck Cond: (v = '-2.2'::numeric)
+   Heap Blocks: exact=3207
+   Buffers: shared hit=2518 read=702
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..59.43 rows=3067 width=0) (actual time=10.028..10.031 rows=3495 loops=1)
+         Index Cond: (v = '-2.2'::numeric)
+         Buffers: shared hit=1 read=12
+ Planning Time: 1.395 ms
+ Execution Time: 69.455 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-2.2';
+                                                         QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=60.19..8230.76 rows=3067 width=128) (actual time=23.380..36.606 rows=3495 loops=1)
+   Recheck Cond: (v = '-2.2'::numeric)
+   Heap Blocks: exact=3207
+   Buffers: shared hit=3220
+   ->  Bitmap Index Scan on normal_dist_v  (cost=0.00..59.43 rows=3067 width=0) (actual time=8.650..8.652 rows=3495 loops=1)
+         Index Cond: (v = '-2.2'::numeric)
+         Buffers: shared hit=13
+ Planning Time: 1.785 ms
+ Execution Time: 38.500 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-2.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.254..0.260 rows=0 loops=1)
+   Filter: (v = '-2.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-2.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 3.012 ms
+ Execution Time: 0.764 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where v = '-2.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=64) (actual time=0.050..0.051 rows=0 loops=1)
+   Filter: (v = '-2.2'::numeric)
+   Columnar Projected Columns: v, filler
+   Columnar Chunk Group Filters: (v = '-2.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 0.636 ms
+ Execution Time: 0.126 ms
+(10 rows)
+
+postgres=# drop table normal_dist_columnar;
+DROP TABLE
+postgres=# drop table normal_dist;
+DROP TABLE
+postgres=#
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     VARCHAR(4) NOT NULL default ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     VARCHAR(4) NOT NULL default ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2,
+from generate_series( 1, 10000000 );
+ERROR:  syntax error at or near "NOT"
+LINE 3:      VARCHAR(4) NOT NULL default ('[0:3]={A01,A02,B01,C01}':...
+                        ^
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+^CCancel request sent
+ERROR:  canceling statement due to user request
+postgres=#
+postgres=#
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 1000000 );
+SELECT 1000000
+postgres=# create index normal_dist_value on normal_dist(value);
+CREATE INDEX
+postgres=# create index normal_dist_columnar on normal_dist(value);
+CREATE INDEX
+postgres=# drop index normal_dist_columnar
+postgres-# ;
+DROP INDEX
+(failed reverse-i-search)`create t': ^Ceate table normal_dist  as SELECT round (random_normal()::pg_catalog.numeric,1) as v, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler from generate_series( 1, 1000000 );
+postgres=# CREATE TABLE normal_dist_columnar(LIKE normal_dist) USING COLUMNAR;
+CREATE TABLE
+postgres=# explain (analyze,buffers) select * from normal_dist where v = '-1.2';
+ERROR:  column "v" does not exist
+LINE 1: ...(analyze,buffers) select * from normal_dist where v = '-1.2'...
+                                                             ^
+postgres=# explain (analyze,buffers) select * from normal_dist where value = '-1.2';
+                                                              QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=409.12..6121.21 rows=21767 width=12) (actual time=32.318..83.260 rows=19693 loops=1)
+   Recheck Cond: (value = '-1.2'::numeric)
+   Heap Blocks: exact=5275
+   Buffers: shared hit=2116 read=3215
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..403.68 rows=21767 width=0) (actual time=28.336..28.337 rows=19693 loops=1)
+         Index Cond: (value = '-1.2'::numeric)
+         Buffers: shared read=56
+ Planning:
+   Buffers: shared hit=27
+ Planning Time: 5.433 ms
+ Execution Time: 89.018 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where value = '-1.2';
+                                                              QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=409.12..6121.21 rows=21767 width=12) (actual time=30.571..61.820 rows=19693 loops=1)
+   Recheck Cond: (value = '-1.2'::numeric)
+   Heap Blocks: exact=5275
+   Buffers: shared hit=5331
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..403.68 rows=21767 width=0) (actual time=26.390..26.391 rows=19693 loops=1)
+         Index Cond: (value = '-1.2'::numeric)
+         Buffers: shared hit=56
+ Planning Time: 1.896 ms
+ Execution Time: 68.607 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where value = '-0.2';
+                                                              QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=735.45..6664.20 rows=39100 width=12) (actual time=45.712..84.353 rows=39133 loops=1)
+   Recheck Cond: (value = '-0.2'::numeric)
+   Heap Blocks: exact=5400
+   Buffers: shared hit=5328 read=181
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..725.67 rows=39100 width=0) (actual time=42.558..42.560 rows=39133 loops=1)
+         Index Cond: (value = '-0.2'::numeric)
+         Buffers: shared hit=1 read=108
+ Planning Time: 1.425 ms
+ Execution Time: 94.373 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where value = '-0.2';
+                                                              QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=735.45..6664.20 rows=39100 width=12) (actual time=42.110..81.088 rows=39133 loops=1)
+   Recheck Cond: (value = '-0.2'::numeric)
+   Heap Blocks: exact=5400
+   Buffers: shared hit=5509
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..725.67 rows=39100 width=0) (actual time=38.963..38.965 rows=39133 loops=1)
+         Index Cond: (value = '-0.2'::numeric)
+         Buffers: shared hit=109
+ Planning Time: 1.577 ms
+ Execution Time: 91.394 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where value = '-0.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=96) (actual time=0.308..0.318 rows=0 loops=1)
+   Filter: (value = '-0.2'::numeric)
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = '-0.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=48 read=1
+ Planning Time: 4.245 ms
+ Execution Time: 0.755 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where value = '-1.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=96) (actual time=0.104..0.106 rows=0 loops=1)
+   Filter: (value = '-1.2'::numeric)
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = '-1.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 1.324 ms
+ Execution Time: 0.270 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar where value = '-2.2';
+                                                           QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=96) (actual time=0.052..0.053 rows=0 loops=1)
+   Filter: (value = '-2.2'::numeric)
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = '-2.2'::numeric)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 0.718 ms
+ Execution Time: 0.143 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where value = '-2.2';
+                                                            QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=72.84..5247.35 rows=3667 width=12) (actual time=16.945..30.142 rows=3532 loops=1)
+   Recheck Cond: (value = '-2.2'::numeric)
+   Heap Blocks: exact=2584
+   Buffers: shared hit=2585 read=12
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..71.93 rows=3667 width=0) (actual time=14.907..14.911 rows=3532 loops=1)
+         Index Cond: (value = '-2.2'::numeric)
+         Buffers: shared hit=1 read=12
+ Planning Time: 1.873 ms
+ Execution Time: 32.139 ms
+(9 rows)
+
+postgres=# \d+ normal_dist
+                                       Table "public.normal_dist"
+ Column |  Type   | Collation | Nullable | Default | Storage  | Compression | Stats target | Description
+--------+---------+-----------+----------+---------+----------+-------------+--------------+-------------
+ value  | numeric |           |          |         | main     |             |              |
+ flag1  | text    |           |          |         | extended |             |              |
+ flag2  | text    |           |          |         | extended |             |              |
+Indexes:
+    "normal_dist_value" btree (value)
+Access method: heap
+
+postgres=# \di+ normal_dist
+Did not find any relation named "normal_dist".
+postgres=# \di+ normal_dist_value
+                                                List of relations
+ Schema |       Name        | Type  |  Owner   |    Table    | Persistence | Access method | Size  | Description
+--------+-------------------+-------+----------+-------------+-------------+---------------+-------+-------------
+ public | normal_dist_value | index | postgres | normal_dist | permanent   | btree         | 21 MB |
+(1 row)
+
+postgres=# \dt+ normal_dist_value
+Did not find any relation named "normal_dist_value".
+postgres=# \dt+ normal_dist
+                                      List of relations
+ Schema |    Name     | Type  |  Owner   | Persistence | Access method | Size  | Description
+--------+-------------+-------+----------+-------------+---------------+-------+-------------
+ public | normal_dist | table | postgres | permanent   | heap          | 43 MB |
+(1 row)
+
+postgres=# \dt+ normal_dist_columnar
+                                          List of relations
+ Schema |         Name         | Type  |  Owner   | Persistence | Access method | Size  | Description
+--------+----------------------+-------+----------+-------------+---------------+-------+-------------
+ public | normal_dist_columnar | table | postgres | permanent   | columnar      | 16 kB |
+(1 row)
+
+postgres=# select * from normal_dist limit 10;
+ value | flag1 | flag2
+-------+-------+-------
+  -0.9 | A02   | Q02
+  -0.1 | B01   | Q02
+   1.3 | A02   | Q02
+   0.7 | C01   | P1
+  -2.1 | B01   | Q02
+   2.2 | C01   | R01
+  -1.2 | B01   | S01
+   1.7 | A02   | R01
+   1.1 | C01   | S01
+   1.1 | A01   | P1
+(10 rows)
+
+postgres=# select count(*),avg(value),max(value),min(value) from normal_dist where flag1 ='A02' and flag2 =' P1';
+ count | avg | max | min
+-------+-----+-----+-----
+     0 |     |     |
+(1 row)
+
+postgres=# select count(*),avg(value),max(value),min(value) from normal_dist where flag1 ='A02' and flag2 ='P1';
+ count |           avg           | max | min
+-------+-------------------------+-----+------
+ 62520 | -0.00135316698656429942 | 4.5 | -4.4
+(1 row)
+
+postgres=# select count(*),avg(value),max(value),min(value) from normal_dist where flag1 ='A02' and flag2 ='Q02';
+ count |          avg           | max | min
+-------+------------------------+-----+------
+ 62838 | 0.00864922499124733442 | 4.6 | -4.1
+(1 row)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist where flag1 ='A02' and flag2 ='Q02';
+                                                                  QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=12955.72..12955.73 rows=1 width=104) (actual time=302.438..314.561 rows=1 loops=1)
+   Buffers: shared hit=5440
+   ->  Gather  (cost=12955.48..12955.69 rows=2 width=104) (actual time=300.741..314.468 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=5440
+         ->  Partial Aggregate  (cost=11955.48..11955.49 rows=1 width=104) (actual time=188.575..188.594 rows=1 loops=3)
+               Buffers: shared hit=5440
+               ->  Parallel Seq Scan on normal_dist  (cost=0.00..11690.00 rows=26548 width=5) (actual time=0.393..165.562 rows=20946 loops=3)
+                     Filter: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+                     Rows Removed by Filter: 312387
+                     Buffers: shared hit=5440
+ Planning Time: 2.129 ms
+ Execution Time: 315.286 ms
+(14 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02' and flag2 ='Q02';
+                                                              QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=0.01..0.02 rows=1 width=104) (actual time=0.776..0.800 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=32) (actual time=0.738..0.745 rows=0 loops=1)
+         Filter: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Columnar Projected Columns: value, flag1, flag2
+         Columnar Chunk Group Filters: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=51
+ Planning Time: 5.736 ms
+ Execution Time: 3.167 ms
+(12 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02' and flag2 ='Q02';
+                                                              QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=0.01..0.02 rows=1 width=104) (actual time=0.505..0.530 rows=1 loops=1)
+   Buffers: shared hit=3
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..0.00 rows=1 width=32) (actual time=0.415..0.417 rows=0 loops=1)
+         Filter: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Columnar Projected Columns: value, flag1, flag2
+         Columnar Chunk Group Filters: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=51
+ Planning Time: 15.746 ms
+ Execution Time: 2.227 ms
+(12 rows)
+
+postgres=# select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02' and flag2 ='Q02';
+ count | avg | max | min
+-------+-----+-----+-----
+     0 |     |     |
+(1 row)
+
+postgres=# select * from normal_dist_columnar limit 10;
+ value | flag1 | flag2
+-------+-------+-------
+(0 rows)
+
+postgres=# insert into normal_dist_columnar (select * from normal_dist);
+INSERT 0 1000000
+postgres=# select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02' and flag2 ='Q02';
+ count |          avg           | max | min
+-------+------------------------+-----+------
+ 62838 | 0.00864922499124733442 | 4.6 | -4.1
+(1 row)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02' and flag2 ='Q02';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=64.91..64.92 rows=1 width=104) (actual time=705.533..705.537 rows=1 loops=1)
+   Buffers: shared hit=1753
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=25 width=32) (actual time=15.102..662.969 rows=62838 loops=1)
+         Filter: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Rows Removed by Filter: 937162
+         Columnar Projected Columns: value, flag1, flag2
+         Columnar Chunk Group Filters: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=1753
+ Planning:
+   Buffers: shared hit=51
+ Planning Time: 4.183 ms
+ Execution Time: 706.259 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02' and flag2 ='Q02';
+                                                                  QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=64.91..64.92 rows=1 width=104) (actual time=906.975..907.075 rows=1 loops=1)
+   Buffers: shared hit=1791
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=25 width=32) (actual time=8.214..845.126 rows=62838 loops=1)
+         Filter: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Rows Removed by Filter: 937162
+         Columnar Projected Columns: value, flag1, flag2
+         Columnar Chunk Group Filters: ((flag1 = 'A02'::text) AND (flag2 = 'Q02'::text))
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=1791
+ Planning:
+   Buffers: shared hit=51
+ Planning Time: 10.733 ms
+ Execution Time: 907.975 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where flag1 ='A02';
+                                                                    QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=93.11..93.12 rows=1 width=104) (actual time=1036.597..1036.695 rows=1 loops=1)
+   Buffers: shared hit=1118
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..43.10 rows=5000 width=32) (actual time=13.611..806.358 rows=250205 loops=1)
+         Filter: (flag1 = 'A02'::text)
+         Rows Removed by Filter: 749795
+         Columnar Projected Columns: value, flag1
+         Columnar Chunk Group Filters: (flag1 = 'A02'::text)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=1118
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 27.810 ms
+ Execution Time: 1038.041 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist  where flag1 ='A02';
+                                                                  QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=12701.21..12701.22 rows=1 width=104) (actual time=706.623..772.332 rows=1 loops=1)
+   Buffers: shared hit=5440
+   ->  Gather  (cost=12700.98..12701.19 rows=2 width=104) (actual time=702.706..771.237 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=5440
+         ->  Partial Aggregate  (cost=11700.98..11700.99 rows=1 width=104) (actual time=405.342..405.390 rows=1 loops=3)
+               Buffers: shared hit=5440
+               ->  Parallel Seq Scan on normal_dist  (cost=0.00..10648.33 rows=105264 width=5) (actual time=0.448..273.916 rows=83402 loops=3)
+                     Filter: (flag1 = 'A02'::text)
+                     Rows Removed by Filter: 249932
+                     Buffers: shared hit=5440
+ Planning Time: 4.844 ms
+ Execution Time: 773.709 ms
+(14 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist  where flag1 =^C
+postgres=# SET max_parallel_workers_per_gather = 0;
+SET
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist  where flag1 ='A02';
+                                                        QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=20466.33..20466.34 rows=1 width=104) (actual time=744.287..744.294 rows=1 loops=1)
+   Buffers: shared hit=5440
+   ->  Seq Scan on normal_dist  (cost=0.00..17940.00 rows=252633 width=5) (actual time=0.418..504.085 rows=250205 loops=1)
+         Filter: (flag1 = 'A02'::text)
+         Rows Removed by Filter: 749795
+         Buffers: shared hit=5440
+ Planning Time: 7.850 ms
+ Execution Time: 745.502 ms
+(8 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar  where flag1 ='A02';
+                                                                    QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=93.11..93.12 rows=1 width=104) (actual time=751.877..751.881 rows=1 loops=1)
+   Buffers: shared hit=1118
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..43.10 rows=5000 width=32) (actual time=5.963..586.326 rows=250205 loops=1)
+         Filter: (flag1 = 'A02'::text)
+         Rows Removed by Filter: 749795
+         Columnar Projected Columns: value, flag1
+         Columnar Chunk Group Filters: (flag1 = 'A02'::text)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=1118
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 1.852 ms
+ Execution Time: 752.082 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar value = '0.2';;
+ERROR:  syntax error at or near "="
+LINE 1: ...x(value),min(value) from normal_dist_columnar value = '0.2';
+                                                               ^
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where value = '0.2';;
+                                                                    QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=71.55..71.56 rows=1 width=104) (actual time=465.779..465.785 rows=1 loops=1)
+   Buffers: shared hit=853
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..21.55 rows=5000 width=32) (actual time=10.132..425.864 rows=38876 loops=1)
+         Filter: (value = 0.2)
+         Rows Removed by Filter: 961124
+         Columnar Projected Columns: value
+         Columnar Chunk Group Filters: (value = 0.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=853
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 3.268 ms
+ Execution Time: 466.242 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist_columnar where value = '0.2';;
+                                                                   QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=71.55..71.56 rows=1 width=104) (actual time=434.151..434.155 rows=1 loops=1)
+   Buffers: shared hit=812
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..21.55 rows=5000 width=32) (actual time=2.374..396.124 rows=38876 loops=1)
+         Filter: (value = 0.2)
+         Rows Removed by Filter: 961124
+         Columnar Projected Columns: value
+         Columnar Chunk Group Filters: (value = 0.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=812
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 0.773 ms
+ Execution Time: 434.298 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist where value = '0.2';;
+                                                                      QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1668.06..1668.07 rows=1 width=104) (actual time=110.014..110.019 rows=1 loops=1)
+   Buffers: shared hit=2 read=109
+   ->  Index Only Scan using normal_dist_value on normal_dist  (cost=0.42..1271.06 rows=39700 width=5) (actual time=1.315..47.431 rows=38876 loops=1)
+         Index Cond: (value = 0.2)
+         Heap Fetches: 0
+         Buffers: shared hit=2 read=109
+ Planning Time: 2.052 ms
+ Execution Time: 110.708 ms
+(8 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist where value = '0.2';;
+                                                              QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=748.10..6684.35 rows=39700 width=12) (actual time=39.981..86.069 rows=38876 loops=1)
+   Recheck Cond: (value = 0.2)
+   Heap Blocks: exact=5403
+   Buffers: shared hit=5513
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..738.17 rows=39700 width=0) (actual time=36.712..36.714 rows=38876 loops=1)
+         Index Cond: (value = 0.2)
+         Buffers: shared hit=110
+ Planning Time: 2.187 ms
+ Execution Time: 96.829 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=11.566..709.202 rows=38876 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 961124
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 8.673 ms
+ Execution Time: 723.169 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=18.246..706.425 rows=38876 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 961124
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 15.328 ms
+ Execution Time: 719.710 ms
+(11 rows)
+
+postgres=# \dt+ normal_dist_columnar
+                                           List of relations
+ Schema |         Name         | Type  |  Owner   | Persistence | Access method |  Size   | Description
+--------+----------------------+-------+----------+-------------+---------------+---------+-------------
+ public | normal_dist_columnar | table | postgres | permanent   | columnar      | 3696 kB |
+(1 row)
+
+postgres=# \d+ normal_dist_columnar
+                                   Table "public.normal_dist_columnar"
+ Column |  Type   | Collation | Nullable | Default | Storage  | Compression | Stats target | Description
+--------+---------+-----------+----------+---------+----------+-------------+--------------+-------------
+ value  | numeric |           |          |         | main     |             |              |
+ flag1  | text    |           |          |         | extended |             |              |
+ flag2  | text    |           |          |         | extended |             |              |
+Access method: columnar
+
+postgres=# \d+ normal_dist
+                                       Table "public.normal_dist"
+ Column |  Type   | Collation | Nullable | Default | Storage  | Compression | Stats target | Description
+--------+---------+-----------+----------+---------+----------+-------------+--------------+-------------
+ value  | numeric |           |          |         | main     |             |              |
+ flag1  | text    |           |          |         | extended |             |              |
+ flag2  | text    |           |          |         | extended |             |              |
+Indexes:
+    "normal_dist_value" btree (value)
+Access method: heap
+
+postgres=# SELECT pg_total_relation_size('normal_dist')::numeric/pg_total_relation_size('normal_dist_columnar') AS compression_ratio;
+  compression_ratio
+---------------------
+ 17.7380952380952381
+(1 row)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '3.2';;
+                                                                QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=14.341..704.953 rows=243 loops=1)
+   Filter: (value = 3.2)
+   Rows Removed by Filter: 999757
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 3.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 27.110 ms
+ Execution Time: 706.553 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '3.2';;
+                                                          QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=5.68..565.39 rows=162 width=12) (actual time=0.992..12.543 rows=243 loops=1)
+   Recheck Cond: (value = 3.2)
+   Heap Blocks: exact=234
+   Buffers: shared hit=235 read=3
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..5.64 rows=162 width=0) (actual time=0.790..0.791 rows=243 loops=1)
+         Index Cond: (value = 3.2)
+         Buffers: shared hit=1 read=3
+ Planning Time: 1.683 ms
+ Execution Time: 13.049 ms
+(9 rows)
+
+postgres=# drop index normal_dist_value;
+DROP INDEX
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '3.2';;
+                                                   QUERY PLAN
+----------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..17940.00 rows=162 width=12) (actual time=1.021..598.468 rows=243 loops=1)
+   Filter: (value = 3.2)
+   Rows Removed by Filter: 999757
+   Buffers: shared hit=5440
+ Planning:
+   Buffers: shared hit=7 dirtied=1
+ Planning Time: 4.056 ms
+ Execution Time: 598.902 ms
+(8 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '3.2';
+                                                               QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=5.661..551.624 rows=243 loops=1)
+   Filter: (value = 3.2)
+   Rows Removed by Filter: 999757
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 3.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 0.816 ms
+ Execution Time: 551.809 ms
+(11 rows)
+
+postgres=# create index normal_dist_value on normal_dist(value);
+CREATE INDEX
+postgres=# create index normal_dist_columnar_value on normal_dist_columnar(value);
+CREATE INDEX
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '3.2';;
+                                                          QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=5.68..565.39 rows=162 width=12) (actual time=1.586..25.997 rows=243 loops=1)
+   Recheck Cond: (value = 3.2)
+   Heap Blocks: exact=234
+   Buffers: shared hit=234 read=4
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..5.64 rows=162 width=0) (actual time=1.231..1.236 rows=243 loops=1)
+         Index Cond: (value = 3.2)
+         Buffers: shared read=4
+ Planning:
+   Buffers: shared hit=17 read=1
+ Planning Time: 6.438 ms
+ Execution Time: 26.926 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '3.2';;
+                                                                QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=17.737..600.298 rows=243 loops=1)
+   Filter: (value = 3.2)
+   Rows Removed by Filter: 999757
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 3.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=59 read=1
+ Planning Time: 5.336 ms
+ Execution Time: 600.685 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '3.2';;
+                                                                QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=14.850..596.064 rows=243 loops=1)
+   Filter: (value = 3.2)
+   Rows Removed by Filter: 999757
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 3.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=39
+ Planning Time: 3.729 ms
+ Execution Time: 596.523 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=15.248..594.551 rows=38876 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 961124
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=39
+ Planning Time: 3.403 ms
+ Execution Time: 603.668 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_  where value = '0.2';;
+ERROR:  relation "normal_dist_" does not exist
+LINE 1: explain (analyze,buffers) select * from normal_dist_  where ...
+                                                ^
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '0.2';;
+                                                              QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on normal_dist  (cost=748.10..6684.35 rows=39700 width=12) (actual time=46.609..90.923 rows=38876 loops=1)
+   Recheck Cond: (value = 0.2)
+   Heap Blocks: exact=5403
+   Buffers: shared hit=5404 read=109
+   ->  Bitmap Index Scan on normal_dist_value  (cost=0.00..738.17 rows=39700 width=0) (actual time=43.540..43.542 rows=38876 loops=1)
+         Index Cond: (value = 0.2)
+         Buffers: shared hit=1 read=109
+ Planning Time: 1.812 ms
+ Execution Time: 100.550 ms
+(9 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..64.66 rows=5000 width=96) (actual time=17.112..584.878 rows=38876 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 961124
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1438
+ Planning:
+   Buffers: shared hit=39
+ Planning Time: 4.438 ms
+ Execution Time: 593.807 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select count(*),avg(value),max(value),min(value) from normal_dist  where flag1 ='A02';^C
+postgres=# drop index normal_dist_value;
+DROP INDEX
+postgres=# drop index normal_dist_value;^C
+(failed reverse-i-search)`dorp': CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(ran^Cm()*4)] as flag2
+from generate_series( 1, 1000000 );
+postgres=# drop index normal_dist_columnar
+;
+ERROR:  "normal_dist_columnar" is not an index
+HINT:  Use DROP TABLE to remove a table.
+postgres=# drop table normal_dist_columnar
+;
+DROP TABLE
+postgres=#
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     VARCHAR(4) NOT NULL default ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     VARCHAR(4) NOT NULL default ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2,
+from generate_series( 1, 10000000 );
+ERROR:  syntax error at or near "NOT"
+LINE 3:      VARCHAR(4) NOT NULL default ('[0:3]={A01,A02,B01,C01}':...
+                        ^
+postgres=#
+postgres=#
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+ERROR:  relation "normal_dist" already exists
+postgres=# drop table TABLE normal_dist;
+ERROR:  syntax error at or near "TABLE"
+LINE 1: drop table TABLE normal_dist;
+                   ^
+postgres=# drop table  normal_dist;
+DROP TABLE
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+SELECT 10000000
+(failed reverse-i-search)`like': select * from normal_dist_columnar ^Cmit 10;
+postgres=# CREATE TABLE normal_dist_columnar(LIKE normal_dist) USING COLUMNAR;
+CREATE TABLE
+(failed reverse-i-search)`INSERT IN': CREATE TABLE normal_dist_columnar(LIKE normal_dist) US^CG COLUMNAR;
+postgres=# insert into normal_dist_columnar (select * from normal_dist);
+INSERT 0 10000000
+postgres=# SELECT pg_total_relation_size('normal_dist')::numeric/pg_total_relation_size('normal_dist_columnar') AS compression_ratio;
+  compression_ratio
+---------------------
+ 11.7555410691003911
+(1 row)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                  QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..67.55 rows=50000 width=96) (actual time=27.186..6106.622 rows=392437 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 9607563
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=14285
+ Planning:
+   Buffers: shared hit=44
+ Planning Time: 18.800 ms
+ Execution Time: 6204.299 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                  QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..67.55 rows=50000 width=96) (actual time=26.280..7128.857 rows=392437 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 9607563
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=14317
+ Planning:
+   Buffers: shared hit=56
+ Planning Time: 27.144 ms
+ Execution Time: 7255.306 ms
+(11 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '0.2';;
+                                                       QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..179090.20 rows=404366 width=12) (actual time=56.108..6722.107 rows=392437 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 9607563
+   Buffers: shared hit=2115 read=51965
+ Planning:
+   Buffers: shared hit=13
+ Planning Time: 12.128 ms
+ JIT:
+   Functions: 2
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 51.878 ms, Inlining 0.000 ms, Optimization 20.355 ms, Emission 34.143 ms, Total 106.375 ms
+ Execution Time: 6903.533 ms
+(12 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '0.2';;
+                                                       QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..179090.20 rows=404366 width=12) (actual time=22.144..5062.701 rows=392437 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 9607563
+   Buffers: shared hit=2147 read=51933
+ Planning Time: 39.025 ms
+ JIT:
+   Functions: 2
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 3.804 ms, Inlining 0.000 ms, Optimization 3.932 ms, Emission 17.301 ms, Total 25.036 ms
+ Execution Time: 5156.887 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '1.2';;
+                                                       QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..179090.20 rows=203017 width=12) (actual time=23.853..4870.711 rows=193946 loops=1)
+   Filter: (value = 1.2)
+   Rows Removed by Filter: 9806054
+   Buffers: shared hit=2179 read=51901
+ Planning Time: 1.471 ms
+ JIT:
+   Functions: 2
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 3.359 ms, Inlining 0.000 ms, Optimization 2.863 ms, Emission 19.848 ms, Total 26.070 ms
+ Execution Time: 4919.551 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '1.2';;
+                                                                  QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..67.55 rows=50000 width=96) (actual time=17.883..5861.315 rows=193946 loops=1)
+   Filter: (value = 1.2)
+   Rows Removed by Filter: 9806054
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 1.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=14279
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 7.070 ms
+ Execution Time: 5907.013 ms
+(11 rows)
+
+postgres=# drop table  normal_dist;
+DROP TABLE
+postgres=# drop table  normal_dist_columnar;
+DROP TABLE
+(reverse-i-search)`cre': ^Ceate table normal_dist  as SELECT round (random_normal()::pg_catalog.numeric,1) as v using columnar, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler from generate_series( 1, 1000000 );
+postgres=#
+postgres=# \timing on
+Timing is on.
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 100000000 );
+^CCancel request sent
+ERROR:  canceling statement due to user request
+Time: 39669.186 ms (00:39.669)
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={Paris France,Munich Germany,Amsterdam Netherlands,Madrid Spain}'::text[])[floor(random()*4)] as city,
+     ('[0:3]={Eiffel Tower,Haus der Kunst,Rijksmuseum,Thyssen-Bornemisza Museum}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 100000000 );
+^CCancel request sent
+ERROR:  canceling statement due to user request
+Time: 47640.986 ms (00:47.641)
+postgres=#
+postgres=#
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={Paris France,Munich Germany,Amsterdam Netherlands,Madrid Spain}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={Eiffel Tower,Haus der Kunst,Rijksmuseum,Thyssen-Bornemisza Museum}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+
+^CCancel request sent
+ERROR:  canceling statement due to user request
+Time: 11808.616 ms (00:11.809)
+postgres=# CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={Paris France,Munich Germany,Amsterdam Netherlands,Madrid Spain}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={Eiffel Tower,Haus der Kunst,Rijksmuseum,Thyssen-Bornemisza Museum}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 1000000 );
+SELECT 1000000
+Time: 12154.528 ms (00:12.155)
+postgres=# CREATE TABLE normal_dist_columnar(LIKE normal_dist) USING COLUMNAR;
+CREATE TABLE
+Time: 56.236 ms
+postgres=# insert into normal_dist_columnar (select * from normal_dist);
+INSERT 0 1000000
+Time: 4028.845 ms (00:04.029)
+postgres=# SELECT pg_total_relation_size('normal_dist')::numeric/pg_total_relation_size('normal_dist_columnar') AS compression_ratio;
+  compression_ratio
+---------------------
+ 14.9718804920913884
+(1 row)
+
+Time: 25.807 ms
+postgres=#
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '1.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..80.16 rows=5000 width=96) (actual time=33.406..661.979 rows=19482 loops=1)
+   Filter: (value = 1.2)
+   Rows Removed by Filter: 980518
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 1.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1552
+ Planning:
+   Buffers: shared hit=47
+ Planning Time: 10.487 ms
+ Execution Time: 667.721 ms
+(11 rows)
+
+Time: 685.435 ms
+Time: 0.291 ms
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '1.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..80.16 rows=5000 width=96) (actual time=15.534..637.399 rows=19482 loops=1)
+   Filter: (value = 1.2)
+   Rows Removed by Filter: 980518
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 1.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1546
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 4.434 ms
+ Execution Time: 642.787 ms
+(11 rows)
+
+Time: 651.333 ms
+Time: 0.290 ms
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '1.2';;
+                                                     QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..21012.00 rows=19600 width=36) (actual time=0.234..585.254 rows=19482 loops=1)
+   Filter: (value = 1.2)
+   Rows Removed by Filter: 980518
+   Buffers: shared hit=2112 read=6400
+ Planning Time: 0.535 ms
+ Execution Time: 590.082 ms
+(6 rows)
+
+Time: 591.991 ms
+Time: 0.177 ms
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '0.2';;
+                                                     QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..21012.00 rows=37533 width=36) (actual time=0.758..582.862 rows=39234 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 960766
+   Buffers: shared hit=2144 read=6368
+ Planning Time: 3.675 ms
+ Execution Time: 592.678 ms
+(6 rows)
+
+Time: 599.841 ms
+Time: 0.132 ms
+postgres=# explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+                                                                 QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..80.16 rows=5000 width=96) (actual time=14.437..584.306 rows=39234 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 960766
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=1584
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 5.240 ms
+ Execution Time: 593.075 ms
+(11 rows)
+
+Time: 608.531 ms
+Time: 0.185 ms
+postgres=# drop table normal_dist;
+drop table normal_dist_columnar;
+
+CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={Paris France,Munich Germany,Amsterdam Netherlands,Madrid Spain}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={Eiffel Tower,Haus der Kunst,Rijksmuseum,Thyssen-Bornemisza Museum}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 20000000 );
+
+
+CREATE TABLE normal_dist_columnar(LIKE normal_dist) USING COLUMNAR;
+
+insert into normal_dist_columnar (select * from normal_dist);
+
+SELECT pg_total_relation_size('normal_dist')::numeric/pg_total_relation_size('normal_dist_columnar') AS compression_ratio;
+
+
+explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+explain (analyze,buffers) select * from normal_dist  where value = '0.2';;
+DROP TABLE
+Time: 86.446 ms
+DROP TABLE
+Time: 6.523 ms
+SELECT 20000000
+Time: 185628.707 ms (03:05.629)
+CREATE TABLE
+Time: 17.209 ms
+INSERT 0 20000000
+Time: 73042.214 ms (01:13.042)
+  compression_ratio
+---------------------
+ 14.9989414255469301
+(1 row)
+
+Time: 8.737 ms
+                                                                   QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..83.72 rows=100000 width=96) (actual time=17.504..15606.620 rows=783716 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 19216284
+   Columnar Projected Columns: value, flag1, flag2
+   Columnar Chunk Group Filters: (value = 0.2)
+   Columnar Chunk Groups Removed by Filter: 0
+   Buffers: shared hit=30774
+ Planning:
+   Buffers: shared hit=51
+ Planning Time: 10.344 ms
+ Execution Time: 15894.051 ms
+(11 rows)
+
+Time: 15922.433 ms (00:15.922)
+Time: 2.210 ms
+                                                        QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..419996.95 rows=783374 width=36) (actual time=64.059..14673.501 rows=783716 loops=1)
+   Filter: (value = 0.2)
+   Rows Removed by Filter: 19216284
+   Buffers: shared hit=2112 read=167872
+ Planning:
+   Buffers: shared hit=13
+ Planning Time: 5.992 ms
+ JIT:
+   Functions: 2
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 14.734 ms, Inlining 0.000 ms, Optimization 11.701 ms, Emission 49.722 ms, Total 76.158 ms
+ Execution Time: 14966.907 ms
+(12 rows)
+
+Time: 15003.125 ms (00:15.003)
+Time: 1.529 ms
+postgres=# drop table normal_dist;
+drop table normal_dist_columnar;
+
+CREATE TABLE normal_dist as SELECT
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={Paris France,Munich Germany,Amsterdam Netherlands,Madrid Spain}'::text[])[floor(random()*4)] as flag1,
+     ('[0:3]={Eiffel Tower,Haus der Kunst,Rijksmuseum,Thyssen-Bornemisza Museum}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 20000000 );
+
+
+CREATE TABLE normal_dist_columnar(LIKE normal_dist) USING COLUMNAR;
+
+insert into normal_dist_columnar (select * from normal_dist);
+
+SELECT pg_total_relation_size('normal_dist')::numeric/pg_total_relation_size('normal_dist_columnar') AS compression_ratio;
+
+
+explain (analyze,buffers) select * from normal_dist_columnar  where value = '0.2';;
+explain (analyze,buffers) select count(*)^Crom normal_dist  where value = '0.2';;
+postgres=# explain (analyze,buffers) select count(*) Crom normal_dist  where value = '0.2';
+ERROR:  syntax error at or near "normal_dist"
+LINE 1: explain (analyze,buffers) select count(*) Crom normal_dist  ...
+                                                       ^
+Time: 27.753 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist  where value = '0.2';
+                                                          QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=421955.39..421955.40 rows=1 width=8) (actual time=11004.748..11004.985 rows=1 loops=1)
+   Buffers: shared hit=2144 read=167840
+   ->  Seq Scan on normal_dist  (cost=0.00..419996.95 rows=783374 width=0) (actual time=32.521..10764.555 rows=783716 loops=1)
+         Filter: (value = 0.2)
+         Rows Removed by Filter: 19216284
+         Buffers: shared hit=2144 read=167840
+ Planning Time: 7.755 ms
+ JIT:
+   Functions: 4
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 9.432 ms, Inlining 0.000 ms, Optimization 4.125 ms, Emission 27.498 ms, Total 41.055 ms
+ Execution Time: 11016.060 ms
+(12 rows)
+
+Time: 11047.397 ms (00:11.047)
+postgres=# explain (analyze,buffers) select count(*) from normal_dist_columnar  where value = '0.2';
+                                                                     QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=277.91..277.92 rows=1 width=8) (actual time=8534.352..8534.357 rows=1 loops=1)
+   Buffers: shared hit=16044
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..27.91 rows=100000 width=0) (actual time=8.071..8294.782 rows=783716 loops=1)
+         Filter: (value = 0.2)
+         Rows Removed by Filter: 19216284
+         Columnar Projected Columns: value
+         Columnar Chunk Group Filters: (value = 0.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=16044
+ Planning:
+   Buffers: shared hit=43
+ Planning Time: 4.631 ms
+ Execution Time: 8534.759 ms
+(13 rows)
+
+Time: 8541.374 ms (00:08.541)
+postgres=# explain (analyze,buffers) select count(*) from normal_dist_columnar  where value = '0.2';
+                                                                     QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=277.91..277.92 rows=1 width=8) (actual time=8437.529..8437.534 rows=1 loops=1)
+   Buffers: shared hit=16044
+   ->  Custom Scan (ColumnarScan) on normal_dist_columnar  (cost=0.00..27.91 rows=100000 width=0) (actual time=8.002..8196.278 rows=783716 loops=1)
+         Filter: (value = 0.2)
+         Rows Removed by Filter: 19216284
+         Columnar Projected Columns: value
+         Columnar Chunk Group Filters: (value = 0.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=16044
+ Planning:
+   Buffers: shared hit=43
+ Planning Time: 9.351 ms
+ Execution Time: 8438.177 ms
+(13 rows)
+
+Time: 8452.329 ms (00:08.452)
+postgres=#
+postgres=# create table normal_dist2  as SELECT round (random_normal()::pg_catalog.numeric,1) as v, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler from generate_series( 1, 1000000 );
+SELECT 1000000
+Time: 14445.827 ms (00:14.446)
+postgres=# CREATE TABLE normal_dist2_columnar(LIKE normal_dist2) USING COLUMNAR;
+
+insert into normal_dist2_columnar (select * from normal_dist)2;
+CREATE TABLE
+Time: 49.813 ms
+ERROR:  syntax error at or near "2"
+LINE 1: ...ert into normal_dist2_columnar (select * from normal_dist)2;
+                                                                     ^
+Time: 2.186 ms
+postgres=# CREATE TABLE normal_dist2_columnar(LIKE normal_dist2) USING COLUMNAR;
+
+insert into normal_dist2_columnar (select * from normal_dist2);
+ERROR:  relation "normal_dist2_columnar" already exists
+Time: 6.135 ms
+INSERT 0 1000000
+Time: 2852.710 ms (00:02.853)
+postgres=# SELECT pg_total_relation_size('normal_dist2')::numeric/pg_total_relation_size('normal_dist_2columnar') AS compression_ratio;
+ERROR:  relation "normal_dist_2columnar" does not exist
+LINE 1: ...e('normal_dist2')::numeric/pg_total_relation_size('normal_di...
+                                                             ^
+Time: 3.818 ms
+postgres=# SELECT pg_total_relation_size('normal_dist2')::numeric/pg_total_relation_size('normal_dist2_columnar') AS compression_ratio;
+  compression_ratio
+---------------------
+ 77.0862745098039216
+(1 row)
+
+Time: 15.806 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where value = '0.2';
+ERROR:  column "value" does not exist
+LINE 1: ...select count(*) from normal_dist2_columnar  where value = '0...
+                                                             ^
+Time: 3.855 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '0.2';
+                                                                   QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=430.502..430.517 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=6.344..418.337 rows=39078 loops=1)
+         Filter: (v = 0.2)
+         Rows Removed by Filter: 960922
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 0.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=42
+ Planning Time: 4.638 ms
+ Execution Time: 431.158 ms
+(13 rows)
+
+Time: 444.583 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '0.2';
+                                                        QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32243.17..32243.18 rows=1 width=8) (actual time=662.256..662.262 rows=1 loops=1)
+   Buffers: shared hit=2112 read=17536
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=38067 width=0) (actual time=1.881..647.951 rows=39078 loops=1)
+         Filter: (v = 0.2)
+         Rows Removed by Filter: 960922
+         Buffers: shared hit=2112 read=17536
+ Planning Time: 5.884 ms
+ Execution Time: 663.736 ms
+(8 rows)
+
+Time: 674.894 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '1.2';
+                                                        QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32196.00..32196.01 rows=1 width=8) (actual time=1132.679..1132.738 rows=1 loops=1)
+   Buffers: shared hit=2144 read=17504
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=19200 width=0) (actual time=4.048..1120.002 rows=19394 loops=1)
+         Filter: (v = 1.2)
+         Rows Removed by Filter: 980606
+         Buffers: shared hit=2144 read=17504
+ Planning Time: 6.661 ms
+ Execution Time: 1135.036 ms
+(8 rows)
+
+Time: 1165.768 ms (00:01.166)
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '1.2';
+                                                                    QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=514.420..514.454 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=21.395..504.941 rows=19394 loops=1)
+         Filter: (v = 1.2)
+         Rows Removed by Filter: 980606
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 1.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 6.367 ms
+ Execution Time: 517.123 ms
+(13 rows)
+
+Time: 539.693 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '1.2';
+                                                                    QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=462.367..462.376 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=14.357..455.217 rows=19394 loops=1)
+         Filter: (v = 1.2)
+         Rows Removed by Filter: 980606
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 1.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 5.514 ms
+ Execution Time: 463.170 ms
+(13 rows)
+
+Time: 477.460 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=434.311..434.320 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=20.455..433.013 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 10.672 ms
+ Execution Time: 437.282 ms
+(13 rows)
+
+Time: 466.983 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=437.772..437.777 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=7.819..436.438 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 5.201 ms
+ Execution Time: 438.305 ms
+(13 rows)
+
+Time: 451.172 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '4.2';
+                                                                  QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=121.021..121.026 rows=1 loops=1)
+   Buffers: shared hit=479
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=15.973..120.896 rows=10 loops=1)
+         Filter: (v = 4.2)
+         Rows Removed by Filter: 199990
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 4.2)
+         Columnar Chunk Groups Removed by Filter: 80
+         Buffers: shared hit=479
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 5.599 ms
+ Execution Time: 122.140 ms
+(13 rows)
+
+Time: 132.422 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '4.2';
+                                                      QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32148.37..32148.38 rows=1 width=8) (actual time=712.237..712.242 rows=1 loops=1)
+   Buffers: shared hit=2176 read=17472
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=146 width=0) (actual time=10.975..712.119 rows=10 loops=1)
+         Filter: (v = 4.2)
+         Rows Removed by Filter: 999990
+         Buffers: shared hit=2176 read=17472
+ Planning Time: 2.989 ms
+ Execution Time: 712.868 ms
+(8 rows)
+
+Time: 719.588 ms
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '4.2';
+
+                                                      QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32148.37..32148.38 rows=1 width=8) (actual time=623.356..623.360 rows=1 loops=1)
+   Buffers: shared hit=2208 read=17440
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=146 width=0) (actual time=11.063..623.259 rows=10 loops=1)
+         Filter: (v = 4.2)
+         Rows Removed by Filter: 999990
+         Buffers: shared hit=2208 read=17440
+ Planning Time: 2.237 ms
+ Execution Time: 623.933 ms
+(8 rows)
+
+Time: 629.272 ms
+postgres=#
+postgres=# \q
+postgres@3aadce9fb67a:~$ pg_ctl -D citus -o "-p 9700" -l citus_logfile stop
+waiting for server to shut down.... done
+server stopped
+postgres@3aadce9fb67a:~$ echo 3 | sudo tee /proc/sys/vm/drop_caches
+-bash: sudo: command not found
+postgres@3aadce9fb67a:~$ history
+    1  psql
+    2  exit
+    3  ls /usr/lib/postgresql/16/bin/
+    4  export PATH=$PATH:/usr/lib/postgresql/16/bin
+    5  cd ~
+    6  mkdir citus
+    7  initdb -D citus
+    8  echo "shared_preload_libraries = 'citus'" >> citus/postgresql.conf
+    9  pg_ctl -D citus -o "-p 9700" -l citus_logfile start
+   10  psql
+   11  psql -p 9700
+   12  pg_ctl -D citus -o "-p 9700" -l citus_logfile stop
+   13  echo 3 | sudo tee /proc/sys/vm/drop_caches
+   14  history
+postgres@3aadce9fb67a:~$ exit
+logout
+root@3aadce9fb67a:/# echo 3 | tee /proc/sys/vm/drop_caches
+tee: /proc/sys/vm/drop_caches: Read-only file system
+3
+root@3aadce9fb67a:/# echo 3 | sido tee /proc/sys/vm/drop_caches
+bash: sido: command not found
+root@3aadce9fb67a:/# echo 3 | sudo tee /proc/sys/vm/drop_caches
+bash: sudo: command not found
+root@3aadce9fb67a:/# su - postgres
+postgres@3aadce9fb67a:~$ pg_ctl -D citus -o "-p 9700" -l citus_logfile start
+-bash: pg_ctl: command not found
+postgres@3aadce9fb67a:~$ export PATH=$PATH:/usr/lib/postgresql/16/bin
+postgres@3aadce9fb67a:~$ pg_ctl -D citus -o "-p 9700" -l citus_logfile start
+waiting for server to start.... done
+server started
+postgres@3aadce9fb67a:~$ psql
+psql (16.2 (Debian 16.2-1.pgdg120+2))
+Type "help" for help.
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '4.2';
+ERROR:  relation "normal_dist2" does not exist
+LINE 1: explain (analyze,buffers) select count(*) from normal_dist2 ...
+                                                       ^
+postgres=# \d
+            List of relations
+ Schema |     Name      | Type |  Owner
+--------+---------------+------+----------
+ public | citus_schemas | view | postgres
+ public | citus_tables  | view | postgres
+(2 rows)
+
+postgres=# \q
+postgres@3aadce9fb67a:~$ psql -p 9700
+psql (16.2 (Debian 16.2-1.pgdg120+2))
+Type "help" for help.
+
+postgres=# \d
+                 List of relations
+ Schema |         Name          | Type  |  Owner
+--------+-----------------------+-------+----------
+ public | citus_schemas         | view  | postgres
+ public | citus_tables          | view  | postgres
+ public | normal_dist           | table | postgres
+ public | normal_dist2          | table | postgres
+ public | normal_dist2_columnar | table | postgres
+ public | normal_dist_columnar  | table | postgres
+(6 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '4.2';
+                                                               QUERY PLAN
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=25856.70..25856.71 rows=1 width=8) (actual time=290.796..298.539 rows=1 loops=1)
+   Buffers: shared read=19648
+   ->  Gather  (cost=25856.49..25856.70 rows=2 width=8) (actual time=289.116..298.038 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared read=19648
+         ->  Partial Aggregate  (cost=24856.49..24856.50 rows=1 width=8) (actual time=248.593..248.619 rows=1 loops=3)
+               Buffers: shared read=19648
+               ->  Parallel Seq Scan on normal_dist2  (cost=0.00..24856.33 rows=61 width=0) (actual time=43.835..248.060 rows=3 loops=3)
+                     Filter: (v = 4.2)
+                     Rows Removed by Filter: 333330
+                     Buffers: shared read=19648
+ Planning:
+   Buffers: shared hit=13 read=6
+ Planning Time: 14.172 ms
+ Execution Time: 301.158 ms
+(16 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '4.2';
+                                                                  QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=94.587..94.597 rows=1 loops=1)
+   Buffers: shared hit=503 read=83
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=14.719..94.529 rows=10 loops=1)
+         Filter: (v = 4.2)
+         Rows Removed by Filter: 199990
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 4.2)
+         Columnar Chunk Groups Removed by Filter: 80
+         Buffers: shared hit=503 read=83
+ Planning:
+   Buffers: shared hit=110 read=9
+ Planning Time: 20.040 ms
+ Execution Time: 95.097 ms
+(13 rows)
+
+(failed reverse-i-search)`set para': explain (analyze,buffers) ^Clect count(*) from normal_dist2_columnar  where v = '4.2';
+postgres=# SET max_parallel_workers_per_gather = 0;
+SET
+postgres=# SELECT pg_total_relation_size('normal_dist2')::numeric/pg_total_relation_size('normal_dist_2columnar') AS compression_ratio;^C
+postgres=# explain (analyze,buffers) select * from normal_dist  where v = '4.2';
+ERROR:  column "v" does not exist
+LINE 1: ...analyze,buffers) select * from normal_dist  where v = '4.2';
+                                                             ^
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '4.2';
+                                                      QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..419996.95 rows=2500 width=36) (actual time=403.744..12978.113 rows=135 loops=1)
+   Filter: (value = 4.2)
+   Rows Removed by Filter: 19999865
+   Buffers: shared read=169984
+ Planning:
+   Buffers: shared hit=12 read=1
+ Planning Time: 10.378 ms
+ JIT:
+   Functions: 2
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 8.199 ms, Inlining 0.000 ms, Optimization 18.333 ms, Emission 180.828 ms, Total 207.359 ms
+ Execution Time: 13481.583 ms
+(12 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '4.2';
+                                                                 QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=72.984..72.988 rows=1 loops=1)
+   Buffers: shared hit=479
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=2.495..72.930 rows=10 loops=1)
+         Filter: (v = 4.2)
+         Rows Removed by Filter: 199990
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 4.2)
+         Columnar Chunk Groups Removed by Filter: 80
+         Buffers: shared hit=479
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 2.267 ms
+ Execution Time: 73.276 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '4.2';
+                                                     QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32148.37..32148.38 rows=1 width=8) (actual time=648.481..648.485 rows=1 loops=1)
+   Buffers: shared hit=96 read=19552
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=146 width=0) (actual time=4.086..648.427 rows=10 loops=1)
+         Filter: (v = 4.2)
+         Rows Removed by Filter: 999990
+         Buffers: shared hit=96 read=19552
+ Planning Time: 0.505 ms
+ Execution Time: 648.659 ms
+(8 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=368.914..368.918 rows=1 loops=1)
+   Buffers: shared hit=655 read=166
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=3.935..367.653 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=655 read=166
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 1.450 ms
+ Execution Time: 369.132 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=387.009..387.015 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=9.221..385.666 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 7.746 ms
+ Execution Time: 387.506 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '2.2';
+                                                       QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32156.92..32156.93 rows=1 width=8) (actual time=578.265..578.269 rows=1 loops=1)
+   Buffers: shared hit=128 read=19520
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=3567 width=0) (actual time=2.083..576.891 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Buffers: shared hit=128 read=19520
+ Planning Time: 2.256 ms
+ Execution Time: 578.722 ms
+(8 rows)
+
+postgres=# explain (analyze,buffers) select * from normal_dist  where v = '4.2';
+ERROR:  column "v" does not exist
+LINE 1: ...analyze,buffers) select * from normal_dist  where v = '4.2';
+                                                             ^
+postgres=# explain (analyze,buffers) select * from normal_dist  where value = '4.2';
+                                                     QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------
+ Seq Scan on normal_dist  (cost=0.00..419996.95 rows=2500 width=36) (actual time=121.672..8784.075 rows=135 loops=1)
+   Filter: (value = 4.2)
+   Rows Removed by Filter: 19999865
+   Buffers: shared hit=33 read=169951
+ Planning Time: 2.274 ms
+ JIT:
+   Functions: 2
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 8.003 ms, Inlining 0.000 ms, Optimization 4.791 ms, Emission 22.589 ms, Total 35.382 ms
+ Execution Time: 8793.273 ms
+(10 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2  where v = '2.2';
+                                                       QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=32156.92..32156.93 rows=1 width=8) (actual time=603.877..603.883 rows=1 loops=1)
+   Buffers: shared hit=160 read=19488
+   ->  Seq Scan on normal_dist2  (cost=0.00..32148.00 rows=3567 width=0) (actual time=1.041..602.007 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Buffers: shared hit=160 read=19488
+ Planning Time: 2.552 ms
+ Execution Time: 604.303 ms
+(8 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.21..30.22 rows=1 width=8) (actual time=372.174..372.180 rows=1 loops=1)
+   Buffers: shared hit=821
+   ->  Custom Scan (ColumnarScan) on normal_dist2_columnar  (cost=0.00..17.71 rows=5000 width=0) (actual time=8.809..371.015 rows=3503 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996497
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=821
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 4.985 ms
+ Execution Time: 372.714 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist2_columnar  where v = '2.2';^C
+postgres=# create table normal_dist3 as SELECT
+round (random_normal()::pg_catalog.numeric,1) as v,
+'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' as filler
+from generate_series( 1, 1000000 );
+SELECT 1000000
+postgres=# CREATE TABLE normal_dist3_columnar(LIKE normal_dist3) USING COLUMNAR;
+
+insert into normal_dist3_columnar (select * from normal_dist3);
+SELECT pg_total_relation_size('normal_dist3')::numeric/pg_total_relation_size('normal_dist3_columnar') AS compression_ratio;
+CREATE TABLE
+INSERT 0 1000000
+  compression_ratio
+----------------------
+ 260.5781250000000000
+(1 row)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist3_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.52..30.53 rows=1 width=8) (actual time=359.036..359.043 rows=1 loops=1)
+   Buffers: shared hit=836
+   ->  Custom Scan (ColumnarScan) on normal_dist3_columnar  (cost=0.00..18.02 rows=5000 width=0) (actual time=4.236..357.902 rows=3563 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996437
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=836
+ Planning:
+   Buffers: shared hit=42
+ Planning Time: 4.643 ms
+ Execution Time: 359.702 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist3_columnar  where v = '2.2';
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30.52..30.53 rows=1 width=8) (actual time=384.268..384.273 rows=1 loops=1)
+   Buffers: shared hit=836
+   ->  Custom Scan (ColumnarScan) on normal_dist3_columnar  (cost=0.00..18.02 rows=5000 width=0) (actual time=8.996..383.011 rows=3563 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996437
+         Columnar Projected Columns: v
+         Columnar Chunk Group Filters: (v = 2.2)
+         Columnar Chunk Groups Removed by Filter: 0
+         Buffers: shared hit=836
+ Planning:
+   Buffers: shared hit=36
+ Planning Time: 6.261 ms
+ Execution Time: 384.793 ms
+(13 rows)
+
+postgres=# explain (analyze,buffers) select count(*) from normal_dist3 where v = '2.2';
+                                                       QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=79197.16..79197.17 rows=1 width=8) (actual time=999.460..999.464 rows=1 loops=1)
+   Buffers: shared hit=2112 read=64576
+   ->  Seq Scan on normal_dist3  (cost=0.00..79187.41 rows=3900 width=0) (actual time=0.917..997.464 rows=3563 loops=1)
+         Filter: (v = 2.2)
+         Rows Removed by Filter: 996437
+         Buffers: shared hit=2112 read=64576
+ Planning:
+   Buffers: shared hit=7
+ Planning Time: 3.519 ms
+ Execution Time: 999.907 ms
+(10 rows)
+
+postgres=# CREATE TABLE normal_dist3 as SELECT
+     VARCHAR(4) NOT NULL default ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     VARCHAR(4) NOT NULL default ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+ERROR:  syntax error at or near "NOT"
+LINE 2:      VARCHAR(4) NOT NULL default ('[0:3]={A01,A02,B01,C01}':...
+                        ^
+postgres=# CREATE TABLE normal_dist3 as SELECT
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+ERROR:  relation "normal_dist3" already exists
+postgres=# CREATE TABLE normal_dist4 as SELECT
+     ('[0:3]={A01,A02,B01,C01}'::text[])[floor(random()*4)] as flag1,
+     round (random_normal()::pg_catalog.numeric,1) as value,
+     ('[0:3]={P1,Q02,R01,S01}'::text[])[floor(random()*4)] as flag2
+from generate_series( 1, 10000000 );
+
+SELECT 10000000
+postgres=#
+postgres=# \
+invalid command \
+Try \? for help.
+postgres=#
+postgres=# CREATE TABLE normal_dist4_columnar(LIKE normal_dist4) USING COLUMNAR;
+insert into normal_dist4_columnar (select * from normal_dist4);
+SELECT pg_total_relation_size(normal_dist4)::numeric/pg_total_relation_size('normal_dist4_columnar') AS compression_ratio;
+CREATE TABLE
+INSERT 0 10000000
+ERROR:  column "normal_dist4" does not exist
+LINE 1: SELECT pg_total_relation_size(normal_dist4)::numeric/pg_tota...
+                                      ^
+postgres=# CREATE TABLE normal_dist3_columnar(LIKE normal_dist3) USING COLUMNAR;
+
+insert into normal_dist3_columnar (select * from normal_dist3);                                                                                                                                                SELECT pg_total_relation_size('normal_dist3')::numeric/pg_total_relation_size('normal_dist3_columnar') AS compression_ratio;^C
+postgres=#                                                                                              SELECT pg_total_relation_size('normal_dist3')::numeric/pg_total_relation_size('normal_dist3_columnar') AS compression_ratio;
+  compression_ratio
+----------------------
+ 260.5898437500000000
+(1 row)
