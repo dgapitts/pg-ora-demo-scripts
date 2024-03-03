@@ -6,7 +6,8 @@
 * [Setup jupyter notebooks via docker](jupyter-notebooks-via-docker.md)
 * [Cockroachdb setup 3 node cluster within docker (lsm-tree)](cockroachdb-setup.md)
 * [CockroachDB docker compose  file - 3 node cluster with pgbench (lsm-tree)](cockroach-docker-compose.md)
-* [Yugabytedb setup with big insert tests  (lsm-tree)](yugabytedb-setup.md)
+* [Yugabytedb setup and simple big insert tests (lsm-tree)](yugabytedb-setup.md)
+* [Exploring Yugabytedb - GUI Interface and Rule Based Optimizer (lsm-tree)≈](Exploring-Yugabytedb.md)
 * [Citus (columnar) docker setup](citus-docker-setup.md)
 
 ## Tests - pgbench based couple with some exceptionally large and long transactions
