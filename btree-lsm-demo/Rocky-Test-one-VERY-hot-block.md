@@ -6,6 +6,10 @@
 The key points here
 * The performance starts off good
 * It rapidly falls off once we have a background long running transaction"
+```
+sleepSeconds=600
+psql -t -c "begin; select txid_current();select pg_sleep(${sleepSeconds});end"
+```
 * When the "background long running transaction" completes this problem goes away
 
 
