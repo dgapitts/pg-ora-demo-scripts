@@ -4,17 +4,32 @@
 ## Summary
 
 The key points here
-* The performance starts off good
-* It rapidly falls off once we have a background long running transaction"
+* Start 
+* The performance starts off good (rapidly build up 2000 tps)
+* It rapidly falls off once we have a background long running transaction:
 ```
-sleepSeconds=600
+sleepSeconds=90
 psql -t -c "begin; select txid_current();select pg_sleep(${sleepSeconds});end"
 ```
-* When the "background long running transaction" completes this problem goes away
+* When the "background long running transaction" completes this problem goes away i.e. tps return upto 2000
 
 
 ![rocky-lsm-tree-single-hot-row-problem.png](rocky-lsm-tree-single-hot-row-problem.png)
 
+
+
+
+## Background - MVCC GC is hard ... MyRocks is more clever
+
+I'm curious about this recent (Mar 2023) Mark Callaghan blog post:
+
+> MVCC GC is hard -- see the amount of content devoted to Postgres vacuum. Perhaps Oracle does it best.  A long-open snapshot can bring about the worst-case behavior for MVCC GC as Postgres vacuum and InnoDB purge cannot touch rows that are reclaimable when said rows have a commit time more recent than the oldest open snapshot. MyRocks is more clever. RocksDB compaction will keep only the versions needed for long-open snapshots.
+https://smalldatum.blogspot.com/2023/04/gc-for-mvcc-myrocks-innodb-and-postgres.html 
+
+
+Unfortunately, based on the basic tests below, it appears that RocksDB seems to handle "hot block scenarios with long running transactions" in a manner similar to regular Postgres. 
+
+I'm curious if this is because of the Postgres FDW?
 
 
 
