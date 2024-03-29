@@ -34,8 +34,7 @@ Reading Postgres Execution plans isn't too tricky, I've written some simple scri
 * [Demo-09 More Columnar Projected Columns](docs/Demo09-More-Columnar-Projected-Columns.md)
 * [Demo-10 Prepared statements, partitioning pruning and plan_cache_mode workaround (use )](docs/Demo10-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
 * [Demo-11 Reviewing plan_cache_mode options - the difference between auto, force_generic_plan and force_custom_plan](docs/Demo11-prepared_statements-partitioning_pruning-and-plan_cache_mode.md)
-
-
+* [Demo-12 Private Process Memory Management -  work_mem and hash_mem_multiplier](docs/Demo12-Private-Process-Memory-Management-work_mem-and-hash_mem_multiplier.md)
 #  Transaction isolation levels
 
 Exploring how different DB Engines implement transaction isolation levels - exploring edge cases!
