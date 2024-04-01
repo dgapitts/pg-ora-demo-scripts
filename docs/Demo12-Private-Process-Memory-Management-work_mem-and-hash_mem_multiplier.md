@@ -6,7 +6,8 @@
 Tuning postgres private memory management is quite complex for two reasons
 * What proportion of the memory 
 * work_mem is a uniform limit ovoer max_connection e.g. if you have a 16000M VM and you say 25% for private processes i.e 4000M and you need max_connection of 500 then work_mem = 8MB 
-* in pg13 there is also a hash_mem_multiplier, for hash operations so some processes can now exceed work_mem
+* in pg13 there is also a hash_mem_multiplier, for hash operations so some processes can now exceed work_mem - however in pg13 and pg14 the default value is 1 i.e. no change with default
+* in pg15 the default value is 2 i.e. some risk this new feature can catch people out
 
 
 #### hash_mem_multiplier (floating point) 
@@ -54,7 +55,12 @@ davidpitts=# INSERT INTO perf_row
   FROM generate_series(1,500000) g;
 INSERT 0 500000
 ```
-This demo is with the default 4Mb work_mem
+Three demos
+*  c99 - 50000 distinct values to aggregate over
+*  c70 - 35000 distinct values to aggregate over
+*  c00 - 500 distinct values to aggregate over
+
+are with the default 4Mb work_mem
 
 
 ```
@@ -75,14 +81,22 @@ davidpitts=# show hash_mem_multiplier;
 (1 row)
 ```
 
+
+NB I also disabled parallelisation to make the plans easier to read
+
+``````
+davidpitts=# SET max_parallel_workers_per_gather = 0;
+SET
+``````
+
 but through the demo's we will vary this to show higher 
 
 
-## Demo 01 - Very high cardinality - 50,000 distinct values to aggregate over
+## Demo 01 - high cardinality (c99) - 50,000 distinct values to aggregate over
 
 ### hash_mem_multiplier=1 - Memory Usage: 4145kB  Disk Usage: 23496kB, temp read=2641 written=4909
 
-This is affectively how postgres used to work pre-pg13
+This is affectively how postgres used to work by default pre-pg15
 ```
 davidpitts=# set hash_mem_multiplier=1;
 SET
@@ -103,7 +117,7 @@ davidpitts=# EXPLAIN (ANALYZE, BUFFERS) SELECT c99, SUM(c29), AVG(c71) FROM perf
 
 ### hash_mem_multiplier=2 - Memory Usage: 8241kB  Disk Usage: 14104kB, temp read=1525 written=2896
 
-This is the default postgres behaviour pg13 and beyond
+This is affectively how postgres used to work by default pre-pg15
 ```
 davidpitts=# set hash_mem_multiplier=2;
 SET
@@ -158,4 +172,93 @@ davidpitts=# EXPLAIN (ANALYZE, BUFFERS) SELECT c99, SUM(c29), AVG(c71) FROM perf
  Planning Time: 0.202 ms
  Execution Time: 259.452 ms
 (8 rows)
+```
+
+
+
+## Demo 02 - loower cardinality (c00) - 500 distinct values to aggregate over
+
+### hash_mem_multiplier=1 - Memory Usage: 169kB  - no overflow to disc
+
+This is affectively how postgres used to work by default pre-pg15
+```
+davidpitts=# set hash_mem_multiplier=1;
+SET
+
+davidpitts=# EXPLAIN (ANALYZE, BUFFERS) SELECT c00, SUM(c29), AVG(c71) FROM perf_row GROUP BY c00;
+                                                       QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=64306.07..64313.57 rows=500 width=72) (actual time=565.246..565.323 rows=500 loops=1)
+   Group Key: c00
+   Batches: 1  Memory Usage: 169kB
+   Buffers: shared hit=15752 read=39804
+   ->  Seq Scan on perf_row  (cost=0.00..60556.04 rows=500004 width=24) (actual time=0.296..364.305 rows=500000 loops=1)
+         Buffers: shared hit=15752 read=39804
+ Planning Time: 0.169 ms
+ Execution Time: 565.536 ms
+(8 rows)
+```
+
+## Demo 03 - higher cardinality (c70) - 35500 distinct values to aggregate over
+
+### hash_mem_multiplier=1 - Memory Usage: 4145kB  Disk Usage: 19496kB
+
+This is affectively how postgres used to work by default pre-pg15
+```
+davidpitts=# set hash_mem_multiplier=1;
+SET
+davidpitts=# EXPLAIN (ANALYZE, BUFFERS) SELECT c70, SUM(c29), AVG(c71) FROM perf_row GROUP BY c70;
+                                                       QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=97743.84..104134.09 rows=35389 width=72) (actual time=1380.927..1565.046 rows=35500 loops=1)
+   Group Key: c70
+   Planned Partitions: 4  Batches: 5  Memory Usage: 4145kB  Disk Usage: 19496kB
+   Buffers: shared hit=15688 read=39868, temp read=2207 written=4087
+   ->  Seq Scan on perf_row  (cost=0.00..60556.04 rows=500004 width=24) (actual time=0.818..768.109 rows=500000 loops=1)
+         Buffers: shared hit=15688 read=39868
+ Planning Time: 11.207 ms
+ Execution Time: 1580.700 ms
+(8 rows)
+
+```
+
+
+### hash_mem_multiplier=2 - Memory Usage: 8241kB  Disk Usage: 7224kB
+
+This is the default postgres behaviour pg15 and beyond
+```
+davidpitts=# set hash_mem_multiplier=2;
+SET
+davidpitts=# EXPLAIN (ANALYZE, BUFFERS) SELECT c70, SUM(c29), AVG(c71) FROM perf_row GROUP BY c70;
+                                                       QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=97743.84..104134.09 rows=35389 width=72) (actual time=247.384..263.229 rows=35500 loops=1)
+   Group Key: c70
+   Batches: 5  Memory Usage: 8241kB  Disk Usage: 7224kB
+   Buffers: shared hit=15643 read=39913, temp read=644 written=1377
+   ->  Seq Scan on perf_row  (cost=0.00..60556.04 rows=500004 width=24) (actual time=0.750..79.638 rows=500000 loops=1)
+         Buffers: shared hit=15643 read=39913
+ Planning Time: 0.132 ms
+ Execution Time: 266.082 ms
+(8 rows)
+```
+
+### hash_mem_multiplier=3 -  Memory Usage: 9489kB, No Disk Usage
+
+
+```
+davidpitts=# set hash_mem_multiplier=3;
+SET
+davidpitts=# EXPLAIN (ANALYZE, BUFFERS) SELECT c70, SUM(c29), AVG(c71) FROM perf_row GROUP BY c70;
+                                                       QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=64306.07..64836.90 rows=35389 width=72) (actual time=194.070..200.619 rows=35500 loops=1)
+   Group Key: c70
+   Batches: 1  Memory Usage: 9489kB
+   Buffers: shared hit=15685 read=39871
+   ->  Seq Scan on perf_row  (cost=0.00..60556.04 rows=500004 width=24) (actual time=0.183..75.247 rows=500000 loops=1)
+         Buffers: shared hit=15685 read=39871
+ Planning Time: 0.751 ms
+ Execution Time: 202.032 ms
+(8 rows)   
 ```
